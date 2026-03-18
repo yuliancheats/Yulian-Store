@@ -109,7 +109,16 @@
     @keyframes spin { to { transform: rotate(360deg); } }
   
     /* ── CURSOR PERSONALIZADO ── */
-    * { cursor: none !important; }
+    /* Solo en desktop — en móvil/tablet no se aplica cursor:none
+       porque bloquea los eventos touch en botones e inputs */
+    @media (pointer: fine) {
+      * { cursor: none !important; }
+    }
+    /* Siempre restaurar pointer-events en elementos interactivos */
+    button, a, input, select, textarea, label,
+    [onclick], .tab, .btn-submit {
+      pointer-events: auto !important;
+    }
     #cdot {
       position: fixed; top: 0; left: 0; width: 10px; height: 10px;
       background: #0d0a1a; border-radius: 50%; pointer-events: none;
@@ -123,6 +132,10 @@
       transform: translate(-50%,-50%);
       box-shadow: 0 0 14px rgba(122,31,238,0.3);
       transition: width .18s, height .18s, border-color .18s;
+    }
+    /* Ocultar cursor custom en móvil */
+    @media (pointer: coarse) {
+      #cdot, #cring { display: none; }
     }
   </style>
 </head>
