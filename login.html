@@ -200,17 +200,24 @@
   const db   = getFirestore(app);
   const ADMIN = 'admin@yulianstore.com';
 
-  // Mantener sesión aunque cierre el navegador
-  setPersistence(auth, browserLocalPersistence);
-
   // Flag para evitar que onAuthStateChanged redirija durante registro/login manual
   let manualFlow = false;
 
-  // Solo redirige si ya estaba logueado antes de abrir la página
-  onAuthStateChanged(auth, (user) => {
-    if (user && !manualFlow) {
-      redirect(user);
-    }
+  // Configurar persistencia y luego escuchar auth
+  setPersistence(auth, browserLocalPersistence).then(() => {
+    // Solo redirige si ya estaba logueado antes de abrir la página
+    onAuthStateChanged(auth, (user) => {
+      if (user && !manualFlow) {
+        redirect(user);
+      }
+    });
+  }).catch(() => {
+    // Si falla la persistencia igual escuchar auth
+    onAuthStateChanged(auth, (user) => {
+      if (user && !manualFlow) {
+        redirect(user);
+      }
+    });
   });
 
   async function redirect(user) {
@@ -256,6 +263,7 @@
     msg.className = 'msg';
 
     try {
+      await setPersistence(auth, browserLocalPersistence);
       const cred = await signInWithEmailAndPassword(auth, email, pass);
 
       // Registrar sesión
