@@ -213,8 +213,33 @@
     }
   });
 
-  function redirect(user) {
-    window.location.href = user.email === ADMIN ? 'admin.html' : 'index.html';
+  async function redirect(user) {
+    if (user.email === ADMIN) { window.location.href = 'admin.html'; return; }
+    // Check banned & role before redirecting
+    try {
+      const snap = await getDoc(doc(db,'users',user.uid));
+      if (snap.exists()) {
+        const data = snap.data();
+        if (data.banned) {
+          showBanScreen(data.banReason || '');
+          return;
+        }
+        if (data.role === 'reseller') {
+          window.location.href = 'reseller.html'; return;
+        }
+      }
+    } catch(e) {}
+    window.location.href = 'index.html';
+  }
+
+  function showBanScreen(reason) {
+    const screen = document.getElementById('ban-screen');
+    screen.style.display = 'flex';
+    if (reason) {
+      const el = document.getElementById('ban-reason-display');
+      el.textContent = '📋 Razón: ' + reason;
+      el.style.display = 'block';
+    }
   }
 
   // ── LOGIN ──
@@ -391,6 +416,51 @@
   });
 })();
 </script>
+
+<!-- ═══ PANTALLA DE BAN ═══ -->
+<div id="ban-screen" style="
+  display:none; position:fixed; inset:0; z-index:999999;
+  background:#06040f; align-items:center; justify-content:center;
+  padding:20px; flex-direction:column;
+">
+  <div style="
+    background:#0d0a1a; border:2px solid rgba(255,68,68,0.4);
+    border-radius:16px; padding:48px 40px; max-width:480px; width:100%;
+    text-align:center; box-shadow:0 0 60px rgba(255,68,68,0.12);
+    animation:popInL .4s cubic-bezier(.34,1.56,.64,1) forwards;
+  ">
+    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
+    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;
+      letter-spacing:3px;color:#ff4444;text-transform:uppercase;margin-bottom:16px;
+      text-shadow:0 0 20px rgba(255,68,68,0.5);">
+      Cuenta Suspendida
+    </h2>
+    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:12px;">
+      Tu cuenta ha sido suspendida por un administrador.
+    </p>
+    <div id="ban-reason-display" style="
+      font-family:'Exo 2',sans-serif;color:#ff9966;font-size:.85rem;
+      background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);
+      border-radius:8px;padding:12px 16px;margin-bottom:24px;line-height:1.7;
+      display:none;
+    "></div>
+    <p style="font-family:'Exo 2',sans-serif;color:#666;font-size:.82rem;line-height:1.7;margin-bottom:24px;">
+      Si crees que esto es un error, abre un ticket en nuestro servidor de Discord
+      o contacta a un administrador para apelar el ban.
+    </p>
+    <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="
+      display:inline-flex;align-items:center;gap:8px;
+      background:#7A1FEE;color:#000;text-decoration:none;
+      font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;
+      letter-spacing:2px;padding:13px 28px;border-radius:6px;
+      text-transform:uppercase;box-shadow:0 4px 18px rgba(122,31,238,.35);
+      transition:all .2s;
+    " onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
+      🎮 Abrir Discord
+    </a>
+  </div>
+</div>
+
 </body>
 </html>
 

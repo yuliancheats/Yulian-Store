@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YULIAN STORE — Panel Reseller</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange:        #7A1FEE;
+      --orange-bright: #8B2FFF;
+      --orange-dim:    #5a0fcc;
+      --neon:          0 0 8px #7A1FEE, 0 0 20px #8B2FFF, 0 0 40px rgba(122,31,238,0.5);
+      --dark:          #06040f;
+      --dark2:         #0b0818;
+      --card:          #0d0a1a;
+      --card2:         #120f22;
+      --card3:         #160e2a;
+      --text:          #ffffff;
+      --text-muted:    #888888;
+      --border:        rgba(122,31,238,0.22);
+      --border-soft:   rgba(255,255,255,0.06);
+      --red:           #ff4444;
+      --green:         #44ff88;
+      --blue:          #44aaff;
+      --font-display:  'Orbitron', sans-serif;
+      --font-body:     'Rajdhani', sans-serif;
+      --font-alt:      'Exo 2', sans-serif;
+    }
+    *, *::before, *::after { box-sizing:border-box;margin:0;padding:0; }
+    body { background:var(--dark);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden; }
+    * { cursor:none !important; }
+    #cdot { position:fixed;top:0;left:0;width:10px;height:10px;background:#0d0a1a;border-radius:50%;pointer-events:none;z-index:999999;transform:translate(-50%,-50%);box-shadow:0 0 0 2.5px rgba(139,47,255,0.95),0 0 14px rgba(122,31,238,0.5); }
+    #cring { position:fixed;top:0;left:0;width:38px;height:38px;border:2.5px solid rgba(139,47,255,0.8);border-radius:50%;pointer-events:none;z-index:999998;transform:translate(-50%,-50%);box-shadow:0 0 14px rgba(122,31,238,0.3);transition:width .18s,height .18s,border-color .18s; }
+    .bg-fixed { position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 20% 30%,rgba(122,31,238,0.1) 0%,transparent 50%),radial-gradient(ellipse at 80% 70%,rgba(122,31,238,0.06) 0%,transparent 50%),var(--dark); }
+    .bg-grid { position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(122,31,238,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(122,31,238,0.04) 1px,transparent 1px);background-size:50px 50px; }
+
+    /* TOPBAR */
+    .topbar { position:fixed;top:0;left:0;right:0;z-index:100;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(6,4,15,0.97);border-bottom:1px solid var(--border);backdrop-filter:blur(20px); }
+    .topbar-logo { font-family:var(--font-display);font-size:1.1rem;font-weight:900;letter-spacing:4px;text-transform:uppercase;text-shadow:var(--neon); }
+    .topbar-logo span { color:var(--orange); }
+    .topbar-badge { display:inline-flex;align-items:center;gap:6px;background:rgba(255,200,0,0.1);border:1px solid rgba(255,200,0,0.3);color:#ffc800;font-family:var(--font-display);font-size:0.55rem;font-weight:700;letter-spacing:2px;padding:4px 12px;border-radius:2px;margin-left:16px; }
+    .topbar-right { display:flex;align-items:center;gap:16px; }
+    .reseller-info { font-family:var(--font-alt);font-size:0.85rem;color:var(--text-muted); }
+    .reseller-info strong { color:var(--orange); }
+    .saldo-pill { background:rgba(68,255,136,0.08);border:1px solid rgba(68,255,136,0.2);color:var(--green);font-family:var(--font-display);font-size:0.68rem;font-weight:700;padding:5px 14px;border-radius:3px;letter-spacing:1px; }
+
+    /* LAYOUT */
+    .layout { display:flex;min-height:100vh;padding-top:64px;position:relative;z-index:1; }
+    .sidebar { width:220px;flex-shrink:0;background:rgba(6,4,15,0.95);border-right:1px solid var(--border);padding:28px 0;position:fixed;top:64px;left:0;bottom:0;overflow-y:auto;z-index:50; }
+    .sidebar-section { padding:0 20px 8px;font-family:var(--font-display);font-size:0.5rem;font-weight:700;letter-spacing:3px;color:rgba(122,31,238,0.5);text-transform:uppercase;margin-top:20px; }
+    .sidebar-section:first-child { margin-top:0; }
+    .nav-item { display:flex;align-items:center;gap:12px;padding:11px 20px;font-family:var(--font-alt);font-size:0.88rem;font-weight:600;color:var(--text-muted);letter-spacing:0.5px;transition:all 0.2s;border-left:2px solid transparent; }
+    .nav-item:hover { color:var(--text);background:rgba(122,31,238,0.07);border-left-color:rgba(122,31,238,0.4); }
+    .nav-item.active { color:var(--orange);background:rgba(122,31,238,0.10);border-left-color:var(--orange);text-shadow:0 0 8px rgba(122,31,238,0.4); }
+    .nav-icon { font-size:1rem;flex-shrink:0; }
+    .nav-badge { margin-left:auto;background:var(--orange);color:#000;font-family:var(--font-display);font-size:0.5rem;font-weight:900;padding:2px 6px;border-radius:2px;min-width:20px;text-align:center; }
+    .main { flex:1;margin-left:220px;padding:32px;min-height:calc(100vh - 64px); }
+    .panel { display:none; }
+    .panel.active { display:block; }
+    .page-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:28px; }
+    .page-title { font-family:var(--font-display);font-size:1.2rem;font-weight:900;letter-spacing:3px;text-transform:uppercase; }
+    .page-title span { color:var(--orange); }
+    .page-sub { font-family:var(--font-alt);font-size:0.85rem;color:var(--text-muted);margin-top:4px;letter-spacing:0.5px; }
+
+    /* STAT CARDS */
+    .stat-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px; }
+    .stat-card { background:var(--card);border:1px solid var(--border-soft);border-radius:8px;padding:22px 20px;position:relative;overflow:hidden;transition:border-color 0.3s; }
+    .stat-card::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--orange),transparent);opacity:0;transition:opacity 0.3s; }
+    .stat-card:hover { border-color:var(--border); }
+    .stat-card:hover::before { opacity:1; }
+    .stat-label { font-family:var(--font-display);font-size:0.55rem;font-weight:700;letter-spacing:2.5px;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px; }
+    .stat-value { font-family:var(--font-display);font-size:2rem;font-weight:900;color:var(--orange);text-shadow:var(--neon);line-height:1; }
+    .stat-icon-bg { position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:2.5rem;opacity:0.08; }
+
+    /* TABLE */
+    .table-card { background:var(--card);border:1px solid var(--border-soft);border-radius:10px;overflow:hidden;margin-bottom:24px; }
+    .table-header { display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--border-soft);background:rgba(122,31,238,0.04); }
+    .table-title { font-family:var(--font-display);font-size:0.7rem;font-weight:700;letter-spacing:2px;color:var(--orange);text-transform:uppercase; }
+    .table-actions { display:flex;gap:10px;align-items:center; }
+    .search-box { background:var(--card2);border:1px solid var(--border-soft);border-radius:4px;padding:7px 14px;color:var(--text);font-family:var(--font-alt);font-size:0.82rem;outline:none;width:220px;transition:border-color 0.2s; }
+    .search-box:focus { border-color:var(--orange); }
+    .search-box::placeholder { color:rgba(255,255,255,0.2); }
+    table { width:100%;border-collapse:collapse; }
+    thead th { padding:12px 16px;font-family:var(--font-display);font-size:0.55rem;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;text-align:left;border-bottom:1px solid var(--border-soft);background:var(--card2); }
+    tbody tr { border-bottom:1px solid rgba(255,255,255,0.03);transition:background 0.15s; }
+    tbody tr:hover { background:rgba(122,31,238,0.05); }
+    tbody tr:last-child { border-bottom:none; }
+    tbody td { padding:13px 16px;font-family:var(--font-alt);font-size:0.88rem;color:var(--text);vertical-align:middle; }
+    .td-muted { color:var(--text-muted);font-size:0.8rem; }
+    .badge { display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:2px;font-family:var(--font-display);font-size:0.5rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase; }
+    .badge-green { background:rgba(68,255,136,0.1);color:var(--green);border:1px solid rgba(68,255,136,0.25); }
+    .badge-purple { background:rgba(122,31,238,0.13);color:var(--orange);border:1px solid rgba(122,31,238,0.25); }
+    .badge-red { background:rgba(255,68,68,0.1);color:var(--red);border:1px solid rgba(255,68,68,0.25); }
+    .badge-yellow { background:rgba(255,200,0,0.1);color:#ffc800;border:1px solid rgba(255,200,0,0.25); }
+    .badge-blue { background:rgba(68,170,255,0.1);color:var(--blue);border:1px solid rgba(68,170,255,0.25); }
+    .btn { display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:4px;font-family:var(--font-display);font-size:0.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border:none;transition:all 0.2s; }
+    .btn-primary { background:var(--orange);color:#000;box-shadow:0 2px 14px rgba(122,31,238,0.25); }
+    .btn-primary:hover { background:var(--orange-bright);box-shadow:var(--neon);transform:translateY(-1px); }
+    .btn-ghost { background:transparent;color:var(--text-muted);border:1px solid rgba(255,255,255,0.1); }
+    .btn-ghost:hover { border-color:var(--orange);color:var(--orange); }
+    .btn-danger { background:transparent;color:var(--red);border:1px solid rgba(255,68,68,0.25); }
+    .btn-danger:hover { background:rgba(255,68,68,0.1);border-color:var(--red); }
+    .btn-sm { padding:5px 12px;font-size:0.5rem; }
+    .btn-warn { background:transparent;color:#ffc800;border:1px solid rgba(255,200,0,0.25); }
+    .btn-warn:hover { background:rgba(255,200,0,0.08);border-color:#ffc800; }
+    .modal-overlay { display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:var(--card);border:1px solid var(--border);border-radius:12px;padding:36px;width:100%;max-width:480px;position:relative;animation:modalIn .3s cubic-bezier(.34,1.56,.64,1) forwards; }
+    @keyframes modalIn { from{opacity:0;transform:scale(.9) translateY(10px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    .modal-title { font-family:var(--font-display);font-size:0.85rem;font-weight:900;letter-spacing:2px;color:var(--orange);text-transform:uppercase;margin-bottom:24px; }
+    .modal-close { position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--text-muted);font-size:1.2rem;padding:4px 8px;border-radius:4px;transition:color 0.2s; }
+    .modal-close:hover { color:var(--text); }
+    .form-group { margin-bottom:18px; }
+    .form-label { display:block;font-family:var(--font-display);font-size:0.55rem;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px; }
+    .form-input { width:100%;background:var(--card2);border:1px solid var(--border-soft);border-radius:4px;padding:11px 14px;color:var(--text);font-family:var(--font-alt);font-size:0.95rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s; }
+    .form-input:focus { border-color:var(--orange);box-shadow:0 0 10px rgba(122,31,238,0.18); }
+    .form-input::placeholder { color:rgba(255,255,255,0.18); }
+    .form-row { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+    .spinner { display:inline-block;width:16px;height:16px;border:2px solid rgba(122,31,238,0.2);border-top-color:var(--orange);border-radius:50%;animation:spin .7s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .loading-row td,.empty-row td { text-align:center;padding:40px;color:var(--text-muted);font-family:var(--font-alt);font-size:0.88rem; }
+    #toast { position:fixed;bottom:28px;right:28px;z-index:99999;background:var(--card3);border:1px solid var(--border);border-radius:8px;padding:14px 20px;font-family:var(--font-alt);font-size:0.88rem;display:flex;align-items:center;gap:10px;transform:translateY(20px);opacity:0;transition:all 0.3s;pointer-events:none;max-width:360px; }
+    #toast.show { transform:translateY(0);opacity:1; }
+    #toast.success { border-color:rgba(68,255,136,0.4);color:var(--green); }
+    #toast.error { border-color:rgba(255,68,68,0.4);color:var(--red); }
+    #toast.info { border-color:var(--border);color:var(--text); }
+    .key-mono { font-family:var(--font-display);font-size:0.62rem;letter-spacing:1px;color:var(--orange);background:rgba(122,31,238,0.10);padding:4px 8px;border-radius:3px; }
+    .overflow-text { max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+    .tab-bar { display:flex;gap:0;border-bottom:1px solid var(--border-soft);margin-bottom:20px; }
+    .tab-btn { background:transparent;color:var(--text-muted);border:none;border-bottom:2px solid transparent;padding:10px 20px;font-family:var(--font-display);font-size:0.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s;margin-bottom:-1px; }
+    .tab-btn.active { color:var(--orange);border-bottom-color:var(--orange);text-shadow:0 0 8px rgba(122,31,238,0.4); }
+    ::-webkit-scrollbar { width:5px;height:5px; }
+    ::-webkit-scrollbar-track { background:var(--dark2); }
+    ::-webkit-scrollbar-thumb { background:var(--orange-dim);border-radius:3px; }
+
+    /* Key gen */
+    .key-gen-box { background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;margin:16px 0;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px; }
+    .key-gen-progress { font-family:var(--font-alt);font-size:0.82rem;color:var(--text-muted); }
+    .key-result { font-family:var(--font-display);font-size:0.8rem;letter-spacing:2px;color:var(--orange);text-shadow:0 0 10px rgba(122,31,238,0.6);word-break:break-all;animation:keyReveal .5s ease forwards; }
+    @keyframes keyReveal { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
+    .key-gen-progress-bar { width:100%;height:3px;background:rgba(122,31,238,0.15);border-radius:2px;overflow:hidden; }
+    .key-gen-progress-fill { height:100%;background:var(--orange);border-radius:2px;width:0%;transition:width 0.1s linear;box-shadow:0 0 8px var(--orange); }
+
+    /* key timer */
+    .key-timer { font-family:var(--font-display);font-size:0.58rem;color:#ffc800;letter-spacing:1px; }
+    .key-timer.pausada { color:var(--text-muted); }
+    .key-timer.baneada { color:var(--red); }
+
+    /* Saldo insuficiente aviso */
+    .saldo-warn { background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);border-radius:6px;padding:12px 16px;font-family:var(--font-alt);font-size:0.82rem;color:#ff8888;margin-bottom:16px;display:none; }
+    .saldo-warn.visible { display:block; }
+  </style>
+</head>
+<body>
+<div class="bg-fixed"></div>
+<div class="bg-grid"></div>
+<div id="cdot"></div>
+<div id="cring"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div style="display:flex;align-items:center;">
+    <div class="topbar-logo"><span>YULIAN</span> STORE</div>
+    <div class="topbar-badge">⭐ RESELLER PANEL</div>
+  </div>
+  <div class="topbar-right">
+    <div class="reseller-info">Hola, <strong id="reseller-name">—</strong></div>
+    <div class="saldo-pill">💰 <span id="reseller-saldo">$0.00</span></div>
+    <button class="btn-ghost btn" style="font-size:.6rem;padding:7px 14px;letter-spacing:1px;" onclick="doLogout()">🚪 Salir</button>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">Mi Panel</div>
+    <div class="nav-item active" onclick="showPanel('dashboard',this)"><span class="nav-icon">📊</span> Resumen</div>
+    <div class="nav-item" onclick="showPanel('claves',this)"><span class="nav-icon">🔑</span> Mis Claves<span class="nav-badge" id="badge-mis-claves">0</span></div>
+    <div class="nav-item" onclick="showPanel('usuarios',this)"><span class="nav-icon">👥</span> Usuarios</div>
+    <div class="sidebar-section">Cuenta</div>
+    <div class="nav-item" onclick="window.location.href='index.html'"><span class="nav-icon">🏠</span> Tienda</div>
+    <div class="nav-item" onclick="window.location.href='perfil.html'"><span class="nav-icon">👤</span> Mi Perfil</div>
+  </aside>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="page-header">
+        <div><div class="page-title">RES<span>UMEN</span></div><div class="page-sub">Tu actividad como reseller</div></div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">Mi Saldo</div><div class="stat-value" id="stat-saldo">$0.00</div><div class="stat-icon-bg">💰</div></div>
+        <div class="stat-card"><div class="stat-label">Claves Generadas</div><div class="stat-value" id="stat-mis-claves">0</div><div class="stat-icon-bg">🔑</div></div>
+        <div class="stat-card"><div class="stat-label">Claves Activas</div><div class="stat-value" id="stat-activas">0</div><div class="stat-icon-bg">✅</div></div>
+      </div>
+      <div style="background:rgba(122,31,238,0.07);border:1px solid rgba(122,31,238,0.2);border-radius:10px;padding:20px 24px;font-family:var(--font-alt);font-size:0.88rem;color:#aa88ff;line-height:1.8;">
+        <div style="font-family:var(--font-display);font-size:0.65rem;letter-spacing:2px;color:var(--orange);margin-bottom:10px;">ℹ️ INFO RESELLER</div>
+        Puedes generar claves de licencia usando tu saldo disponible. Para recargar saldo contacta al administrador.<br>
+        Solo puedes ver las claves que <strong style="color:#fff;">tú has generado</strong>.
+      </div>
+    </div>
+
+    <!-- MIS CLAVES -->
+    <div class="panel" id="panel-claves">
+      <div class="page-header">
+        <div><div class="page-title">MIS <span>CLAVES</span></div><div class="page-sub">Claves que has generado</div></div>
+        <button class="btn btn-primary" onclick="openGenKeyModal()">⚡ GENERAR CLAVE</button>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchKeyTab('todas')">Todas</button>
+        <button class="tab-btn" onclick="switchKeyTab('disponible')">Activas</button>
+        <button class="tab-btn" onclick="switchKeyTab('pausada')">Pausadas</button>
+        <button class="tab-btn" onclick="switchKeyTab('baneada')">Baneadas</button>
+      </div>
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">🔑 Mis Claves Generadas</div>
+          <div class="table-actions"><input class="search-box" id="search-claves" placeholder="🔍 Buscar..." oninput="filterClaves(this.value)"></div>
+        </div>
+        <table>
+          <thead><tr><th>Clave</th><th>Producto</th><th>Plan</th><th>Timer</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead>
+          <tbody id="claves-body"><tr class="loading-row"><td colspan="7"><span class="spinner"></span> Cargando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- USUARIOS (solo ver) -->
+    <div class="panel" id="panel-usuarios">
+      <div class="page-header">
+        <div><div class="page-title">USU<span>ARIOS</span></div><div class="page-sub">Solo lectura — sin edición de saldo</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="loadUsuarios()">🔄 Actualizar</button>
+      </div>
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">👥 Lista de Usuarios</div>
+          <div class="table-actions"><input class="search-box" id="search-usuarios" placeholder="🔍 Buscar..." oninput="filterUsuarios(this.value)"></div>
+        </div>
+        <table>
+          <thead><tr><th>Nombre</th><th>Email</th><th>Estado</th><th>Registro</th></tr></thead>
+          <tbody id="usuarios-body"><tr class="loading-row"><td colspan="4"><span class="spinner"></span> Cargando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL: GENERAR CLAVE -->
+<div class="modal-overlay" id="modal-gen-key">
+  <div class="modal" style="max-width:520px;">
+    <button class="modal-close" onclick="closeModal('modal-gen-key')">✕</button>
+    <div class="modal-title">⚡ Generar Clave</div>
+    <div class="saldo-warn" id="saldo-warn">⚠️ Saldo insuficiente para generar esta clave. Contacta al admin para recargar.</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Producto</label>
+        <select class="form-input" id="key-product" onchange="updateCost()">
+          <option value="Blood Strike (Privado)" data-cost="15">Blood Strike Privado</option>
+          <option value="CODM (Privado)" data-cost="15">CODM Privado</option>
+          <option value="Combat Master (Privado)" data-cost="10">Combat Master Privado</option>
+          <option value="PUBG Mobile (Privado)" data-cost="15">PUBG Mobile Privado</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Plan</label>
+        <select class="form-input" id="key-plan" onchange="updateCost()">
+          <option value="DÍA" data-cost="5">DÍA (24h) — $5</option>
+          <option value="3 DÍAS" data-cost="12">3 DÍAS — $12</option>
+          <option value="SEMANA" data-cost="20">SEMANA — $20</option>
+          <option value="MES" data-cost="50">MES — $50</option>
+          <option value="LIFETIME" data-cost="100">LIFETIME — $100</option>
+        </select>
+      </div>
+    </div>
+    <div style="background:rgba(122,31,238,0.08);border:1px solid rgba(122,31,238,0.2);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-family:var(--font-alt);font-size:0.85rem;display:flex;justify-content:space-between;align-items:center;">
+      <span style="color:var(--text-muted);">Costo:</span>
+      <span id="key-cost-display" style="font-family:var(--font-display);font-size:0.8rem;color:var(--orange);font-weight:700;">$5.00</span>
+    </div>
+    <div class="form-group"><label class="form-label">Notas (opcional)</label><input class="form-input" type="text" id="key-notes" placeholder="Notas..."></div>
+    <div class="key-gen-box" id="key-gen-box" style="display:none;">
+      <div class="key-gen-progress" id="key-gen-status">Iniciando...</div>
+      <div class="key-gen-progress-bar"><div class="key-gen-progress-fill" id="key-gen-bar"></div></div>
+    </div>
+    <div class="key-gen-box" id="key-result-box" style="display:none;">
+      <div style="font-family:var(--font-display);font-size:0.55rem;letter-spacing:2px;color:var(--text-muted);margin-bottom:4px;">CLAVE GENERADA</div>
+      <div class="key-result" id="key-result-text">—</div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:6px;" onclick="copyKey()">📋 Copiar</button>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px;" id="key-gen-btns">
+      <button class="btn btn-ghost" style="flex:1;" onclick="closeModal('modal-gen-key')">Cancelar</button>
+      <button class="btn btn-primary" style="flex:1;" id="btn-gen-key" onclick="generarClave()">⚡ GENERAR</button>
+    </div>
+    <div style="display:none;margin-top:10px;" id="key-done-btns">
+      <button class="btn btn-ghost" style="width:100%;" onclick="resetGenModal()">🔄 Generar otra</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut }
+                             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore,
+         collection, getDocs, getDoc, doc,
+         updateDoc, addDoc, increment,
+         serverTimestamp, query, where, orderBy }
+                             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const cfg = {
+  apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",
+  authDomain:"yulian-store.firebaseapp.com",
+  projectId:"yulian-store",
+  storageBucket:"yulian-store.firebasestorage.app",
+  messagingSenderId:"372613089099",
+  appId:"1:372613089099:web:b70fae80818c73628f8ace"
+};
+const app  = initializeApp(cfg);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+let currentUser = null, currentSaldo = 0;
+let allMisClaves = [], allUsuarios = [];
+let currentKeyTab = 'todas';
+let generatedKey = null;
+const keyTimers = {};
+
+/* ─── AUTH GUARD ─── */
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href='login.html'; return; }
+  // Check role
+  const snap = await getDoc(doc(db,'users',user.uid));
+  if (!snap.exists()||snap.data().role!=='reseller') {
+    window.location.href='index.html'; return;
+  }
+  // Check banned
+  if (snap.data().banned) { window.location.href='index.html'; return; }
+
+  currentUser  = user;
+  currentSaldo = snap.data().saldo ?? 0;
+  const name   = snap.data().name || user.email.split('@')[0].toUpperCase();
+  document.getElementById('reseller-name').textContent    = name;
+  document.getElementById('reseller-saldo').textContent   = `$${currentSaldo.toFixed(2)}`;
+  document.getElementById('stat-saldo').textContent       = `$${currentSaldo.toFixed(2)}`;
+
+  loadMisClaves();
+  loadUsuarios();
+});
+
+window.doLogout = async () => { await signOut(auth); window.location.href='index.html'; };
+
+/* ── USUARIOS (solo lectura) ── */
+window.loadUsuarios = async () => {
+  document.getElementById('usuarios-body').innerHTML=
+    '<tr class="loading-row"><td colspan="4"><span class="spinner"></span> Cargando...</td></tr>';
+  try {
+    const snap = await getDocs(collection(db,'users'));
+    allUsuarios = snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderUsuarios(allUsuarios);
+  } catch(e) {
+    document.getElementById('usuarios-body').innerHTML=
+      '<tr class="empty-row"><td colspan="4">❌ Error</td></tr>';
+  }
+};
+
+function renderUsuarios(list) {
+  const tbody = document.getElementById('usuarios-body');
+  if (!list.length) { tbody.innerHTML='<tr class="empty-row"><td colspan="4">Sin usuarios</td></tr>'; return; }
+  tbody.innerHTML = list.map(u => {
+    const fecha  = u.createdAt?.toDate ? formatDate(u.createdAt.toDate()) : '—';
+    const status = u.banned
+      ? '<span class="badge badge-red">🚫 Baneado</span>'
+      : '<span class="badge badge-green">✅ Activo</span>';
+    return `<tr>
+      <td><strong>${esc(u.name||'—')}</strong></td>
+      <td class="td-muted overflow-text">${esc(u.email||'—')}</td>
+      <td>${status}</td>
+      <td class="td-muted">${fecha}</td>
+    </tr>`;
+  }).join('');
+}
+
+window.filterUsuarios = q => {
+  const f=q.toLowerCase();
+  renderUsuarios(allUsuarios.filter(u=>(u.name||'').toLowerCase().includes(f)||(u.email||'').toLowerCase().includes(f)));
+};
+
+/* ── MIS CLAVES ── */
+window.loadMisClaves = async () => {
+  document.getElementById('claves-body').innerHTML=
+    '<tr class="loading-row"><td colspan="7"><span class="spinner"></span> Cargando...</td></tr>';
+  try {
+    const q = query(collection(db,'claves'),where('creadoPor','==',currentUser.uid));
+    const snap = await getDocs(q);
+    allMisClaves = snap.docs.map(d=>({id:d.id,...d.data()}));
+    const activas = allMisClaves.filter(k=>k.estado==='disponible').length;
+    document.getElementById('badge-mis-claves').textContent = allMisClaves.length;
+    document.getElementById('stat-mis-claves').textContent  = allMisClaves.length;
+    document.getElementById('stat-activas').textContent     = activas;
+    renderClaves(filterByKeyTab(allMisClaves));
+  } catch(e) {
+    document.getElementById('claves-body').innerHTML=
+      '<tr class="empty-row"><td colspan="7">❌ Error</td></tr>';
+  }
+};
+
+function planSeconds(plan) {
+  const map={'DÍA':86400,'3 DÍAS':259200,'SEMANA':604800,'MES':2592000,'LIFETIME':0};
+  return map[plan]??0;
+}
+function formatTimer(s) {
+  if(s<=0) return 'EXPIRADA';
+  const d=Math.floor(s/86400),h=Math.floor((s%86400)/3600),m=Math.floor((s%3600)/60),sec=s%60;
+  if(d>0) return `${d}d ${h}h ${m}m`;
+  if(h>0) return `${h}h ${m}m ${sec}s`;
+  return `${m}m ${sec}s`;
+}
+
+function startKeyTimer(k) {
+  if(planSeconds(k.plan)===0) return;
+  if(keyTimers[k.id]) clearInterval(keyTimers[k.id]);
+  keyTimers[k.id]=setInterval(()=>{
+    const el=document.getElementById(`timer-${k.id}`);
+    if(!el){clearInterval(keyTimers[k.id]);return;}
+    const total=planSeconds(k.plan);
+    const elapsed=Math.floor((Date.now()-k.createdAt.toDate().getTime())/1000);
+    const rem=Math.max(0,total-elapsed);
+    el.textContent=formatTimer(rem);
+    if(rem<=0){clearInterval(keyTimers[k.id]);el.textContent='⛔ EXPIRADA';}
+  },1000);
+}
+
+function filterByKeyTab(list) {
+  if(currentKeyTab==='todas') return list;
+  return list.filter(k=>(k.estado||'disponible')===currentKeyTab);
+}
+
+function renderClaves(list) {
+  Object.values(keyTimers).forEach(clearInterval);
+  const tbody=document.getElementById('claves-body');
+  if(!list.length){tbody.innerHTML='<tr class="empty-row"><td colspan="7">Sin claves en esta categoría</td></tr>';return;}
+  const stateMap={
+    disponible:'<span class="badge badge-green">✅ Activa</span>',
+    pausada:   '<span class="badge badge-yellow">⏸ Pausada</span>',
+    baneada:   '<span class="badge badge-red">🚫 Baneada</span>',
+    usada:     '<span class="badge badge-blue">🔒 Usada</span>',
+  };
+  tbody.innerHTML=list.map(k=>{
+    const estado=k.estado||'disponible';
+    const fecha=k.createdAt?.toDate?formatDate(k.createdAt.toDate()):'—';
+    const isLifetime=planSeconds(k.plan)===0;
+    const timerHtml=isLifetime
+      ?'<span class="key-timer">∞ LIFETIME</span>'
+      :`<span class="key-timer ${estado!=='disponible'?estado:''}" id="timer-${k.id}">—</span>`;
+    return `<tr>
+      <td><span class="key-mono">${esc(k.clave||'—')}</span></td>
+      <td class="td-muted">${esc(k.producto||'—')}</td>
+      <td><span class="badge badge-purple">${esc(k.plan||'—')}</span></td>
+      <td>${timerHtml}</td>
+      <td>${stateMap[estado]||stateMap.disponible}</td>
+      <td class="td-muted">${fecha}</td>
+      <td style="display:flex;gap:4px;flex-wrap:wrap;">
+        ${estado==='disponible'?`<button class="btn btn-warn btn-sm" onclick="pauseKey('${k.id}')">⏸</button>`
+          :estado==='pausada'?`<button class="btn btn-ghost btn-sm" onclick="resumeKey('${k.id}')">▶</button>`:''}
+        ${estado!=='baneada'?`<button class="btn btn-danger btn-sm" onclick="banKey('${k.id}')">🚫</button>`
+          :`<button class="btn btn-ghost btn-sm" onclick="unbanKey('${k.id}')">🔓</button>`}
+        <button class="btn btn-ghost btn-sm" onclick="resetKey('${k.id}')">🔄</button>
+      </td>
+    </tr>`;
+  }).join('');
+  list.forEach(k=>{if(k.estado==='disponible')startKeyTimer(k);});
+}
+
+window.filterClaves=q=>{
+  const f=q.toLowerCase();
+  renderClaves(filterByKeyTab(allMisClaves).filter(k=>(k.clave||'').toLowerCase().includes(f)||(k.producto||'').toLowerCase().includes(f)));
+};
+window.switchKeyTab=tab=>{
+  currentKeyTab=tab;
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    const tabs=['todas','disponible','pausada','baneada'];
+    b.classList.toggle('active',tabs[i]===tab);
+  });
+  renderClaves(filterByKeyTab(allMisClaves));
+};
+
+async function updateKeyState(id,estado){
+  await updateDoc(doc(db,'claves',id),{estado});
+  const k=allMisClaves.find(x=>x.id===id);
+  if(k)k.estado=estado;
+  renderClaves(filterByKeyTab(allMisClaves));
+}
+window.pauseKey  = id=>updateKeyState(id,'pausada').then(()=>showToast('⏸ Pausada','info'));
+window.resumeKey = id=>updateKeyState(id,'disponible').then(()=>showToast('▶ Reanudada','success'));
+window.banKey    = id=>updateKeyState(id,'baneada').then(()=>showToast('🚫 Baneada','info'));
+window.unbanKey  = id=>updateKeyState(id,'disponible').then(()=>showToast('🔓 Desbaneada','success'));
+window.resetKey  = async id=>{
+  await updateDoc(doc(db,'claves',id),{estado:'disponible',createdAt:serverTimestamp(),pausedSeconds:0});
+  const k=allMisClaves.find(x=>x.id===id);
+  if(k){k.estado='disponible';k.createdAt={toDate:()=>new Date()};k.pausedSeconds=0;}
+  renderClaves(filterByKeyTab(allMisClaves));
+  showToast('🔄 Reseteada','success');
+};
+
+/* ── COST MAP ── */
+const PLAN_COSTS = {'DÍA':5,'3 DÍAS':12,'SEMANA':20,'MES':50,'LIFETIME':100};
+window.updateCost = () => {
+  const plan=document.getElementById('key-plan').value;
+  const cost=PLAN_COSTS[plan]??5;
+  document.getElementById('key-cost-display').textContent=`$${cost.toFixed(2)}`;
+  const warn=document.getElementById('saldo-warn');
+  const btn=document.getElementById('btn-gen-key');
+  if(currentSaldo<cost){warn.classList.add('visible');btn.disabled=true;}
+  else{warn.classList.remove('visible');btn.disabled=false;}
+};
+
+/* ── GEN KEY ── */
+window.openGenKeyModal=()=>{
+  resetGenModal();
+  document.getElementById('modal-gen-key').classList.add('open');
+  updateCost();
+};
+window.resetGenModal=()=>{
+  document.getElementById('key-gen-box').style.display='none';
+  document.getElementById('key-result-box').style.display='none';
+  document.getElementById('key-gen-btns').style.display='flex';
+  document.getElementById('key-done-btns').style.display='none';
+  document.getElementById('btn-gen-key').disabled=false;
+  document.getElementById('btn-gen-key').innerHTML='⚡ GENERAR';
+  document.getElementById('key-notes').value='';
+  generatedKey=null;
+  updateCost();
+};
+window.generarClave=async()=>{
+  const product=document.getElementById('key-product').value;
+  const plan=document.getElementById('key-plan').value;
+  const notes=document.getElementById('key-notes').value.trim();
+  const cost=PLAN_COSTS[plan]??5;
+  if(currentSaldo<cost){showToast('Saldo insuficiente','error');return;}
+  const btn=document.getElementById('btn-gen-key');
+  btn.disabled=true;
+  document.getElementById('key-gen-box').style.display='block';
+  document.getElementById('key-gen-btns').style.display='none';
+  const steps=['Iniciando generador seguro...','Aplicando encriptación...','Verificando unicidad...','Vinculando producto...','Finalizando...'];
+  const bar=document.getElementById('key-gen-bar');
+  const status=document.getElementById('key-gen-status');
+  for(let i=0;i<steps.length;i++){
+    status.textContent=steps[i];
+    bar.style.width=((i+1)/steps.length*100)+'%';
+    await sleep(500+Math.random()*300);
+  }
+  const prefix=product.replace(/[^A-Z0-9]/gi,'').toUpperCase().slice(0,4);
+  const planCode=plan.replace(/[^A-Z0-9]/gi,'').toUpperCase().slice(0,3);
+  const r1=Math.random().toString(36).slice(2,6).toUpperCase();
+  const r2=Math.random().toString(36).slice(2,6).toUpperCase();
+  const r3=Math.random().toString(36).slice(2,6).toUpperCase();
+  generatedKey=`YS-${prefix}-${planCode}-${r1}-${r2}-${r3}`;
+  document.getElementById('key-gen-box').style.display='none';
+  document.getElementById('key-result-box').style.display='flex';
+  document.getElementById('key-result-text').textContent=generatedKey;
+  document.getElementById('key-gen-btns').style.display='none';
+  document.getElementById('key-done-btns').style.display='block';
+  try {
+    // Descontar saldo
+    await updateDoc(doc(db,'users',currentUser.uid),{saldo:increment(-cost)});
+    currentSaldo-=cost;
+    document.getElementById('reseller-saldo').textContent=`$${currentSaldo.toFixed(2)}`;
+    document.getElementById('stat-saldo').textContent=`$${currentSaldo.toFixed(2)}`;
+    const ref=await addDoc(collection(db,'claves'),{
+      clave:generatedKey,producto:product,plan,
+      estado:'disponible',notas:notes,
+      asignadoA:'—',creadoPor:currentUser.uid,
+      pausedSeconds:0,createdAt:serverTimestamp()
+    });
+    allMisClaves.unshift({id:ref.id,clave:generatedKey,producto:product,plan,estado:'disponible',asignadoA:'—',creadoPor:currentUser.uid,pausedSeconds:0,createdAt:{toDate:()=>new Date()}});
+    document.getElementById('badge-mis-claves').textContent=allMisClaves.length;
+    document.getElementById('stat-mis-claves').textContent=allMisClaves.length;
+    const activas=allMisClaves.filter(k=>k.estado==='disponible').length;
+    document.getElementById('stat-activas').textContent=activas;
+    renderClaves(filterByKeyTab(allMisClaves));
+    showToast('✅ Clave generada','success');
+  } catch(e){showToast('Error al guardar','error');}
+};
+window.copyKey=()=>{if(generatedKey){navigator.clipboard.writeText(generatedKey);showToast('📋 Copiada','success');}};
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function formatDate(d){return d.toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'});}
+function esc(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+let toastTimer;
+window.showToast=(msg,type='info')=>{const t=document.getElementById('toast');t.textContent=msg;t.className=`show ${type}`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3200);};
+window.closeModal=id=>document.getElementById(id).classList.remove('open');
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));});
+</script>
+
+<script>
+window.showPanel=(name,el)=>{
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById(`panel-${name}`).classList.add('active');
+  if(el)el.classList.add('active');
+};
+(function(){
+  const dot=document.getElementById('cdot'),ring=document.getElementById('cring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function anim(){requestAnimationFrame(anim);dot.style.left=mx+'px';dot.style.top=my+'px';rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;ring.style.left=rx+'px';ring.style.top=ry+'px';})();
+  document.addEventListener('mouseover',e=>{
+    const el=e.target.closest('button,a,input,select,[onclick],.nav-item,.tab-btn');
+    if(el){ring.style.width='52px';ring.style.height='52px';ring.style.borderColor='rgba(139,47,255,1)';}
+    else{ring.style.width='38px';ring.style.height='38px';ring.style.borderColor='rgba(139,47,255,0.8)';}
+  });
+})();
+</script>
+</body>
+</html>

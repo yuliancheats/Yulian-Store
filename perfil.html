@@ -440,6 +440,86 @@
 @keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
 </style>
 
+
+<!-- ═══ PANTALLA DE BAN EN TIEMPO REAL ═══ -->
+<div id="ban-screen" style="
+  display:none; position:fixed; inset:0; z-index:999999;
+  background:#06040f; align-items:center; justify-content:center;
+  padding:20px; flex-direction:column;
+">
+  <div style="
+    background:#0d0a1a; border:2px solid rgba(255,68,68,0.4);
+    border-radius:16px; padding:48px 40px; max-width:480px; width:100%;
+    text-align:center; box-shadow:0 0 60px rgba(255,68,68,0.12);
+    animation:popInBan .5s cubic-bezier(.34,1.56,.64,1) forwards;
+  ">
+    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
+    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;
+      letter-spacing:3px;color:#ff4444;text-transform:uppercase;margin-bottom:16px;
+      text-shadow:0 0 20px rgba(255,68,68,0.5);">
+      Cuenta Suspendida
+    </h2>
+    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:12px;">
+      Tu cuenta ha sido suspendida por un administrador.
+    </p>
+    <div id="ban-reason-rt" style="
+      font-family:'Exo 2',sans-serif;color:#ff9966;font-size:.85rem;
+      background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);
+      border-radius:8px;padding:12px 16px;margin-bottom:24px;line-height:1.7;
+      display:none;
+    "></div>
+    <p style="font-family:'Exo 2',sans-serif;color:#666;font-size:.82rem;line-height:1.7;margin-bottom:24px;">
+      Si crees que es un error, abre un ticket en nuestro Discord o contacta un administrador para apelar.
+    </p>
+    <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="
+      display:inline-flex;align-items:center;gap:8px;
+      background:#7A1FEE;color:#000;text-decoration:none;
+      font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;
+      letter-spacing:2px;padding:13px 28px;border-radius:6px;
+      text-transform:uppercase;box-shadow:0 4px 18px rgba(122,31,238,.35);
+      transition:all .2s;
+    " onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
+      🎮 Abrir Discord
+    </a>
+  </div>
+</div>
+<style>
+@keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+</style>
+
+<script type="module">
+/* ── REAL-TIME BAN LISTENER ── */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+(function(){
+  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
+  const app2 = initializeApp(cfg, 'ban-listener');
+  const auth2 = getAuth(app2);
+  const db2   = getFirestore(app2);
+  let unsub = null;
+  onAuthStateChanged(auth2, user => {
+    if (unsub) unsub();
+    if (!user) return;
+    unsub = onSnapshot(doc(db2,'users',user.uid), snap => {
+      if (!snap.exists()) return;
+      const data = snap.data();
+      if (data.banned) {
+        const screen = document.getElementById('ban-screen');
+        if (screen) {
+          screen.style.display = 'flex';
+          if (data.banReason) {
+            const el = document.getElementById('ban-reason-rt');
+            if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
+          }
+        }
+      }
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
 
@@ -838,6 +918,86 @@ document.querySelectorAll('.tilt-box').forEach(box=>{
 <style>
 @keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
 </style>
+
+
+<!-- ═══ PANTALLA DE BAN EN TIEMPO REAL ═══ -->
+<div id="ban-screen" style="
+  display:none; position:fixed; inset:0; z-index:999999;
+  background:#06040f; align-items:center; justify-content:center;
+  padding:20px; flex-direction:column;
+">
+  <div style="
+    background:#0d0a1a; border:2px solid rgba(255,68,68,0.4);
+    border-radius:16px; padding:48px 40px; max-width:480px; width:100%;
+    text-align:center; box-shadow:0 0 60px rgba(255,68,68,0.12);
+    animation:popInBan .5s cubic-bezier(.34,1.56,.64,1) forwards;
+  ">
+    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
+    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;
+      letter-spacing:3px;color:#ff4444;text-transform:uppercase;margin-bottom:16px;
+      text-shadow:0 0 20px rgba(255,68,68,0.5);">
+      Cuenta Suspendida
+    </h2>
+    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:12px;">
+      Tu cuenta ha sido suspendida por un administrador.
+    </p>
+    <div id="ban-reason-rt" style="
+      font-family:'Exo 2',sans-serif;color:#ff9966;font-size:.85rem;
+      background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);
+      border-radius:8px;padding:12px 16px;margin-bottom:24px;line-height:1.7;
+      display:none;
+    "></div>
+    <p style="font-family:'Exo 2',sans-serif;color:#666;font-size:.82rem;line-height:1.7;margin-bottom:24px;">
+      Si crees que es un error, abre un ticket en nuestro Discord o contacta un administrador para apelar.
+    </p>
+    <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="
+      display:inline-flex;align-items:center;gap:8px;
+      background:#7A1FEE;color:#000;text-decoration:none;
+      font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;
+      letter-spacing:2px;padding:13px 28px;border-radius:6px;
+      text-transform:uppercase;box-shadow:0 4px 18px rgba(122,31,238,.35);
+      transition:all .2s;
+    " onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
+      🎮 Abrir Discord
+    </a>
+  </div>
+</div>
+<style>
+@keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+</style>
+
+<script type="module">
+/* ── REAL-TIME BAN LISTENER ── */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+(function(){
+  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
+  const app2 = initializeApp(cfg, 'ban-listener');
+  const auth2 = getAuth(app2);
+  const db2   = getFirestore(app2);
+  let unsub = null;
+  onAuthStateChanged(auth2, user => {
+    if (unsub) unsub();
+    if (!user) return;
+    unsub = onSnapshot(doc(db2,'users',user.uid), snap => {
+      if (!snap.exists()) return;
+      const data = snap.data();
+      if (data.banned) {
+        const screen = document.getElementById('ban-screen');
+        if (screen) {
+          screen.style.display = 'flex';
+          if (data.banReason) {
+            const el = document.getElementById('ban-reason-rt');
+            if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
+          }
+        }
+      }
+    });
+  });
+})();
+</script>
 
 </body>
 </html>
@@ -1238,6 +1398,86 @@ document.querySelectorAll('.tilt-box').forEach(box=>{
 @keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
 </style>
 
+
+<!-- ═══ PANTALLA DE BAN EN TIEMPO REAL ═══ -->
+<div id="ban-screen" style="
+  display:none; position:fixed; inset:0; z-index:999999;
+  background:#06040f; align-items:center; justify-content:center;
+  padding:20px; flex-direction:column;
+">
+  <div style="
+    background:#0d0a1a; border:2px solid rgba(255,68,68,0.4);
+    border-radius:16px; padding:48px 40px; max-width:480px; width:100%;
+    text-align:center; box-shadow:0 0 60px rgba(255,68,68,0.12);
+    animation:popInBan .5s cubic-bezier(.34,1.56,.64,1) forwards;
+  ">
+    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
+    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;
+      letter-spacing:3px;color:#ff4444;text-transform:uppercase;margin-bottom:16px;
+      text-shadow:0 0 20px rgba(255,68,68,0.5);">
+      Cuenta Suspendida
+    </h2>
+    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:12px;">
+      Tu cuenta ha sido suspendida por un administrador.
+    </p>
+    <div id="ban-reason-rt" style="
+      font-family:'Exo 2',sans-serif;color:#ff9966;font-size:.85rem;
+      background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);
+      border-radius:8px;padding:12px 16px;margin-bottom:24px;line-height:1.7;
+      display:none;
+    "></div>
+    <p style="font-family:'Exo 2',sans-serif;color:#666;font-size:.82rem;line-height:1.7;margin-bottom:24px;">
+      Si crees que es un error, abre un ticket en nuestro Discord o contacta un administrador para apelar.
+    </p>
+    <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="
+      display:inline-flex;align-items:center;gap:8px;
+      background:#7A1FEE;color:#000;text-decoration:none;
+      font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;
+      letter-spacing:2px;padding:13px 28px;border-radius:6px;
+      text-transform:uppercase;box-shadow:0 4px 18px rgba(122,31,238,.35);
+      transition:all .2s;
+    " onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
+      🎮 Abrir Discord
+    </a>
+  </div>
+</div>
+<style>
+@keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+</style>
+
+<script type="module">
+/* ── REAL-TIME BAN LISTENER ── */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+(function(){
+  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
+  const app2 = initializeApp(cfg, 'ban-listener');
+  const auth2 = getAuth(app2);
+  const db2   = getFirestore(app2);
+  let unsub = null;
+  onAuthStateChanged(auth2, user => {
+    if (unsub) unsub();
+    if (!user) return;
+    unsub = onSnapshot(doc(db2,'users',user.uid), snap => {
+      if (!snap.exists()) return;
+      const data = snap.data();
+      if (data.banned) {
+        const screen = document.getElementById('ban-screen');
+        if (screen) {
+          screen.style.display = 'flex';
+          if (data.banReason) {
+            const el = document.getElementById('ban-reason-rt');
+            if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
+          }
+        }
+      }
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
 
@@ -1637,6 +1877,86 @@ document.querySelectorAll('.tilt-box').forEach(box=>{
 @keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
 </style>
 
+
+<!-- ═══ PANTALLA DE BAN EN TIEMPO REAL ═══ -->
+<div id="ban-screen" style="
+  display:none; position:fixed; inset:0; z-index:999999;
+  background:#06040f; align-items:center; justify-content:center;
+  padding:20px; flex-direction:column;
+">
+  <div style="
+    background:#0d0a1a; border:2px solid rgba(255,68,68,0.4);
+    border-radius:16px; padding:48px 40px; max-width:480px; width:100%;
+    text-align:center; box-shadow:0 0 60px rgba(255,68,68,0.12);
+    animation:popInBan .5s cubic-bezier(.34,1.56,.64,1) forwards;
+  ">
+    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
+    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;
+      letter-spacing:3px;color:#ff4444;text-transform:uppercase;margin-bottom:16px;
+      text-shadow:0 0 20px rgba(255,68,68,0.5);">
+      Cuenta Suspendida
+    </h2>
+    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:12px;">
+      Tu cuenta ha sido suspendida por un administrador.
+    </p>
+    <div id="ban-reason-rt" style="
+      font-family:'Exo 2',sans-serif;color:#ff9966;font-size:.85rem;
+      background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);
+      border-radius:8px;padding:12px 16px;margin-bottom:24px;line-height:1.7;
+      display:none;
+    "></div>
+    <p style="font-family:'Exo 2',sans-serif;color:#666;font-size:.82rem;line-height:1.7;margin-bottom:24px;">
+      Si crees que es un error, abre un ticket en nuestro Discord o contacta un administrador para apelar.
+    </p>
+    <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="
+      display:inline-flex;align-items:center;gap:8px;
+      background:#7A1FEE;color:#000;text-decoration:none;
+      font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;
+      letter-spacing:2px;padding:13px 28px;border-radius:6px;
+      text-transform:uppercase;box-shadow:0 4px 18px rgba(122,31,238,.35);
+      transition:all .2s;
+    " onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
+      🎮 Abrir Discord
+    </a>
+  </div>
+</div>
+<style>
+@keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+</style>
+
+<script type="module">
+/* ── REAL-TIME BAN LISTENER ── */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+(function(){
+  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
+  const app2 = initializeApp(cfg, 'ban-listener');
+  const auth2 = getAuth(app2);
+  const db2   = getFirestore(app2);
+  let unsub = null;
+  onAuthStateChanged(auth2, user => {
+    if (unsub) unsub();
+    if (!user) return;
+    unsub = onSnapshot(doc(db2,'users',user.uid), snap => {
+      if (!snap.exists()) return;
+      const data = snap.data();
+      if (data.banned) {
+        const screen = document.getElementById('ban-screen');
+        if (screen) {
+          screen.style.display = 'flex';
+          if (data.banReason) {
+            const el = document.getElementById('ban-reason-rt');
+            if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
+          }
+        }
+      }
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
 
@@ -2035,6 +2355,86 @@ document.querySelectorAll('.tilt-box').forEach(box=>{
 <style>
 @keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
 </style>
+
+
+<!-- ═══ PANTALLA DE BAN EN TIEMPO REAL ═══ -->
+<div id="ban-screen" style="
+  display:none; position:fixed; inset:0; z-index:999999;
+  background:#06040f; align-items:center; justify-content:center;
+  padding:20px; flex-direction:column;
+">
+  <div style="
+    background:#0d0a1a; border:2px solid rgba(255,68,68,0.4);
+    border-radius:16px; padding:48px 40px; max-width:480px; width:100%;
+    text-align:center; box-shadow:0 0 60px rgba(255,68,68,0.12);
+    animation:popInBan .5s cubic-bezier(.34,1.56,.64,1) forwards;
+  ">
+    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
+    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;
+      letter-spacing:3px;color:#ff4444;text-transform:uppercase;margin-bottom:16px;
+      text-shadow:0 0 20px rgba(255,68,68,0.5);">
+      Cuenta Suspendida
+    </h2>
+    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:12px;">
+      Tu cuenta ha sido suspendida por un administrador.
+    </p>
+    <div id="ban-reason-rt" style="
+      font-family:'Exo 2',sans-serif;color:#ff9966;font-size:.85rem;
+      background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);
+      border-radius:8px;padding:12px 16px;margin-bottom:24px;line-height:1.7;
+      display:none;
+    "></div>
+    <p style="font-family:'Exo 2',sans-serif;color:#666;font-size:.82rem;line-height:1.7;margin-bottom:24px;">
+      Si crees que es un error, abre un ticket en nuestro Discord o contacta un administrador para apelar.
+    </p>
+    <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="
+      display:inline-flex;align-items:center;gap:8px;
+      background:#7A1FEE;color:#000;text-decoration:none;
+      font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;
+      letter-spacing:2px;padding:13px 28px;border-radius:6px;
+      text-transform:uppercase;box-shadow:0 4px 18px rgba(122,31,238,.35);
+      transition:all .2s;
+    " onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
+      🎮 Abrir Discord
+    </a>
+  </div>
+</div>
+<style>
+@keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+</style>
+
+<script type="module">
+/* ── REAL-TIME BAN LISTENER ── */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+(function(){
+  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
+  const app2 = initializeApp(cfg, 'ban-listener');
+  const auth2 = getAuth(app2);
+  const db2   = getFirestore(app2);
+  let unsub = null;
+  onAuthStateChanged(auth2, user => {
+    if (unsub) unsub();
+    if (!user) return;
+    unsub = onSnapshot(doc(db2,'users',user.uid), snap => {
+      if (!snap.exists()) return;
+      const data = snap.data();
+      if (data.banned) {
+        const screen = document.getElementById('ban-screen');
+        if (screen) {
+          screen.style.display = 'flex';
+          if (data.banReason) {
+            const el = document.getElementById('ban-reason-rt');
+            if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
+          }
+        }
+      }
+    });
+  });
+})();
+</script>
 
 </body>
 </html>
