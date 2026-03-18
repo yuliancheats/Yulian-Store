@@ -1705,8 +1705,9 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { initializeApp }                     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc }         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",
@@ -1717,35 +1718,36 @@ document.addEventListener('DOMContentLoaded', () => {
     appId: "1:372613089099:web:b70fae80818c73628f8ace"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const ADMIN_EMAIL = 'admin@yulianstore.com';
+  const app   = initializeApp(firebaseConfig);
+  const auth  = getAuth(app);
+  const db    = getFirestore(app);
+  const ADMIN = 'admin@yulianstore.com';
 
-  onAuthStateChanged(auth, (user) => {
-    const guest = document.getElementById('nav-guest');
-    const userDiv = document.getElementById('nav-user');
-    const nameEl = document.getElementById('nav-username');
+  onAuthStateChanged(auth, async (user) => {
+    const guest    = document.getElementById('nav-guest');
+    const userDiv  = document.getElementById('nav-user');
+    const nameEl   = document.getElementById('nav-username');
+    const saldoEl  = document.getElementById('nav-saldo');
     const adminBtn = document.getElementById('btn-admin-panel');
 
     if (user) {
-      guest.style.display = 'none';
+      // Mostrar nombre inmediatamente
+      guest.style.display  = 'none';
       userDiv.style.display = 'flex';
-      nameEl.textContent = user.displayName || user.email.split('@')[0].toUpperCase();
-      if (user.email === ADMIN_EMAIL) adminBtn.style.display = 'block';
+      nameEl.textContent   = user.displayName || user.email.split('@')[0].toUpperCase();
+      if (user.email === ADMIN) adminBtn.style.display = 'block';
 
-      // Load and show balance
+      // Cargar saldo desde Firestore
       try {
-        const { getFirestore, doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-        const db2 = getFirestore(app);
-        const userDoc = await getDoc(doc(db2, 'users', user.uid));
-        if (userDoc.exists()) {
-          const saldo = userDoc.data().saldo ?? 0;
-          const saldoEl = document.getElementById('nav-saldo');
-          if (saldoEl) saldoEl.textContent = `$${saldo.toFixed(2)}`;
+        const snap = await getDoc(doc(db, 'users', user.uid));
+        if (snap.exists()) {
+          const saldo = snap.data().saldo ?? 0;
+          saldoEl.textContent = `$${Number(saldo).toFixed(2)}`;
         }
-      } catch(e) { console.log(e); }
+      } catch(e) { console.warn('Error cargando saldo:', e); }
+
     } else {
-      guest.style.display = 'flex';
+      guest.style.display   = 'flex';
       userDiv.style.display = 'none';
     }
   });
