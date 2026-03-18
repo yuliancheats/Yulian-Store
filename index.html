@@ -1056,7 +1056,16 @@ footer p {
   </ul>
 
   <div class="nav-actions">
-    <button class="btn-nav">ACCEDER</button>
+    <div id="nav-guest" style="display:flex;gap:10px;align-items:center;">
+      <a href="login.html" style="text-decoration:none;">
+        <button class="btn-nav">ACCEDER</button>
+      </a>
+    </div>
+    <div id="nav-user" style="display:none;gap:10px;align-items:center;">
+      <span id="nav-username" style="font-family:'Orbitron',sans-serif;font-size:0.65rem;letter-spacing:2px;color:#FF6B1A;text-shadow:0 0 8px #FF6B1A;"></span>
+      <button class="btn-nav" id="btn-admin-panel" onclick="window.location.href='admin.html'" style="display:none;">ADMIN</button>
+      <button class="btn-nav" onclick="doLogout()">SALIR</button>
+    </div>
   </div>
 </nav>
 
@@ -1694,5 +1703,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </script>
 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",
+    authDomain: "yulian-store.firebaseapp.com",
+    projectId: "yulian-store",
+    storageBucket: "yulian-store.firebasestorage.app",
+    messagingSenderId: "372613089099",
+    appId: "1:372613089099:web:b70fae80818c73628f8ace"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const ADMIN_EMAIL = 'admin@yulianstore.com';
+
+  onAuthStateChanged(auth, (user) => {
+    const guest = document.getElementById('nav-guest');
+    const userDiv = document.getElementById('nav-user');
+    const nameEl = document.getElementById('nav-username');
+    const adminBtn = document.getElementById('btn-admin-panel');
+
+    if (user) {
+      guest.style.display = 'none';
+      userDiv.style.display = 'flex';
+      nameEl.textContent = user.displayName || user.email.split('@')[0].toUpperCase();
+      if (user.email === ADMIN_EMAIL) adminBtn.style.display = 'block';
+    } else {
+      guest.style.display = 'flex';
+      userDiv.style.display = 'none';
+    }
+  });
+
+  window.doLogout = async function() {
+    await signOut(auth);
+    window.location.reload();
+  };
+</script>
 </body>
 </html>
