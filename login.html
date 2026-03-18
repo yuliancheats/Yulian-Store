@@ -292,7 +292,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, doc, setDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",
@@ -320,6 +320,29 @@
     }
   });
 
+  // ── REGISTRAR SESIÓN ──
+  async function registrarSesion(user) {
+    const sesion = {
+      uid:       user.uid,
+      nombre:    user.displayName || '—',
+      email:     user.email,
+      fecha:     serverTimestamp(),
+      dispositivo: navigator.userAgent.includes('Mobile') ? '📱 Móvil' : '💻 Escritorio',
+      navegador: (() => {
+        const ua = navigator.userAgent;
+        if (ua.includes('Chrome')) return 'Chrome';
+        if (ua.includes('Firefox')) return 'Firefox';
+        if (ua.includes('Safari')) return 'Safari';
+        if (ua.includes('Edge')) return 'Edge';
+        return 'Otro';
+      })(),
+    };
+    // Guarda en subcolección sesiones del usuario
+    await addDoc(collection(db, 'users', user.uid, 'sesiones'), sesion);
+    // También guarda en colección global para el admin
+    await addDoc(collection(db, 'sesiones'), sesion);
+  }
+
   // ── LOGIN ──
   window.doLogin = async function() {
     const email = document.getElementById('login-email').value.trim();
@@ -338,6 +361,8 @@
 
     try {
       await signInWithEmailAndPassword(auth, email, pass);
+      // Registrar inicio de sesión en Firestore
+      await registrarSesion(cred.user);
       showMsg(msg, 'success', '¡Bienvenido! Redirigiendo...');
     } catch (e) {
       btn.disabled = false;
@@ -384,7 +409,8 @@
         email: email,
         role: 'user',
         createdAt: serverTimestamp(),
-        purchases: []
+        purchases: [],
+        saldo: 0
       });
 
       showMsg(msg, 'success', '¡Cuenta creada! Bienvenido a Yulian Store 🎮');

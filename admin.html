@@ -239,7 +239,179 @@
       letter-spacing: 2px;
     }
 
-    @media (max-width: 768px) {
+    .saldo-cell {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #4dff91;
+      text-shadow: 0 0 8px rgba(77,255,145,0.5);
+    }
+    .saldo-cero { color: var(--text-muted); text-shadow: none; }
+
+    .btn-recargar {
+      background: transparent;
+      color: var(--orange);
+      border: 1px solid var(--orange);
+      padding: 6px 14px;
+      border-radius: 3px;
+      font-family: var(--font-display);
+      font-size: 0.55rem;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-recargar:hover {
+      background: var(--orange);
+      color: #000;
+      box-shadow: 0 0 10px rgba(255,107,26,0.4);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(4px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 36px 32px;
+      width: 100%; max-width: 400px;
+      position: relative;
+    }
+    .modal::before {
+      content: '';
+      position: absolute; top: -1px; left: -1px;
+      width: 20px; height: 20px;
+      border-top: 2px solid var(--orange);
+      border-left: 2px solid var(--orange);
+      border-radius: 10px 0 0 0;
+      box-shadow: -2px -2px 8px rgba(255,107,26,0.4);
+    }
+    .modal::after {
+      content: '';
+      position: absolute; bottom: -1px; right: -1px;
+      width: 20px; height: 20px;
+      border-bottom: 2px solid var(--orange);
+      border-right: 2px solid var(--orange);
+      border-radius: 0 0 10px 0;
+      box-shadow: 2px 2px 8px rgba(255,107,26,0.4);
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--orange);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .modal-user {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .modal-saldo-actual {
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-saldo-actual span:first-child {
+      font-size: 0.78rem; color: var(--text-muted);
+      font-family: var(--font-display); letter-spacing: 1.5px;
+    }
+    .modal-saldo-actual span:last-child {
+      font-family: var(--font-display);
+      font-size: 1.3rem; font-weight: 900;
+      color: #4dff91;
+      text-shadow: 0 0 8px rgba(77,255,145,0.5);
+    }
+
+    .modal-input-wrap { margin-bottom: 20px; }
+    .modal-input-wrap label {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 0.58rem; letter-spacing: 2px;
+      color: var(--text-muted); margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .modal-input-wrap input {
+      width: 100%;
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .modal-input-wrap input:focus { border-color: var(--orange); }
+
+    .modal-quick-btns {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+    }
+    .quick-btn {
+      background: rgba(255,107,26,0.1);
+      border: 1px solid rgba(255,107,26,0.25);
+      color: var(--orange);
+      padding: 6px 14px;
+      border-radius: 3px;
+      font-family: var(--font-display);
+      font-size: 0.6rem; letter-spacing: 1px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .quick-btn:hover { background: rgba(255,107,26,0.25); }
+
+    .modal-btns { display: flex; gap: 10px; }
+    .btn-confirmar {
+      flex: 1;
+      background: var(--orange); color: #000;
+      border: none; padding: 12px;
+      border-radius: 4px;
+      font-family: var(--font-display);
+      font-weight: 700; font-size: 0.65rem;
+      letter-spacing: 2px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-confirmar:hover { background: var(--orange-bright); }
+    .btn-confirmar:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-cancelar {
+      background: transparent; color: var(--text-muted);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 12px 20px; border-radius: 4px;
+      font-family: var(--font-display);
+      font-size: 0.65rem; letter-spacing: 2px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-cancelar:hover { border-color: var(--text-muted); color: #fff; }
+
+    .modal-msg {
+      padding: 10px 14px; border-radius: 4px;
+      font-size: 0.82rem; margin-top: 14px;
+      display: none; font-family: var(--font-body);
+    }
+    .modal-msg.success {
+      background: rgba(77,255,145,0.1);
+      border: 1px solid rgba(77,255,145,0.3);
+      color: #4dff91; display: block;
+    }
+    .modal-msg.error {
+      background: rgba(255,50,50,0.1);
+      border: 1px solid rgba(255,50,50,0.3);
+      color: #ff6666; display: block;
+    }
       nav { padding: 14px 20px; }
       main { padding: 20px; }
       table { font-size: 0.8rem; }
@@ -268,7 +440,40 @@
   <a href="index.html">Volver a la tienda</a>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- MODAL RECARGAR SALDO -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">⚡ Recargar Saldo</div>
+    <div class="modal-user" id="modal-user-info">—</div>
+
+    <div class="modal-saldo-actual">
+      <span>SALDO ACTUAL</span>
+      <span id="modal-saldo-actual">$0.00</span>
+    </div>
+
+    <div class="modal-input-wrap">
+      <label>Cantidad a añadir ($)</label>
+      <input type="number" id="modal-cantidad" placeholder="0.00" min="0" step="0.01">
+    </div>
+
+    <div class="modal-quick-btns">
+      <button class="quick-btn" onclick="setMonto(5)">+$5</button>
+      <button class="quick-btn" onclick="setMonto(10)">+$10</button>
+      <button class="quick-btn" onclick="setMonto(20)">+$20</button>
+      <button class="quick-btn" onclick="setMonto(50)">+$50</button>
+      <button class="quick-btn" onclick="setMonto(100)">+$100</button>
+    </div>
+
+    <div class="modal-btns">
+      <button class="btn-cancelar" onclick="cerrarModal()">CANCELAR</button>
+      <button class="btn-confirmar" id="btn-confirmar" onclick="confirmarRecarga()">
+        CONFIRMAR RECARGA
+      </button>
+    </div>
+
+    <div class="modal-msg" id="modal-msg"></div>
+  </div>
+</div>
 <main id="main-content" style="display:none;">
 
   <!-- STATS -->
@@ -314,8 +519,10 @@
           <th>Nombre</th>
           <th>Correo</th>
           <th>Rol</th>
+          <th>Saldo</th>
           <th>Productos</th>
           <th>Registro</th>
+          <th>Acción</th>
         </tr>
       </thead>
       <tbody id="users-tbody">
@@ -362,7 +569,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, orderBy, query, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",
@@ -477,14 +684,25 @@
           ? purchases.map(p => `<span class="purchase-tag">${p}</span>`).join('')
           : '<span class="no-purchase">Sin compras</span>';
 
+        const saldo = typeof u.saldo === 'number' ? u.saldo : 0;
+        const saldoClass = saldo > 0 ? 'saldo-cell' : 'saldo-cell saldo-cero';
+        const saldoFmt = `$${saldo.toFixed(2)}`;
+
         tbody.innerHTML += `
-          <tr>
+          <tr id="row-${docSnap.id}">
             <td>${index + 1}</td>
             <td class="name">${u.name || '—'}</td>
             <td class="email">${u.email || '—'}</td>
             <td><span class="role-badge role-${u.role || 'user'}">${u.role || 'user'}</span></td>
+            <td><span class="${saldoClass}" id="saldo-${docSnap.id}">${saldoFmt}</span></td>
             <td>${purchasesHtml}</td>
             <td class="date-text">${date}</td>
+            <td>
+              <button class="btn-recargar"
+                onclick="abrirModal('${docSnap.id}','${(u.name||'').replace(/'/g,"\\'")}','${u.email||''}',${saldo})">
+                + SALDO
+              </button>
+            </td>
           </tr>
         `;
       });
@@ -501,6 +719,81 @@
       console.error(e);
     }
   }
+
+  // ── MODAL VARIABLES ──
+  let modalUID = null;
+  let modalSaldoActual = 0;
+
+  window.abrirModal = function(uid, nombre, email, saldo) {
+    modalUID = uid;
+    modalSaldoActual = saldo;
+    document.getElementById('modal-user-info').textContent = `${nombre} · ${email}`;
+    document.getElementById('modal-saldo-actual').textContent = `$${saldo.toFixed(2)}`;
+    document.getElementById('modal-cantidad').value = '';
+    document.getElementById('modal-msg').className = 'modal-msg';
+    document.getElementById('btn-confirmar').disabled = false;
+    document.getElementById('btn-confirmar').textContent = 'CONFIRMAR RECARGA';
+    document.getElementById('modal-overlay').classList.add('open');
+  };
+
+  window.cerrarModal = function() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    modalUID = null;
+  };
+
+  window.setMonto = function(val) {
+    document.getElementById('modal-cantidad').value = val;
+  };
+
+  window.confirmarRecarga = async function() {
+    const cantidadRaw = parseFloat(document.getElementById('modal-cantidad').value);
+    const msg = document.getElementById('modal-msg');
+    const btn = document.getElementById('btn-confirmar');
+
+    if (!cantidadRaw || cantidadRaw <= 0 || isNaN(cantidadRaw)) {
+      msg.className = 'modal-msg error';
+      msg.textContent = 'Ingresa una cantidad válida mayor a $0.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Procesando...';
+    msg.className = 'modal-msg';
+
+    try {
+      await updateDoc(doc(db, 'users', modalUID), {
+        saldo: increment(cantidadRaw)
+      });
+
+      const nuevoSaldo = modalSaldoActual + cantidadRaw;
+
+      // Update cell in table
+      const cell = document.getElementById(`saldo-${modalUID}`);
+      if (cell) {
+        cell.textContent = `$${nuevoSaldo.toFixed(2)}`;
+        cell.className = 'saldo-cell';
+      }
+
+      msg.className = 'modal-msg success';
+      msg.textContent = `✅ +$${cantidadRaw.toFixed(2)} añadidos. Nuevo saldo: $${nuevoSaldo.toFixed(2)}`;
+      btn.textContent = '¡LISTO!';
+
+      // Close after 1.5s
+      setTimeout(() => cerrarModal(), 1800);
+
+    } catch(e) {
+      msg.className = 'modal-msg error';
+      msg.textContent = 'Error al actualizar el saldo. Intenta de nuevo.';
+      btn.disabled = false;
+      btn.textContent = 'CONFIRMAR RECARGA';
+      console.error(e);
+    }
+  };
+
+  // Close modal clicking outside
+  document.getElementById('modal-overlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('modal-overlay')) cerrarModal();
+  });
 
   window.doLogout = async function() {
     await signOut(auth);
