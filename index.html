@@ -784,6 +784,28 @@ footer p {
 }
 .footer-links a:hover { color: var(--orange); }
 
+
+/* ── STATUS BADGE EN PRODUCTOS ── */
+.product-status-badge {
+  position: absolute; top: 10px; left: 10px; z-index: 6;
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(0,0,0,.75); backdrop-filter: blur(6px);
+  padding: 5px 12px; border-radius: 20px;
+  font-family: 'Orbitron', sans-serif; font-size: .5rem;
+  letter-spacing: 1.5px; font-weight: 700; text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,.1);
+}
+.product-status-badge .sdot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.sdot.online   { background: #4dff91; box-shadow: 0 0 8px #4dff91; }
+.sdot.updating { background: #FFB800; box-shadow: 0 0 8px #FFB800; animation: blink-s 1.2s infinite; }
+.sdot.offline  { background: #ff5555; box-shadow: 0 0 8px #ff5555; }
+@keyframes blink-s { 0%,100%{opacity:1} 50%{opacity:.3} }
+.sdot-txt.online   { color: #4dff91; }
+.sdot-txt.updating { color: #FFB800; }
+.sdot-txt.offline  { color: #ff5555; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   nav { padding: 16px 24px; }
@@ -1096,7 +1118,7 @@ footer p {
       Recibe soporte, reclama tu acceso y mantente al día con todas las actualizaciones de los productos.
     </p>
     <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
-      <a href="https://discord.gg/kNQAHEbm" target="_blank"
+      <a href="https://discord.gg/TU_LINK_AQUI" target="_blank"
          onclick="document.getElementById('discord-overlay').style.display='none'"
          style="background:#FF6B1A;color:#000;text-decoration:none;font-family:'Orbitron',sans-serif;
          font-weight:700;font-size:.65rem;letter-spacing:2px;padding:12px 22px;border-radius:6px;
@@ -1314,6 +1336,7 @@ window.addEventListener('load', function() {
     <div id="nav-user" style="display:none;gap:10px;align-items:center;">
       <span id="nav-username" style="font-family:'Orbitron',sans-serif;font-size:0.65rem;letter-spacing:2px;color:#FF6B1A;text-shadow:0 0 8px #FF6B1A;"></span>
       <span style="font-family:'Orbitron',sans-serif;font-size:0.65rem;letter-spacing:1px;color:#4dff91;text-shadow:0 0 8px rgba(77,255,145,0.6);background:rgba(77,255,145,0.08);border:1px solid rgba(77,255,145,0.2);padding:5px 12px;border-radius:3px;" id="nav-saldo">$0.00</span>
+      <button class="btn-nav" onclick="window.location.href='perfil.html'" style="font-size:.62rem;">MI PERFIL</button>
       <button class="btn-nav" id="btn-admin-panel" onclick="window.location.href='admin.html'" style="display:none;">ADMIN</button>
       <button class="btn-nav" onclick="doLogout()">CERRAR SESIÓN</button>
     </div>
@@ -1439,6 +1462,7 @@ window.addEventListener('load', function() {
       <span class="corner-br"></span>
       <div class="product-inner">
         <div class="product-img-wrap">
+          <div class="product-status-badge" id="badge-codm"><div class="sdot online"></div><span class="sdot-txt online">Online</span></div>
           <img src="codm_public_box.png" alt="Call of Duty Mobile">
           <div class="product-img-overlay"></div>
         </div>
@@ -1461,6 +1485,7 @@ window.addEventListener('load', function() {
       <span class="corner-br"></span>
       <div class="product-inner">
         <div class="product-img-wrap">
+          <div class="product-status-badge" id="badge-blood"><div class="sdot online"></div><span class="sdot-txt online">Online</span></div>
           <img src="blood_public_box.png" alt="Blood Strike">
           <div class="product-img-overlay"></div>
         </div>
@@ -1484,6 +1509,7 @@ window.addEventListener('load', function() {
       <div class="free-badge pulse-glow">GRATIS</div>
       <div class="product-inner">
         <div class="product-img-wrap">
+          <div class="product-status-badge" id="badge-combat"><div class="sdot online"></div><span class="sdot-txt online">Online</span></div>
           <img src="combat.png" alt="Combat Master">
           <div class="product-img-overlay"></div>
         </div>
@@ -1540,7 +1566,7 @@ window.addEventListener('load', function() {
         </svg>
       </div>
       <div class="feature-title">Miles de Usuarios</div>
-      <div class="feature-text">Más de 2,000 jugadores satisfechos confían en nuestros productos. Reconocidos y recomendados en toda la comunidad.</div>
+      <div class="feature-text">Más de 15,000 jugadores satisfechos confían en nuestros productos. Reconocidos y recomendados en toda la comunidad.</div>
     </div>
 
     <div class="feature-card reveal">
@@ -1957,7 +1983,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <script type="module">
   import { initializeApp }                     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc }         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc }          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",
@@ -1972,6 +1998,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const auth  = getAuth(app);
   const db    = getFirestore(app);
   const ADMIN = 'admin@yulianstore.com';
+
+
+  // ── CARGAR ESTADO DE CHEATS EN TIEMPO REAL ──
+  const STATUS_MAP = {
+    online:   { txt: 'Online',        cls: 'online'   },
+    updating: { txt: 'Actualizando',  cls: 'updating' },
+    offline:  { txt: 'Offline',       cls: 'offline'  },
+  };
+
+  ['codm','blood','combat'].forEach(prodId => {
+    getDoc(doc(db, 'status', prodId)).then(snap => {
+      const estado = snap.exists() ? (snap.data().estado || 'online') : 'online';
+      updateStatusBadge(prodId, estado);
+    }).catch(() => {});
+  });
+
+  function updateStatusBadge(prodId, estado) {
+    const badge = document.getElementById(`badge-${prodId}`);
+    if (!badge) return;
+    const info = STATUS_MAP[estado] || STATUS_MAP.online;
+    badge.innerHTML = `<div class="sdot ${info.cls}"></div><span class="sdot-txt ${info.cls}">${info.txt}</span>`;
+  }
 
   onAuthStateChanged(auth, async (user) => {
     const guest    = document.getElementById('nav-guest');
