@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YULIAN STORE — Acceder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6B1A;
+      --orange-bright: #FF8C42;
+      --dark: #080808;
+      --dark2: #0e0e0e;
+      --card: #111111;
+      --card2: #161616;
+      --text: #ffffff;
+      --text-muted: #999999;
+      --border: rgba(255,107,26,0.2);
+      --neon: 0 0 8px #FF6B1A, 0 0 20px #FF6B1A, 0 0 40px rgba(255,107,26,0.4);
+      --font-display: 'Orbitron', sans-serif;
+      --font-body: 'Exo 2', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Background */
+    .bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(255,107,26,0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(255,107,26,0.07) 0%, transparent 50%),
+        #080808;
+    }
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,107,26,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,107,26,0.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    /* Card */
+    .login-wrap {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 440px;
+      padding: 20px;
+    }
+
+    .logo-top {
+      text-align: center;
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      text-shadow: var(--neon);
+      margin-bottom: 32px;
+    }
+    .logo-top span { color: var(--orange); }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 40px 36px;
+      position: relative;
+      box-shadow: 0 0 40px rgba(255,107,26,0.05);
+    }
+
+    /* Corner accents */
+    .card::before, .card::after {
+      content: ''; position: absolute;
+      width: 20px; height: 20px;
+    }
+    .card::before {
+      top: -1px; left: -1px;
+      border-top: 2px solid var(--orange);
+      border-left: 2px solid var(--orange);
+      border-radius: 10px 0 0 0;
+      box-shadow: -2px -2px 10px rgba(255,107,26,0.4);
+    }
+    .card::after {
+      bottom: -1px; right: -1px;
+      border-bottom: 2px solid var(--orange);
+      border-right: 2px solid var(--orange);
+      border-radius: 0 0 10px 0;
+      box-shadow: 2px 2px 10px rgba(255,107,26,0.4);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      margin-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .tab {
+      flex: 1; text-align: center;
+      padding: 12px;
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.25s;
+    }
+    .tab.active {
+      color: var(--orange);
+      border-bottom-color: var(--orange);
+      text-shadow: 0 0 8px var(--orange);
+    }
+
+    /* Forms */
+    .form { display: none; }
+    .form.active { display: block; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .form-group input {
+      width: 100%;
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .form-group input:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 10px rgba(255,107,26,0.2);
+    }
+    .form-group input::placeholder { color: rgba(255,255,255,0.2); }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--orange);
+      color: #000;
+      border: none;
+      padding: 14px;
+      border-radius: 4px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.25s;
+    }
+    .btn-submit:hover {
+      background: var(--orange-bright);
+      box-shadow: var(--neon);
+      transform: translateY(-2px);
+    }
+    .btn-submit:disabled {
+      opacity: 0.5; cursor: not-allowed; transform: none;
+    }
+
+    /* Messages */
+    .msg {
+      padding: 12px 16px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      display: none;
+      font-family: var(--font-body);
+    }
+    .msg.error {
+      background: rgba(255,50,50,0.1);
+      border: 1px solid rgba(255,50,50,0.3);
+      color: #ff6666;
+      display: block;
+    }
+    .msg.success {
+      background: rgba(50,255,100,0.1);
+      border: 1px solid rgba(50,255,100,0.3);
+      color: #66ff88;
+      display: block;
+    }
+
+    /* Back link */
+    .back-link {
+      text-align: center;
+      margin-top: 24px;
+    }
+    .back-link a {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      text-decoration: none;
+      transition: color 0.2s;
+      font-family: var(--font-body);
+    }
+    .back-link a:hover { color: var(--orange); }
+
+    /* Loading spinner */
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(0,0,0,0.3);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="bg-grid"></div>
+
+<div class="login-wrap">
+  <div class="logo-top"><span>YULIAN</span> STORE</div>
+
+  <div class="card">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('login')">Iniciar Sesión</div>
+      <div class="tab" onclick="switchTab('register')">Crear Cuenta</div>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div class="form active" id="form-login">
+      <div id="msg-login" class="msg"></div>
+
+      <div class="form-group">
+        <label>Correo Electrónico</label>
+        <input type="email" id="login-email" placeholder="tu@correo.com">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="login-pass" placeholder="••••••••">
+      </div>
+      <button class="btn-submit" id="btn-login" onclick="doLogin()">
+        Entrar
+      </button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="form" id="form-register">
+      <div id="msg-register" class="msg"></div>
+
+      <div class="form-group">
+        <label>Nombre de Usuario</label>
+        <input type="text" id="reg-name" placeholder="Tu nombre o alias">
+      </div>
+      <div class="form-group">
+        <label>Correo Electrónico</label>
+        <input type="email" id="reg-email" placeholder="tu@correo.com">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres">
+      </div>
+      <button class="btn-submit" id="btn-register" onclick="doRegister()">
+        Crear Cuenta
+      </button>
+    </div>
+
+    <div class="back-link">
+      <a href="index.html">← Volver a la tienda</a>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",
+    authDomain: "yulian-store.firebaseapp.com",
+    projectId: "yulian-store",
+    storageBucket: "yulian-store.firebasestorage.app",
+    messagingSenderId: "372613089099",
+    appId: "1:372613089099:web:b70fae80818c73628f8ace"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // ── CHECK IF ALREADY LOGGED IN ──
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // If admin, go to admin panel
+      if (user.email === 'admin@yulianstore.com') {
+        window.location.href = 'admin.html';
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+  });
+
+  // ── LOGIN ──
+  window.doLogin = async function() {
+    const email = document.getElementById('login-email').value.trim();
+    const pass  = document.getElementById('login-pass').value;
+    const btn   = document.getElementById('btn-login');
+    const msg   = document.getElementById('msg-login');
+
+    if (!email || !pass) {
+      showMsg(msg, 'error', 'Por favor completa todos los campos.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Entrando...';
+    msg.className = 'msg';
+
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      showMsg(msg, 'success', '¡Bienvenido! Redirigiendo...');
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = 'Entrar';
+      const errors = {
+        'auth/user-not-found': 'No existe una cuenta con ese correo.',
+        'auth/wrong-password': 'Contraseña incorrecta.',
+        'auth/invalid-email': 'El correo no es válido.',
+        'auth/too-many-requests': 'Demasiados intentos. Espera un momento.',
+        'auth/invalid-credential': 'Correo o contraseña incorrectos.',
+      };
+      showMsg(msg, 'error', errors[e.code] || 'Error al iniciar sesión. Intenta de nuevo.');
+    }
+  };
+
+  // ── REGISTER ──
+  window.doRegister = async function() {
+    const name  = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const pass  = document.getElementById('reg-pass').value;
+    const btn   = document.getElementById('btn-register');
+    const msg   = document.getElementById('msg-register');
+
+    if (!name || !email || !pass) {
+      showMsg(msg, 'error', 'Por favor completa todos los campos.');
+      return;
+    }
+    if (pass.length < 6) {
+      showMsg(msg, 'error', 'La contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Creando cuenta...';
+    msg.className = 'msg';
+
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await updateProfile(cred.user, { displayName: name });
+
+      // Save user to Firestore
+      await setDoc(doc(db, 'users', cred.user.uid), {
+        name: name,
+        email: email,
+        role: 'user',
+        createdAt: serverTimestamp(),
+        purchases: []
+      });
+
+      showMsg(msg, 'success', '¡Cuenta creada! Bienvenido a Yulian Store 🎮');
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = 'Crear Cuenta';
+      const errors = {
+        'auth/email-already-in-use': 'Ya existe una cuenta con ese correo.',
+        'auth/invalid-email': 'El correo no es válido.',
+        'auth/weak-password': 'La contraseña es muy débil.',
+      };
+      showMsg(msg, 'error', errors[e.code] || 'Error al crear la cuenta. Intenta de nuevo.');
+    }
+  };
+
+  function showMsg(el, type, text) {
+    el.className = `msg ${type}`;
+    el.textContent = text;
+  }
+
+  // Enter key support
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const loginActive = document.getElementById('form-login').classList.contains('active');
+      if (loginActive) window.doLogin();
+      else window.doRegister();
+    }
+  });
+</script>
+
+<script>
+  function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+
+    if (tab === 'login') {
+      document.querySelectorAll('.tab')[0].classList.add('active');
+      document.getElementById('form-login').classList.add('active');
+    } else {
+      document.querySelectorAll('.tab')[1].classList.add('active');
+      document.getElementById('form-register').classList.add('active');
+    }
+  }
+</script>
+
+</body>
+</html>

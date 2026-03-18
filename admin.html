@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YULIAN STORE — Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6B1A;
+      --orange-bright: #FF8C42;
+      --dark: #080808;
+      --dark2: #0e0e0e;
+      --card: #111111;
+      --card2: #161616;
+      --text: #ffffff;
+      --text-muted: #999999;
+      --border: rgba(255,107,26,0.18);
+      --neon: 0 0 8px #FF6B1A, 0 0 20px #FF6B1A, 0 0 40px rgba(255,107,26,0.4);
+      --font-display: 'Orbitron', sans-serif;
+      --font-body: 'Exo 2', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--dark2); }
+    ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 3px; }
+
+    /* NAVBAR */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(8,8,8,0.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.1rem; font-weight: 900;
+      letter-spacing: 3px;
+      text-shadow: var(--neon);
+    }
+    .nav-logo span { color: var(--orange); }
+    .nav-badge {
+      background: var(--orange);
+      color: #000;
+      font-family: var(--font-display);
+      font-size: 0.55rem;
+      letter-spacing: 2px;
+      padding: 3px 10px;
+      border-radius: 2px;
+      margin-left: 12px;
+      font-weight: 700;
+    }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+    .admin-name {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .btn-logout {
+      background: transparent;
+      color: var(--orange);
+      border: 1px solid var(--orange);
+      padding: 8px 18px;
+      border-radius: 3px;
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { background: var(--orange); color: #000; }
+
+    /* MAIN */
+    main { padding: 40px; max-width: 1300px; margin: 0 auto; }
+
+    /* STATS */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .stat-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 20px;
+      text-align: center;
+    }
+    .stat-box-num {
+      font-family: var(--font-display);
+      font-size: 2rem; font-weight: 900;
+      color: var(--orange);
+      text-shadow: var(--neon);
+    }
+    .stat-box-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* SECTION TITLE */
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      color: var(--orange);
+      text-transform: uppercase;
+      text-shadow: 0 0 6px rgba(255,107,26,0.4);
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title::after {
+      content: ''; flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    /* USERS TABLE */
+    .table-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: var(--card2); }
+    thead th {
+      padding: 14px 20px;
+      font-family: var(--font-display);
+      font-size: 0.58rem;
+      letter-spacing: 2px;
+      color: var(--orange);
+      text-transform: uppercase;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    tbody tr {
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.2s;
+    }
+    tbody tr:hover { background: rgba(255,107,26,0.04); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody td {
+      padding: 14px 20px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      vertical-align: middle;
+    }
+    tbody td.name { color: var(--text); font-weight: 600; }
+    tbody td.email { font-size: 0.82rem; }
+
+    .role-badge {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 0.5rem;
+      letter-spacing: 1.5px;
+      padding: 3px 8px;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+    .role-user  { background: rgba(255,255,255,0.08); color: var(--text-muted); }
+    .role-admin { background: rgba(255,107,26,0.2); color: var(--orange); border: 1px solid rgba(255,107,26,0.3); }
+
+    .purchase-tag {
+      display: inline-block;
+      background: rgba(255,107,26,0.12);
+      border: 1px solid rgba(255,107,26,0.25);
+      color: var(--orange);
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 3px;
+      margin: 2px;
+      font-family: var(--font-display);
+      font-size: 0.5rem;
+      letter-spacing: 1px;
+    }
+    .no-purchase { color: rgba(255,255,255,0.2); font-size: 0.8rem; }
+
+    .date-text { font-size: 0.78rem; }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* LOADING */
+    #loading {
+      text-align: center;
+      padding: 60px;
+      color: var(--text-muted);
+    }
+    .loading-dots::after {
+      content: '';
+      animation: dots 1.5s steps(4, end) infinite;
+    }
+    @keyframes dots {
+      0%   { content: ''; }
+      25%  { content: '.'; }
+      50%  { content: '..'; }
+      75%  { content: '...'; }
+    }
+
+    /* ACCESS DENIED */
+    #access-denied {
+      display: none;
+      text-align: center;
+      padding: 100px 20px;
+    }
+    #access-denied h2 {
+      font-family: var(--font-display);
+      color: var(--orange);
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+    #access-denied p { color: var(--text-muted); margin-bottom: 24px; }
+    #access-denied a {
+      color: var(--orange);
+      text-decoration: none;
+      border: 1px solid var(--orange);
+      padding: 10px 24px;
+      border-radius: 4px;
+      font-family: var(--font-display);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      main { padding: 20px; }
+      table { font-size: 0.8rem; }
+      thead th, tbody td { padding: 12px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div>
+    <span class="nav-logo"><span>YULIAN</span> STORE</span>
+    <span class="nav-badge">ADMIN</span>
+  </div>
+  <div class="nav-right">
+    <span class="admin-name" id="admin-name">—</span>
+    <button class="btn-logout" onclick="doLogout()">SALIR</button>
+  </div>
+</nav>
+
+<!-- ACCESS DENIED -->
+<div id="access-denied">
+  <h2>⛔ ACCESO DENEGADO</h2>
+  <p>No tienes permisos para ver esta página.</p>
+  <a href="index.html">Volver a la tienda</a>
+</div>
+
+<!-- MAIN CONTENT -->
+<main id="main-content" style="display:none;">
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-box-num" id="total-users">0</div>
+      <div class="stat-box-label">Usuarios Registrados</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-num" id="total-purchases">0</div>
+      <div class="stat-box-label">Compras Totales</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-num" id="codm-count">0</div>
+      <div class="stat-box-label">CODM</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-num" id="blood-count">0</div>
+      <div class="stat-box-label">Blood Strike</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-num" id="combat-count">0</div>
+      <div class="stat-box-label">Combat Master</div>
+    </div>
+  </div>
+
+  <!-- USERS TABLE -->
+  <div class="section-title">Usuarios Registrados</div>
+
+  <div id="loading">
+    <p class="loading-dots">Cargando usuarios</p>
+  </div>
+
+  <div class="table-wrap" id="table-container" style="display:none;">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Rol</th>
+          <th>Productos</th>
+          <th>Registro</th>
+        </tr>
+      </thead>
+      <tbody id="users-tbody">
+      </tbody>
+    </table>
+  </div>
+
+  <div id="empty-users" class="empty-state" style="display:none;">
+    <div class="icon">👥</div>
+    <p>Aún no hay usuarios registrados.</p>
+  </div>
+
+</main>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",
+    authDomain: "yulian-store.firebaseapp.com",
+    projectId: "yulian-store",
+    storageBucket: "yulian-store.firebasestorage.app",
+    messagingSenderId: "372613089099",
+    appId: "1:372613089099:web:b70fae80818c73628f8ace"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // ADMIN EMAIL — cámbialo al tuyo
+  const ADMIN_EMAIL = 'admin@yulianstore.com';
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    if (user.email !== ADMIN_EMAIL) {
+      document.getElementById('access-denied').style.display = 'block';
+      return;
+    }
+
+    // Admin is logged in
+    document.getElementById('admin-name').textContent = user.email;
+    document.getElementById('main-content').style.display = 'block';
+    await loadUsers();
+  });
+
+  async function loadUsers() {
+    try {
+      const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+
+      document.getElementById('loading').style.display = 'none';
+
+      if (snap.empty) {
+        document.getElementById('empty-users').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('table-container').style.display = 'block';
+
+      const tbody = document.getElementById('users-tbody');
+      let totalPurchases = 0, codm = 0, blood = 0, combat = 0;
+
+      snap.forEach((docSnap, index) => {
+        const u = docSnap.data();
+        const purchases = u.purchases || [];
+        totalPurchases += purchases.length;
+
+        purchases.forEach(p => {
+          if (p.toLowerCase().includes('codm') || p.toLowerCase().includes('call')) codm++;
+          if (p.toLowerCase().includes('blood')) blood++;
+          if (p.toLowerCase().includes('combat')) combat++;
+        });
+
+        const date = u.createdAt?.toDate
+          ? u.createdAt.toDate().toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' })
+          : '—';
+
+        const purchasesHtml = purchases.length > 0
+          ? purchases.map(p => `<span class="purchase-tag">${p}</span>`).join('')
+          : '<span class="no-purchase">Sin compras</span>';
+
+        tbody.innerHTML += `
+          <tr>
+            <td>${index + 1}</td>
+            <td class="name">${u.name || '—'}</td>
+            <td class="email">${u.email || '—'}</td>
+            <td><span class="role-badge role-${u.role || 'user'}">${u.role || 'user'}</span></td>
+            <td>${purchasesHtml}</td>
+            <td class="date-text">${date}</td>
+          </tr>
+        `;
+      });
+
+      // Update stats
+      document.getElementById('total-users').textContent = snap.size;
+      document.getElementById('total-purchases').textContent = totalPurchases;
+      document.getElementById('codm-count').textContent = codm;
+      document.getElementById('blood-count').textContent = blood;
+      document.getElementById('combat-count').textContent = combat;
+
+    } catch (e) {
+      document.getElementById('loading').innerHTML = '<p style="color:#ff6666;">Error al cargar usuarios. Verifica las reglas de Firestore.</p>';
+      console.error(e);
+    }
+  }
+
+  window.doLogout = async function() {
+    await signOut(auth);
+    window.location.href = 'login.html';
+  };
+</script>
+
+</body>
+</html>
