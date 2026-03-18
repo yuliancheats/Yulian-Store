@@ -109,16 +109,7 @@
     @keyframes spin { to { transform: rotate(360deg); } }
   
     /* ── CURSOR PERSONALIZADO ── */
-    /* Solo en desktop — en móvil/tablet no se aplica cursor:none
-       porque bloquea los eventos touch en botones e inputs */
-    @media (pointer: fine) {
-      * { cursor: none !important; }
-    }
-    /* Siempre restaurar pointer-events en elementos interactivos */
-    button, a, input, select, textarea, label,
-    [onclick], .tab, .btn-submit {
-      pointer-events: auto !important;
-    }
+    * { cursor: none !important; }
     #cdot {
       position: fixed; top: 0; left: 0; width: 10px; height: 10px;
       background: #0d0a1a; border-radius: 50%; pointer-events: none;
@@ -133,9 +124,7 @@
       box-shadow: 0 0 14px rgba(122,31,238,0.3);
       transition: width .18s, height .18s, border-color .18s;
     }
-    /* Ocultar cursor custom en móvil */
-    @media (pointer: coarse) {
-      #cdot, #cring { display: none; }
+    
     }
   </style>
 </head>
@@ -194,9 +183,9 @@
   import { initializeApp }                          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword,
            createUserWithEmailAndPassword, signOut,
-           updateProfile, onAuthStateChanged, sendEmailVerification,
-           setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc,
+           updateProfile, onAuthStateChanged,
+           sendEmailVerification }                  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc,
            addDoc, collection, serverTimestamp }    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -213,40 +202,21 @@
   const db   = getFirestore(app);
   const ADMIN = 'admin@yulianstore.com';
 
-  // Flag para evitar que onAuthStateChanged redirija durante registro/login manual
   let manualFlow = false;
 
-  // Configurar persistencia y luego escuchar auth
-  setPersistence(auth, browserLocalPersistence).then(() => {
-    // Solo redirige si ya estaba logueado antes de abrir la página
-    onAuthStateChanged(auth, (user) => {
-      if (user && !manualFlow) {
-        redirect(user);
-      }
-    });
-  }).catch(() => {
-    // Si falla la persistencia igual escuchar auth
-    onAuthStateChanged(auth, (user) => {
-      if (user && !manualFlow) {
-        redirect(user);
-      }
-    });
+  // Si ya hay sesión activa al abrir la página → redirigir
+  onAuthStateChanged(auth, (user) => {
+    if (user && !manualFlow) redirect(user);
   });
 
   async function redirect(user) {
     if (user.email === ADMIN) { window.location.href = 'admin.html'; return; }
-    // Check banned & role before redirecting
     try {
-      const snap = await getDoc(doc(db,'users',user.uid));
+      const snap = await getDoc(doc(db, 'users', user.uid));
       if (snap.exists()) {
         const data = snap.data();
-        if (data.banned) {
-          showBanScreen(data.banReason || '');
-          return;
-        }
-        if (data.role === 'reseller') {
-          window.location.href = 'reseller.html'; return;
-        }
+        if (data.banned) { showBanScreen(data.banReason || ''); return; }
+        if (data.role === 'reseller') { window.location.href = 'reseller.html'; return; }
       }
     } catch(e) {}
     window.location.href = 'index.html';
@@ -254,11 +224,11 @@
 
   function showBanScreen(reason) {
     const screen = document.getElementById('ban-screen');
+    if (!screen) return;
     screen.style.display = 'flex';
     if (reason) {
       const el = document.getElementById('ban-reason-display');
-      el.textContent = '📋 Razón: ' + reason;
-      el.style.display = 'block';
+      if (el) { el.textContent = '📋 Razón: ' + reason; el.style.display = 'block'; }
     }
   }
 
@@ -268,7 +238,7 @@
     const pass  = document.getElementById('login-pass').value;
     const btn   = document.getElementById('btn-login');
     const msg   = document.getElementById('msg-login');
-    if (!email || !pass) { showMsg(msg,'error','Por favor completa todos los campos.'); return; }
+    if (!email || !pass) { showMsg(msg, 'error', 'Por favor completa todos los campos.'); return; }
 
     manualFlow = true;
     btn.disabled = true;
@@ -276,50 +246,44 @@
     msg.className = 'msg';
 
     try {
-      await setPersistence(auth, browserLocalPersistence);
       const cred = await signInWithEmailAndPassword(auth, email, pass);
 
-      // Registrar sesión
-      await addDoc(collection(db, 'sesiones'), {
-        uid:  cred.user.uid,
-        nombre: cred.user.displayName || '—',
-        email: cred.user.email,
-        fecha: serverTimestamp(),
-        dispositivo: /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? '📱 Móvil' : '💻 Escritorio',
-        navegador: (() => {
-          const ua = navigator.userAgent;
-          if (ua.includes('Edg'))    return 'Edge';
-          if (ua.includes('Chrome')) return 'Chrome';
-          if (ua.includes('Firefox'))return 'Firefox';
-          if (ua.includes('Safari')) return 'Safari';
-          return 'Otro';
-        })()
-      });
-
-      // Check email verification
+      // Verificar email (admin siempre pasa)
       if (!cred.user.emailVerified && cred.user.email !== ADMIN) {
         manualFlow = false;
         btn.disabled = false;
         btn.textContent = 'Entrar';
-        showMsg(msg, 'error', '⚠️ Debes verificar tu correo antes de entrar. Revisa tu bandeja de entrada (o spam).');
-        // Offer to resend
-        const resendBtn = document.createElement('button');
-        resendBtn.className = 'btn-submit';
-        resendBtn.style.marginTop = '10px';
-        resendBtn.style.background = 'transparent';
-        resendBtn.style.color = '#7A1FEE';
-        resendBtn.style.border = '1.5px solid #7A1FEE';
-        resendBtn.textContent = 'Reenviar correo de verificación';
-        resendBtn.onclick = async () => {
-          await sendEmailVerification(cred.user);
-          resendBtn.textContent = '✅ Correo reenviado. Revisa tu bandeja.';
-          resendBtn.disabled = true;
-        };
-        msg.after(resendBtn);
+        showMsg(msg, 'error', '⚠️ Debes verificar tu correo antes de entrar. Revisa tu bandeja (o spam).');
+        // Botón reenviar
+        if (!document.getElementById('resend-btn')) {
+          const rb = document.createElement('button');
+          rb.id = 'resend-btn';
+          rb.className = 'btn-submit';
+          rb.style.cssText = 'margin-top:10px;background:transparent;color:#7A1FEE;border:1.5px solid #7A1FEE;';
+          rb.textContent = 'Reenviar correo de verificación';
+          rb.onclick = async () => {
+            rb.disabled = true;
+            try {
+              await sendEmailVerification(cred.user);
+              rb.textContent = '✅ Correo reenviado.';
+            } catch(e) { rb.disabled = false; }
+          };
+          msg.after(rb);
+        }
         return;
       }
+
+      // Registrar sesión
+      try {
+        await addDoc(collection(db, 'sesiones'), {
+          uid: cred.user.uid, nombre: cred.user.displayName || '—',
+          email: cred.user.email, fecha: serverTimestamp(),
+          dispositivo: /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? '📱 Móvil' : '💻 Escritorio'
+        });
+      } catch(e) {}
+
       showMsg(msg, 'success', '¡Bienvenido! Redirigiendo...');
-      setTimeout(() => redirect(cred.user), 1000);
+      setTimeout(() => redirect(cred.user), 800);
 
     } catch(e) {
       manualFlow = false;
@@ -332,7 +296,7 @@
         'auth/too-many-requests': 'Demasiados intentos. Espera un momento.',
         'auth/invalid-credential':'Correo o contraseña incorrectos.',
       };
-      showMsg(msg, 'error', errs[e.code] || 'Error al iniciar sesión.');
+      showMsg(msg, 'error', errs[e.code] || 'Error al iniciar sesión. (' + e.code + ')');
     }
   };
 
@@ -344,8 +308,8 @@
     const btn   = document.getElementById('btn-register');
     const msg   = document.getElementById('msg-register');
 
-    if (!name || !email || !pass) { showMsg(msg,'error','Por favor completa todos los campos.'); return; }
-    if (pass.length < 6)          { showMsg(msg,'error','La contraseña debe tener al menos 6 caracteres.'); return; }
+    if (!name || !email || !pass) { showMsg(msg, 'error', 'Por favor completa todos los campos.'); return; }
+    if (pass.length < 6)          { showMsg(msg, 'error', 'La contraseña debe tener al menos 6 caracteres.'); return; }
 
     manualFlow = true;
     btn.disabled = true;
@@ -356,59 +320,28 @@
       const cred = await createUserWithEmailAndPassword(auth, email, pass);
       await updateProfile(cred.user, { displayName: name });
 
-      // Guardar en Firestore ANTES de redirigir
       await setDoc(doc(db, 'users', cred.user.uid), {
-        name:      name,
-        email:     email,
-        role:      'user',
+        name, email, role: 'user',
         createdAt: serverTimestamp(),
-        purchases: [],
-        saldo:     0
+        purchases: [], saldo: 0
       });
 
-      // Enviar email de verificación
       await sendEmailVerification(cred.user);
-
-      // Cerrar sesión inmediatamente — no puede entrar sin verificar
       await signOut(auth);
       manualFlow = false;
 
-      // Cambiar el formulario a un estado de "pendiente de verificación"
       btn.disabled = true;
       btn.textContent = '📧 Correo enviado';
-      showMsg(msg, 'success', '✅ ¡Cuenta creada! Te enviamos un correo de verificación. Debes confirmarlo antes de poder iniciar sesión.');
+      showMsg(msg, 'success', '✅ ¡Cuenta creada! Revisa tu correo y verifica antes de iniciar sesión.');
 
-      // Mostrar panel de espera con instrucciones
-      const waitBox = document.createElement('div');
-      waitBox.style.cssText = 'margin-top:16px;padding:16px;background:rgba(122,31,238,0.07);border:1px solid rgba(122,31,238,0.2);border-radius:8px;text-align:center;';
-      waitBox.innerHTML = \`
-        <div style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;line-height:1.8;margin-bottom:12px;">
-          📬 Revisa tu bandeja de entrada (o carpeta de spam).<br>
-          Haz clic en el link del correo y luego inicia sesión aquí.
-        </div>
-        <button id="resend-btn" style="background:transparent;color:#7A1FEE;border:1px solid rgba(122,31,238,0.4);padding:8px 20px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:.55rem;letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
-          onmouseover="this.style.background='rgba(122,31,238,0.1)'" onmouseout="this.style.background='transparent'">
-          🔄 Reenviar correo
-        </button>
-      \`;
-      msg.after(waitBox);
-
-      // Reenviar correo — necesita volver a loguear temporalmente para reenviar
-      document.getElementById('resend-btn').addEventListener('click', async () => {
-        const resendBtn = document.getElementById('resend-btn');
-        resendBtn.disabled = true;
-        resendBtn.textContent = '⏳ Enviando...';
-        try {
-          // Re-login temporal solo para reenviar
-          const tmp = await signInWithEmailAndPassword(auth, email, pass);
-          await sendEmailVerification(tmp.user);
-          await signOut(auth);
-          resendBtn.textContent = '✅ Reenviado';
-        } catch(e) {
-          resendBtn.disabled = false;
-          resendBtn.textContent = '🔄 Reenviar correo';
-        }
-      });
+      // Caja de espera
+      if (!document.getElementById('wait-box')) {
+        const box = document.createElement('div');
+        box.id = 'wait-box';
+        box.style.cssText = 'margin-top:16px;padding:16px;background:rgba(122,31,238,0.07);border:1px solid rgba(122,31,238,0.2);border-radius:8px;text-align:center;';
+        box.innerHTML = '<div style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;line-height:1.8;margin-bottom:12px;">📬 Revisa tu bandeja de entrada (o spam).<br>Haz clic en el link del correo, luego inicia sesión.</div>';
+        msg.after(box);
+      }
 
     } catch(e) {
       manualFlow = false;
@@ -419,7 +352,7 @@
         'auth/invalid-email':        'El correo no es válido.',
         'auth/weak-password':        'La contraseña es muy débil.',
       };
-      showMsg(msg, 'error', errs[e.code] || 'Error al crear la cuenta.');
+      showMsg(msg, 'error', errs[e.code] || 'Error al crear la cuenta. (' + e.code + ')');
     }
   };
 
