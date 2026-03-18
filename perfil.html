@@ -178,7 +178,7 @@
   <a href="index.html" class="logo"><span>YULIAN</span> STORE</a>
   <div class="nav-r">
     <a href="index.html" class="nbtn nbtn-g" style="font-size:.54rem;">← Tienda</a>
-    <button class="nbtn" onclick="doLogout()" style="font-size:.56rem;">CERRAR SESIÓN</button>
+    <button class="nbtn" onclick="pedirLogout()" style="font-size:.56rem;">CERRAR SESIÓN</button>
   </div>
 </nav>
 
@@ -390,5 +390,56 @@
   });
 })();
 </script>
+
+<!-- MODAL CERRAR SESIÓN -->
+<div id="logout-modal" style="
+  display:none;position:fixed;inset:0;z-index:99999;
+  background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:20px;
+">
+  <div style="
+    background:#111;border:1px solid rgba(255,107,26,0.25);border-radius:14px;
+    padding:40px 36px;max-width:420px;width:100%;position:relative;
+    box-shadow:0 0 60px rgba(255,107,26,0.08);
+    animation:popInL .4s cubic-bezier(.34,1.56,.64,1) forwards;
+  ">
+    <div style="text-align:center;margin-bottom:20px;font-size:2.8rem;">⚠️</div>
+    <h3 style="font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:900;
+      letter-spacing:2px;color:#FF6B1A;text-align:center;margin-bottom:14px;text-transform:uppercase;">
+      ¿Cerrar Sesión?
+    </h3>
+    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.88rem;line-height:1.75;
+      text-align:center;margin-bottom:10px;">
+      Recuerda que tu <strong style="color:#fff;">saldo y compras</strong> están guardados en tu cuenta.
+    </p>
+    <p style="font-family:'Exo 2',sans-serif;color:#ff9955;font-size:.82rem;line-height:1.7;
+      text-align:center;margin-bottom:28px;
+      background:rgba(255,107,26,0.07);border:1px solid rgba(255,107,26,0.2);
+      border-radius:8px;padding:12px 16px;">
+      🔑 Si no recuerdas tu contraseña, <strong>no podrás recuperar el acceso</strong> a tu saldo ni a tus claves de productos. Asegúrate de tenerla guardada antes de salir.
+    </p>
+    <div style="display:flex;gap:12px;">
+      <button onclick="document.getElementById('logout-modal').style.display='none'"
+        style="flex:1;background:transparent;color:#777;border:1px solid rgba(255,255,255,.12);
+        padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.6rem;
+        letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
+        onmouseover="this.style.borderColor='#FF6B1A';this.style.color='#FF6B1A'"
+        onmouseout="this.style.borderColor='rgba(255,255,255,.12)';this.style.color='#777'">
+        CANCELAR
+      </button>
+      <button onclick="confirmarLogout()"
+        style="flex:1;background:#FF6B1A;color:#000;border:none;padding:13px;border-radius:6px;
+        font-family:'Orbitron',sans-serif;font-weight:700;font-size:.6rem;
+        letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
+        onmouseover="this.style.background='#FF8C42'" onmouseout="this.style.background='#FF6B1A'">
+        SÍ, CERRAR SESIÓN
+      </button>
+    </div>
+  </div>
+</div>
+<style>
+@keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+</style>
+
 </body>
 </html>

@@ -168,6 +168,9 @@
         <input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres">
       </div>
       <button class="btn-submit" id="btn-register" onclick="doRegister()">Crear Cuenta</button>
+      <p style="font-family:'Exo 2',sans-serif;font-size:.78rem;color:#666;text-align:center;margin-top:14px;line-height:1.6;">
+        📧 Te enviaremos un correo de verificación.<br>Debes confirmarlo para poder iniciar sesión.
+      </p>
     </div>
 
     <div class="back-link"><a href="index.html">← Volver a la tienda</a></div>
@@ -178,7 +181,7 @@
   import { initializeApp }                          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword,
            createUserWithEmailAndPassword,
-           updateProfile, onAuthStateChanged,
+           updateProfile, onAuthStateChanged, sendEmailVerification,
            setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getFirestore, doc, setDoc,
            addDoc, collection, serverTimestamp }    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -247,6 +250,28 @@
         })()
       });
 
+      // Check email verification
+      if (!cred.user.emailVerified && cred.user.email !== ADMIN) {
+        manualFlow = false;
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+        showMsg(msg, 'error', '⚠️ Debes verificar tu correo antes de entrar. Revisa tu bandeja de entrada (o spam).');
+        // Offer to resend
+        const resendBtn = document.createElement('button');
+        resendBtn.className = 'btn-submit';
+        resendBtn.style.marginTop = '10px';
+        resendBtn.style.background = 'transparent';
+        resendBtn.style.color = '#FF6B1A';
+        resendBtn.style.border = '1.5px solid #FF6B1A';
+        resendBtn.textContent = 'Reenviar correo de verificación';
+        resendBtn.onclick = async () => {
+          await sendEmailVerification(cred.user);
+          resendBtn.textContent = '✅ Correo reenviado. Revisa tu bandeja.';
+          resendBtn.disabled = true;
+        };
+        msg.after(resendBtn);
+        return;
+      }
       showMsg(msg, 'success', '¡Bienvenido! Redirigiendo...');
       setTimeout(() => redirect(cred.user), 1000);
 
@@ -295,8 +320,10 @@
         saldo:     0
       });
 
-      showMsg(msg, 'success', '✅ ¡Cuenta creada! Iniciando sesión...');
-      setTimeout(() => redirect(cred.user), 1200);
+      // Enviar email de verificación
+      await sendEmailVerification(cred.user);
+      showMsg(msg, 'success', '✅ ¡Cuenta creada! Revisa tu correo para verificar tu cuenta antes de continuar.');
+      setTimeout(() => redirect(cred.user), 3000);
 
     } catch(e) {
       manualFlow = false;
