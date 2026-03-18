@@ -1711,7 +1711,7 @@ window.addEventListener('load', function() {
         🛒
         <span class="cart-count" id="cart-count-badge">0</span>
       </button>
-      <button class="btn-nav" onclick="pedirLogout()">CERRAR SESIÓN</button>
+      <button class="btn-nav" onclick="doLogout()">CERRAR SESIÓN</button>
     </div>
   </div>
 </nav>
@@ -2423,7 +2423,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  window.doLogout = async function() {
+  window.doLogout = function() {
+    const modal = document.getElementById('logout-modal');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  window.confirmarLogout = async function() {
     await signOut(auth);
     window.location.reload();
   };
