@@ -180,7 +180,7 @@
 <script type="module">
   import { initializeApp }                          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword,
-           createUserWithEmailAndPassword,
+           createUserWithEmailAndPassword, signOut,
            updateProfile, onAuthStateChanged, sendEmailVerification,
            setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getFirestore, doc, setDoc,
@@ -347,8 +347,47 @@
 
       // Enviar email de verificación
       await sendEmailVerification(cred.user);
-      showMsg(msg, 'success', '✅ ¡Cuenta creada! Revisa tu correo para verificar tu cuenta antes de continuar.');
-      setTimeout(() => redirect(cred.user), 3000);
+
+      // Cerrar sesión inmediatamente — no puede entrar sin verificar
+      await signOut(auth);
+      manualFlow = false;
+
+      // Cambiar el formulario a un estado de "pendiente de verificación"
+      btn.disabled = true;
+      btn.textContent = '📧 Correo enviado';
+      showMsg(msg, 'success', '✅ ¡Cuenta creada! Te enviamos un correo de verificación. Debes confirmarlo antes de poder iniciar sesión.');
+
+      // Mostrar panel de espera con instrucciones
+      const waitBox = document.createElement('div');
+      waitBox.style.cssText = 'margin-top:16px;padding:16px;background:rgba(122,31,238,0.07);border:1px solid rgba(122,31,238,0.2);border-radius:8px;text-align:center;';
+      waitBox.innerHTML = \`
+        <div style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;line-height:1.8;margin-bottom:12px;">
+          📬 Revisa tu bandeja de entrada (o carpeta de spam).<br>
+          Haz clic en el link del correo y luego inicia sesión aquí.
+        </div>
+        <button id="resend-btn" style="background:transparent;color:#7A1FEE;border:1px solid rgba(122,31,238,0.4);padding:8px 20px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:.55rem;letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
+          onmouseover="this.style.background='rgba(122,31,238,0.1)'" onmouseout="this.style.background='transparent'">
+          🔄 Reenviar correo
+        </button>
+      \`;
+      msg.after(waitBox);
+
+      // Reenviar correo — necesita volver a loguear temporalmente para reenviar
+      document.getElementById('resend-btn').addEventListener('click', async () => {
+        const resendBtn = document.getElementById('resend-btn');
+        resendBtn.disabled = true;
+        resendBtn.textContent = '⏳ Enviando...';
+        try {
+          // Re-login temporal solo para reenviar
+          const tmp = await signInWithEmailAndPassword(auth, email, pass);
+          await sendEmailVerification(tmp.user);
+          await signOut(auth);
+          resendBtn.textContent = '✅ Reenviado';
+        } catch(e) {
+          resendBtn.disabled = false;
+          resendBtn.textContent = '🔄 Reenviar correo';
+        }
+      });
 
     } catch(e) {
       manualFlow = false;

@@ -205,6 +205,7 @@
     <div class="nav-item active" onclick="showPanel('dashboard',this)"><span class="nav-icon">📊</span> Dashboard</div>
     <div class="nav-item" onclick="showPanel('usuarios',this)"><span class="nav-icon">👥</span> Usuarios<span class="nav-badge" id="badge-usuarios">—</span></div>
     <div class="nav-item" onclick="showPanel('compras',this)"><span class="nav-icon">🛒</span> Compras<span class="nav-badge" id="badge-compras">—</span></div>
+    <div class="nav-item" onclick="showPanel('historial',this)"><span class="nav-icon">📋</span> Historial Saldo<span class="nav-badge" id="badge-historial">—</span></div>
     <div class="sidebar-section">Licencias</div>
     <div class="nav-item" onclick="showPanel('claves',this)"><span class="nav-icon">🔑</span> Claves<span class="nav-badge" id="badge-claves">—</span></div>
     <div class="sidebar-section">Sistema</div>
@@ -268,6 +269,39 @@
       </div>
     </div>
 
+
+    <!-- HISTORIAL DE SALDO -->
+    <div class="panel" id="panel-historial">
+      <div class="page-header">
+        <div><div class="page-title">HISTO<span>RIAL</span></div><div class="page-sub">Recargas de saldo por usuario</div></div>
+        <button class="btn btn-primary" onclick="loadHistorial()">🔄 Actualizar</button>
+      </div>
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">💰 Movimientos de Saldo</div>
+          <div class="table-actions">
+            <input class="search-box" id="search-historial" placeholder="🔍 Buscar usuario..." oninput="filterHistorial(this.value)" style="width:200px;">
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Email</th>
+              <th>Saldo Anterior</th>
+              <th>Saldo Nuevo</th>
+              <th>Diferencia</th>
+              <th>Nota</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody id="historial-body">
+            <tr class="loading-row"><td colspan="7"><span class="spinner"></span> Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- CLAVES -->
     <div class="panel" id="panel-claves">
       <div class="page-header">
@@ -302,7 +336,12 @@
     <button class="modal-close" onclick="closeModal('modal-saldo')">✕</button>
     <div class="modal-title">💰 Editar Saldo</div>
     <div style="margin-bottom:16px;font-family:var(--font-alt);color:var(--text-muted);font-size:.88rem;">Usuario: <strong id="saldo-user-name" style="color:var(--text);">—</strong></div>
-    <div class="form-group"><label class="form-label">Nuevo Saldo (USD)</label><input class="form-input" type="number" id="saldo-input" min="0" step="0.01" placeholder="0.00"></div>
+    <div style="background:rgba(122,31,238,0.07);border:1px solid rgba(122,31,238,0.15);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-family:var(--font-alt);font-size:0.82rem;color:var(--text-muted);">
+      Saldo actual: <strong id="saldo-actual-display" style="color:var(--green);font-family:var(--font-display);font-size:.8rem;">$0.00</strong>
+    </div>
+    <div class="form-group"><label class="form-label">Nuevo Saldo (USD)</label><input class="form-input" type="number" id="saldo-input" min="0" step="0.01" placeholder="0.00" oninput="updateSaldoDiff()"></div>
+    <div id="saldo-diff-display" style="text-align:center;font-family:var(--font-display);font-size:0.72rem;letter-spacing:1px;margin-bottom:16px;min-height:20px;"></div>
+    <div class="form-group"><label class="form-label">Nota (opcional)</label><input class="form-input" type="text" id="saldo-nota" placeholder="Ej: Recarga por transferencia, Bono de bienvenida..."></div>
     <div style="display:flex;gap:10px;margin-top:8px;">
       <button class="btn btn-ghost" style="flex:1;" onclick="closeModal('modal-saldo')">Cancelar</button>
       <button class="btn btn-primary" style="flex:1;" id="btn-save-saldo" onclick="saveSaldo()">💾 GUARDAR</button>
@@ -422,7 +461,7 @@ import { getFirestore,
          collection, getDocs, getDoc, doc,
          updateDoc, addDoc, deleteDoc, setDoc,
          onSnapshot,
-         serverTimestamp, query, orderBy }
+         serverTimestamp, query, orderBy, where }
                                 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const cfg = {
@@ -458,7 +497,7 @@ let generatedKey  = null;
 const keyTimers = {};
 
 /* ─── LOAD ALL ─── */
-window.loadAll = () => Promise.all([loadUsuarios(), loadCompras(), loadClaves()]);
+window.loadAll = () => Promise.all([loadUsuarios(), loadCompras(), loadClaves(), loadHistorial()]);
 
 /* ══════════════════════════════
    USUARIOS
@@ -520,25 +559,60 @@ window.filterUsuarios = q => {
 };
 
 /* ── SALDO ── */
+let editingSaldoAnterior = 0;
+
 window.openSaldoModal = (uid, name, saldo) => {
   editingUserId = uid;
+  editingSaldoAnterior = Number(saldo);
   document.getElementById('saldo-user-name').textContent = name;
   document.getElementById('saldo-input').value = saldo;
+  document.getElementById('saldo-nota').value = '';
+  document.getElementById('saldo-actual-display').textContent = '$' + Number(saldo).toFixed(2);
+  document.getElementById('saldo-diff-display').textContent = '';
   document.getElementById('modal-saldo').classList.add('open');
 };
-window.saveSaldo = async () => {
-  const btn = document.getElementById('btn-save-saldo');
+
+window.updateSaldoDiff = () => {
   const val = parseFloat(document.getElementById('saldo-input').value);
+  const el  = document.getElementById('saldo-diff-display');
+  if (isNaN(val)) { el.textContent = ''; return; }
+  const diff = val - editingSaldoAnterior;
+  if (diff === 0) { el.textContent = 'Sin cambio'; el.style.color = '#666'; return; }
+  el.textContent = (diff > 0 ? '▲ +' : '▼ ') + '$' + Math.abs(diff).toFixed(2);
+  el.style.color  = diff > 0 ? '#44ff88' : '#ff4444';
+};
+
+window.saveSaldo = async () => {
+  const btn  = document.getElementById('btn-save-saldo');
+  const val  = parseFloat(document.getElementById('saldo-input').value);
+  const nota = document.getElementById('saldo-nota').value.trim();
   if (isNaN(val)||val<0) { showToast('Ingresa un valor válido','error'); return; }
   btn.disabled=true; btn.innerHTML='<span class="spinner"></span>';
   try {
+    const anterior = editingSaldoAnterior;
+    const diff     = val - anterior;
+    // Update user saldo
     await updateDoc(doc(db,'users',editingUserId),{saldo:val});
+    // Save history record — only if value actually changed
+    if (diff !== 0) {
+      const u = allUsuarios.find(x=>x.id===editingUserId);
+      await addDoc(collection(db,'historial_saldo'),{
+        uid:         editingUserId,
+        nombre:      u?.name || '—',
+        email:       u?.email || '—',
+        saldoAntes:  anterior,
+        saldoDespues:val,
+        diferencia:  diff,
+        nota:        nota || '',
+        fecha:       serverTimestamp()
+      });
+    }
     const u = allUsuarios.find(x=>x.id===editingUserId);
     if (u) u.saldo=val;
     renderUsuarios(allUsuarios);
     closeModal('modal-saldo');
-    showToast(`✅ Saldo actualizado a $${val.toFixed(2)}`,'success');
-  } catch(e) { showToast('Error','error'); }
+    showToast(`✅ Saldo actualizado a $${val.toFixed(2)}`,(diff>0?'success':'info'));
+  } catch(e) { showToast('Error','error'); console.error(e); }
   btn.disabled=false; btn.innerHTML='💾 GUARDAR';
 };
 
@@ -922,6 +996,59 @@ window.copyKey = () => {
 };
 
 function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+
+
+/* ══════════════════════════════
+   HISTORIAL DE SALDO
+══════════════════════════════ */
+let allHistorial = [];
+
+window.loadHistorial = async () => {
+  document.getElementById('historial-body').innerHTML =
+    '<tr class="loading-row"><td colspan="7"><span class="spinner"></span> Cargando...</td></tr>';
+  try {
+    const q    = query(collection(db,'historial_saldo'), orderBy('fecha','desc'));
+    const snap = await getDocs(q);
+    allHistorial = snap.docs.map(d=>({id:d.id,...d.data()}));
+    document.getElementById('badge-historial').textContent = allHistorial.length;
+    renderHistorial(allHistorial);
+  } catch(e) {
+    document.getElementById('historial-body').innerHTML =
+      '<tr class="empty-row"><td colspan="7">❌ Error al cargar historial</td></tr>';
+  }
+};
+
+function renderHistorial(list) {
+  const tbody = document.getElementById('historial-body');
+  if (!list.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="7">Sin movimientos de saldo registrados</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map(h => {
+    const fecha = h.fecha?.toDate ? formatDate(h.fecha.toDate()) : '—';
+    const diff  = Number(h.diferencia || 0);
+    const diffColor  = diff >= 0 ? 'var(--green)' : '#ff4444';
+    const diffPrefix = diff >= 0 ? '▲ +' : '▼ ';
+    const diffText   = diffPrefix + '$' + Math.abs(diff).toFixed(2);
+    return `<tr>
+      <td><strong>${esc(h.nombre||'—')}</strong></td>
+      <td class="td-muted overflow-text" title="${esc(h.email)}">${esc(h.email||'—')}</td>
+      <td style="font-family:var(--font-display);font-size:.75rem;color:var(--text-muted);">$${Number(h.saldoAntes||0).toFixed(2)}</td>
+      <td style="font-family:var(--font-display);font-size:.75rem;color:var(--orange);">$${Number(h.saldoDespues||0).toFixed(2)}</td>
+      <td style="font-family:var(--font-display);font-size:.75rem;font-weight:700;color:${diffColor};">${diffText}</td>
+      <td class="td-muted">${esc(h.nota||'—')}</td>
+      <td class="td-muted">${fecha}</td>
+    </tr>`;
+  }).join('');
+}
+
+window.filterHistorial = q => {
+  const f = q.toLowerCase();
+  renderHistorial(allHistorial.filter(h =>
+    (h.nombre||''). toLowerCase().includes(f) ||
+    (h.email||''). toLowerCase().includes(f)
+  ));
+};
 
 /* ─── UTILS ─── */
 function formatDate(d) { return d.toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'}); }

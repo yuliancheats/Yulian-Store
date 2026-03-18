@@ -1707,6 +1707,7 @@ window.addEventListener('load', function() {
       <span style="font-family:'Orbitron',sans-serif;font-size:0.65rem;letter-spacing:1px;color:#4dff91;text-shadow:0 0 8px rgba(77,255,145,0.6);background:rgba(77,255,145,0.08);border:1px solid rgba(77,255,145,0.2);padding:5px 12px;border-radius:3px;" id="nav-saldo">$0.00</span>
       <button class="btn-nav" onclick="window.location.href='perfil.html'" style="font-size:.62rem;">MI PERFIL</button>
       <button class="btn-nav" id="btn-admin-panel" onclick="window.location.href='admin.html'" style="display:none;">ADMIN</button>
+      <button class="btn-nav" id="btn-reseller-panel" onclick="window.location.href='reseller.html'" style="display:none;background:rgba(255,200,0,0.08);border-color:#ffc800;color:#ffc800;">⭐ MI PANEL</button>
       <button class="btn-cart btn-nav" id="btn-cart-nav" onclick="abrirCarrito()" title="Mi Carrito">
         🛒
         <span class="cart-count" id="cart-count-badge">0</span>
@@ -1939,7 +1940,7 @@ window.addEventListener('load', function() {
         </svg>
       </div>
       <div class="feature-title">Miles de Usuarios</div>
-      <div class="feature-text">Más de 2,000 jugadores satisfechos confían en nuestros productos. Reconocidos y recomendados en toda la comunidad.</div>
+      <div class="feature-text">Más de 15,000 jugadores satisfechos confían en nuestros productos. Reconocidos y recomendados en toda la comunidad.</div>
     </div>
 
     <div class="feature-card reveal">
@@ -2408,14 +2409,21 @@ document.addEventListener('DOMContentLoaded', () => {
       nameEl.textContent   = user.displayName || user.email.split('@')[0].toUpperCase();
       if (user.email === ADMIN) adminBtn.style.display = 'block';
 
-      // Cargar saldo desde Firestore
+      // Cargar saldo y rol desde Firestore
       try {
         const snap = await getDoc(doc(db, 'users', user.uid));
         if (snap.exists()) {
-          const saldo = snap.data().saldo ?? 0;
+          const data  = snap.data();
+          const saldo = data.saldo ?? 0;
           saldoEl.textContent = `$${Number(saldo).toFixed(2)}`;
+
+          // Mostrar botón reseller si tiene el rol
+          if (data.role === 'reseller') {
+            const resellerBtn = document.getElementById('btn-reseller-panel');
+            if (resellerBtn) resellerBtn.style.display = 'block';
+          }
         }
-      } catch(e) { console.warn('Error cargando saldo:', e); }
+      } catch(e) { console.warn('Error cargando datos:', e); }
 
     } else {
       guest.style.display   = 'flex';
