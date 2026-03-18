@@ -162,7 +162,7 @@
 <div class="topbar">
   <div style="display:flex;align-items:center;">
     <div class="topbar-logo"><span>YULIAN</span> STORE</div>
-    <div class="topbar-badge">⭐ RESELLER PANEL</div>
+    <div class="topbar-badge">⭐ MINI ADMIN PANEL</div>
   </div>
   <div class="topbar-right">
     <div class="reseller-info">Hola, <strong id="reseller-name">—</strong></div>
@@ -174,7 +174,7 @@
 <!-- LAYOUT -->
 <div class="layout">
   <aside class="sidebar">
-    <div class="sidebar-section">Mi Panel</div>
+    <div class="sidebar-section">Mini Admin Panel</div>
     <div class="nav-item active" onclick="showPanel('dashboard',this)"><span class="nav-icon">📊</span> Resumen</div>
     <div class="nav-item" onclick="showPanel('claves',this)"><span class="nav-icon">🔑</span> Mis Claves<span class="nav-badge" id="badge-mis-claves">0</span></div>
     <div class="nav-item" onclick="showPanel('usuarios',this)"><span class="nav-icon">👥</span> Usuarios</div>
@@ -362,7 +362,7 @@ window.loadUsuarios = async () => {
     renderUsuarios(allUsuarios);
   } catch(e) {
     document.getElementById('usuarios-body').innerHTML=
-      '<tr class="empty-row"><td colspan="4">❌ Error</td></tr>';
+      '<tr class="empty-row"><td colspan="4" style="color:#888;font-family:Exo 2,sans-serif;font-size:.85rem;">⚠️ Sin permiso para ver usuarios. Contacta al administrador.</td></tr>';
   }
 };
 
