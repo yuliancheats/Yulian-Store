@@ -161,7 +161,8 @@
   import { initializeApp }                          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword,
            createUserWithEmailAndPassword,
-           updateProfile, onAuthStateChanged }      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+           updateProfile, onAuthStateChanged,
+           setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getFirestore, doc, setDoc,
            addDoc, collection, serverTimestamp }    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -178,6 +179,9 @@
   const auth = getAuth(app);
   const db   = getFirestore(app);
   const ADMIN = 'admin@yulianstore.com';
+
+  // Mantener sesión aunque cierre el navegador
+  setPersistence(auth, browserLocalPersistence);
 
   // Flag para evitar que onAuthStateChanged redirija durante registro/login manual
   let manualFlow = false;
