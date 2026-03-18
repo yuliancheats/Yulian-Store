@@ -7,20 +7,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --orange:        #FF6B1A;
-      --orange-bright: #FF8C42;
-      --orange-dim:    #cc5200;
-      --orange-glow:   rgba(255,107,26,0.6);
-      --neon:          0 0 8px #FF6B1A, 0 0 20px #FF6B1A, 0 0 40px rgba(255,107,26,0.4);
-      --dark:          #080808;
-      --dark2:         #0e0e0e;
+      --orange:        #7A1FEE;
+      --orange-bright: #8B2FFF;
+      --orange-dim:    #5a0fcc;
+      --orange-glow:   rgba(122,31,238,0.6);
+      --neon:          0 0 8px #7A1FEE, 0 0 20px #8B2FFF, 0 0 40px rgba(122,31,238,0.5);
+      --dark:          #06040f;
+      --dark2:         #0b0818;
       --dark3:         #111111;
-      --card:          #111111;
-      --card2:         #161616;
-      --card3:         #1a1a1a;
+      --card:          #0d0a1a;
+      --card2:         #120f22;
+      --card3:         #160e2a;
       --text:          #ffffff;
       --text-muted:    #888888;
-      --border:        rgba(255,107,26,0.18);
+      --border:        rgba(122,31,238,0.22);
       --border-soft:   rgba(255,255,255,0.06);
       --red:           #ff4444;
       --green:         #44ff88;
@@ -45,16 +45,16 @@
     * { cursor: none !important; }
     #cdot {
       position: fixed; top: 0; left: 0; width: 10px; height: 10px;
-      background: #111; border-radius: 50%; pointer-events: none;
+      background: #0d0a1a; border-radius: 50%; pointer-events: none;
       z-index: 999999; transform: translate(-50%,-50%);
-      box-shadow: 0 0 0 2.5px rgba(255,107,26,0.95), 0 0 14px rgba(255,107,26,0.5);
+      box-shadow: 0 0 0 2.5px rgba(139,47,255,0.95), 0 0 14px rgba(122,31,238,0.5);
     }
     #cring {
       position: fixed; top: 0; left: 0; width: 38px; height: 38px;
-      border: 2.5px solid rgba(255,107,26,0.8); border-radius: 50%;
+      border: 2.5px solid rgba(139,47,255,0.8); border-radius: 50%;
       pointer-events: none; z-index: 999998;
       transform: translate(-50%,-50%);
-      box-shadow: 0 0 14px rgba(255,107,26,0.3);
+      box-shadow: 0 0 14px rgba(122,31,238,0.3);
       transition: width .18s, height .18s, border-color .18s;
     }
 
@@ -62,15 +62,15 @@
     .bg-fixed {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
-        radial-gradient(ellipse at 10% 20%, rgba(255,107,26,0.06) 0%, transparent 45%),
-        radial-gradient(ellipse at 90% 80%, rgba(255,107,26,0.04) 0%, transparent 45%),
+        radial-gradient(ellipse at 10% 20%, rgba(122,31,238,0.08) 0%, transparent 45%),
+        radial-gradient(ellipse at 90% 80%, rgba(122,31,238,0.05) 0%, transparent 45%),
         var(--dark);
     }
     .bg-grid {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background-image:
-        linear-gradient(rgba(255,107,26,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,107,26,0.025) 1px, transparent 1px);
+        linear-gradient(rgba(122,31,238,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(122,31,238,0.04) 1px, transparent 1px);
       background-size: 50px 50px;
     }
 
@@ -93,8 +93,8 @@
     .topbar-logo span { color: var(--orange); }
     .topbar-badge {
       display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(255,107,26,0.1);
-      border: 1px solid rgba(255,107,26,0.3);
+      background: rgba(122,31,238,0.13);
+      border: 1px solid rgba(122,31,238,0.3);
       color: var(--orange);
       font-family: var(--font-display);
       font-size: 0.55rem; font-weight: 700;
@@ -148,7 +148,7 @@
       padding: 0 20px 8px;
       font-family: var(--font-display);
       font-size: 0.5rem; font-weight: 700;
-      letter-spacing: 3px; color: rgba(255,107,26,0.5);
+      letter-spacing: 3px; color: rgba(122,31,238,0.5);
       text-transform: uppercase; margin-top: 20px;
     }
     .sidebar-section:first-child { margin-top: 0; }
@@ -165,14 +165,14 @@
     }
     .nav-item:hover {
       color: var(--text);
-      background: rgba(255,107,26,0.05);
-      border-left-color: rgba(255,107,26,0.4);
+      background: rgba(122,31,238,0.07);
+      border-left-color: rgba(122,31,238,0.4);
     }
     .nav-item.active {
       color: var(--orange);
-      background: rgba(255,107,26,0.08);
+      background: rgba(122,31,238,0.10);
       border-left-color: var(--orange);
-      text-shadow: 0 0 8px rgba(255,107,26,0.4);
+      text-shadow: 0 0 8px rgba(122,31,238,0.4);
     }
     .nav-icon { font-size: 1rem; flex-shrink: 0; }
     .nav-badge {
@@ -268,7 +268,7 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 18px 24px;
       border-bottom: 1px solid var(--border-soft);
-      background: rgba(255,107,26,0.03);
+      background: rgba(122,31,238,0.04);
     }
     .table-title {
       font-family: var(--font-display);
@@ -312,7 +312,7 @@
       border-bottom: 1px solid rgba(255,255,255,0.03);
       transition: background 0.15s;
     }
-    tbody tr:hover { background: rgba(255,107,26,0.04); }
+    tbody tr:hover { background: rgba(122,31,238,0.05); }
     tbody tr:last-child { border-bottom: none; }
     tbody td {
       padding: 13px 16px;
@@ -338,7 +338,7 @@
       letter-spacing: 1.5px; text-transform: uppercase;
     }
     .badge-green { background: rgba(68,255,136,0.1); color: var(--green); border: 1px solid rgba(68,255,136,0.25); }
-    .badge-orange { background: rgba(255,107,26,0.1); color: var(--orange); border: 1px solid rgba(255,107,26,0.25); }
+    .badge-orange { background: rgba(122,31,238,0.13); color: var(--orange); border: 1px solid rgba(122,31,238,0.25); }
     .badge-red { background: rgba(255,68,68,0.1); color: var(--red); border: 1px solid rgba(255,68,68,0.25); }
     .badge-blue { background: rgba(68,170,255,0.1); color: var(--blue); border: 1px solid rgba(68,170,255,0.25); }
 
@@ -353,7 +353,7 @@
     }
     .btn-primary {
       background: var(--orange); color: #000;
-      box-shadow: 0 2px 14px rgba(255,107,26,0.25);
+      box-shadow: 0 2px 14px rgba(122,31,238,0.25);
     }
     .btn-primary:hover {
       background: var(--orange-bright);
@@ -439,7 +439,7 @@
     }
     .form-input:focus {
       border-color: var(--orange);
-      box-shadow: 0 0 10px rgba(255,107,26,0.15);
+      box-shadow: 0 0 10px rgba(122,31,238,0.18);
     }
     .form-input::placeholder { color: rgba(255,255,255,0.18); }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -447,7 +447,7 @@
     /* ── LOADING ── */
     .spinner {
       display: inline-block; width: 16px; height: 16px;
-      border: 2px solid rgba(255,107,26,0.2);
+      border: 2px solid rgba(122,31,238,0.2);
       border-top-color: var(--orange);
       border-radius: 50%;
       animation: spin .7s linear infinite;
@@ -491,7 +491,7 @@
       font-family: var(--font-display);
       font-size: 0.62rem; letter-spacing: 1px;
       color: var(--orange);
-      background: rgba(255,107,26,0.08);
+      background: rgba(122,31,238,0.10);
       padding: 4px 8px; border-radius: 3px;
     }
 
@@ -538,7 +538,7 @@
     .tab-btn.active {
       color: var(--orange);
       border-bottom-color: var(--orange);
-      text-shadow: 0 0 8px rgba(255,107,26,0.4);
+      text-shadow: 0 0 8px rgba(122,31,238,0.4);
     }
     .tab-btn:hover:not(.active) { color: var(--text); }
 
@@ -887,7 +887,11 @@ onAuthStateChanged(auth, (user) => {
 });
 
 /* ─── LOGOUT ─── */
-window.doLogout = async () => {
+window.doLogout = () => {
+  document.getElementById('logout-modal').style.display = 'flex';
+};
+
+window.confirmarLogout = async () => {
   await signOut(auth);
   window.location.href = 'login.html';
 };
@@ -1252,15 +1256,69 @@ window.showPanel = (name) => {
     if (el) {
       ring.style.width  = '52px';
       ring.style.height = '52px';
-      ring.style.borderColor = 'rgba(255,107,26,1)';
+      ring.style.borderColor = 'rgba(139,47,255,1)';
     } else {
       ring.style.width  = '38px';
       ring.style.height = '38px';
-      ring.style.borderColor = 'rgba(255,107,26,0.8)';
+      ring.style.borderColor = 'rgba(139,47,255,0.8)';
     }
   });
 })();
 </script>
+
+<!-- ═══ MODAL: CERRAR SESIÓN ═══ -->
+<div id="logout-modal" style="
+  display:none; position:fixed; inset:0; z-index:99999;
+  background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);
+  align-items:center; justify-content:center; padding:20px;
+">
+  <div style="
+    background:#0d0a1a; border:1px solid rgba(122,31,238,0.25); border-radius:14px;
+    padding:40px 36px; max-width:420px; width:100%; position:relative;
+    box-shadow:0 0 60px rgba(122,31,238,0.10);
+    animation:popInL .4s cubic-bezier(.34,1.56,.64,1) forwards;
+  ">
+    <div style="text-align:center; margin-bottom:20px; font-size:2.8rem;">&#9888;&#65039;</div>
+    <h3 style="font-family:'Orbitron',sans-serif; font-size:.9rem; font-weight:900;
+      letter-spacing:2px; color:#7A1FEE; text-align:center; margin-bottom:14px; text-transform:uppercase;">
+      &iquest;Cerrar Sesi&oacute;n?
+    </h3>
+    <p style="font-family:'Exo 2',sans-serif; color:#888; font-size:.88rem; line-height:1.75;
+      text-align:center; margin-bottom:10px;">
+      Recuerda que tu <strong style="color:#fff;">saldo y compras</strong> est&aacute;n guardados en tu cuenta.
+    </p>
+    <p style="font-family:'Exo 2',sans-serif; color:#aa77ff; font-size:.82rem; line-height:1.7;
+      text-align:center; margin-bottom:28px;
+      background:rgba(122,31,238,0.09); border:1px solid rgba(122,31,238,0.2);
+      border-radius:8px; padding:12px 16px;">
+      &#128273; Si no recuerdas tu contrase&ntilde;a, <strong>no podr&aacute;s recuperar el acceso</strong>
+      a tu saldo ni a tus claves de productos. Asg&uacute;rate de tenerla guardada antes de salir.
+    </p>
+    <div style="display:flex; gap:12px;">
+      <button
+        onclick="document.getElementById('logout-modal').style.display='none'"
+        onmouseover="this.style.borderColor='#7A1FEE';this.style.color='#7A1FEE'"
+        onmouseout="this.style.borderColor='rgba(255,255,255,.12)';this.style.color='#777'"
+        style="flex:1; background:transparent; color:#777; border:1px solid rgba(255,255,255,.12);
+        padding:13px; border-radius:6px; font-family:'Orbitron',sans-serif; font-size:.6rem;
+        letter-spacing:2px; text-transform:uppercase; transition:all .2s;">
+        CANCELAR
+      </button>
+      <button
+        onclick="confirmarLogout()"
+        onmouseover="this.style.background='#8B2FFF'"
+        onmouseout="this.style.background='#7A1FEE'"
+        style="flex:1; background:#7A1FEE; color:#000; border:none; padding:13px; border-radius:6px;
+        font-family:'Orbitron',sans-serif; font-weight:700; font-size:.6rem;
+        letter-spacing:2px; text-transform:uppercase; transition:all .2s;">
+        S&Iacute;, CERRAR SESI&Oacute;N
+      </button>
+    </div>
+  </div>
+</div>
+<style>
+@keyframes popInL { from{opacity:0;transform:scale(.85) translateY(16px)} to{opacity:1;transform:scale(1) translateY(0)} }
+</style>
 
 </body>
 </html>

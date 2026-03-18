@@ -7,16 +7,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --orange: #FF6B1A;
-      --orange-bright: #FF8C42;
+      --orange: #7A1FEE;
+      --orange-bright: #8B2FFF;
       --dark: #080808;
       --dark2: #0e0e0e;
       --card: #111111;
       --card2: #161616;
       --text: #ffffff;
       --text-muted: #999999;
-      --border: rgba(255,107,26,0.2);
-      --neon: 0 0 8px #FF6B1A, 0 0 20px #FF6B1A, 0 0 40px rgba(255,107,26,0.4);
+      --border: rgba(122,31,238,0.25);
+      --neon: 0 0 8px #7A1FEE, 0 0 20px #7A1FEE, 0 0 40px rgba(122,31,238,0.4);
       --font-display: 'Orbitron', sans-serif;
       --font-body: 'Exo 2', sans-serif;
     }
@@ -29,14 +29,14 @@
     .bg {
       position: fixed; inset: 0; z-index: 0;
       background:
-        radial-gradient(ellipse at 20% 50%, rgba(255,107,26,0.1) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 50%, rgba(255,107,26,0.07) 0%, transparent 50%), #080808;
+        radial-gradient(ellipse at 20% 50%, rgba(122,31,238,0.13) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(122,31,238,0.09) 0%, transparent 50%), #080808;
     }
     .bg-grid {
       position: fixed; inset: 0; z-index: 0;
       background-image:
-        linear-gradient(rgba(255,107,26,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,107,26,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(122,31,238,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(122,31,238,0.05) 1px, transparent 1px);
       background-size: 50px 50px;
     }
     .login-wrap { position: relative; z-index: 1; width: 100%; max-width: 440px; padding: 20px; }
@@ -49,18 +49,18 @@
     .card {
       background: var(--card); border: 1px solid var(--border);
       border-radius: 10px; padding: 40px 36px; position: relative;
-      box-shadow: 0 0 40px rgba(255,107,26,0.05);
+      box-shadow: 0 0 40px rgba(122,31,238,0.07);
     }
     .card::before, .card::after { content: ''; position: absolute; width: 20px; height: 20px; }
     .card::before {
       top: -1px; left: -1px;
       border-top: 2px solid var(--orange); border-left: 2px solid var(--orange);
-      border-radius: 10px 0 0 0; box-shadow: -2px -2px 10px rgba(255,107,26,0.4);
+      border-radius: 10px 0 0 0; box-shadow: -2px -2px 10px rgba(122,31,238,0.4);
     }
     .card::after {
       bottom: -1px; right: -1px;
       border-bottom: 2px solid var(--orange); border-right: 2px solid var(--orange);
-      border-radius: 0 0 10px 0; box-shadow: 2px 2px 10px rgba(255,107,26,0.4);
+      border-radius: 0 0 10px 0; box-shadow: 2px 2px 10px rgba(122,31,238,0.4);
     }
     .tabs { display: flex; margin-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,0.06); }
     .tab {
@@ -84,7 +84,7 @@
       font-family: var(--font-body); font-size: 0.95rem; outline: none;
       transition: border-color 0.25s, box-shadow 0.25s;
     }
-    .form-group input:focus { border-color: var(--orange); box-shadow: 0 0 10px rgba(255,107,26,0.2); }
+    .form-group input:focus { border-color: var(--orange); box-shadow: 0 0 10px rgba(122,31,238,0.2); }
     .form-group input::placeholder { color: rgba(255,255,255,0.2); }
     .btn-submit {
       width: 100%; background: var(--orange); color: #000; border: none;
@@ -112,16 +112,16 @@
     * { cursor: none !important; }
     #cdot {
       position: fixed; top: 0; left: 0; width: 10px; height: 10px;
-      background: #111; border-radius: 50%; pointer-events: none;
+      background: #0d0a1a; border-radius: 50%; pointer-events: none;
       z-index: 999999; transform: translate(-50%,-50%);
-      box-shadow: 0 0 0 2.5px rgba(255,107,26,0.95), 0 0 14px rgba(255,107,26,0.5);
+      box-shadow: 0 0 0 2.5px rgba(139,47,255,0.95), 0 0 14px rgba(122,31,238,0.5);
     }
     #cring {
       position: fixed; top: 0; left: 0; width: 38px; height: 38px;
-      border: 2.5px solid rgba(255,107,26,0.8); border-radius: 50%;
+      border: 2.5px solid rgba(139,47,255,0.8); border-radius: 50%;
       pointer-events: none; z-index: 999998;
       transform: translate(-50%,-50%);
-      box-shadow: 0 0 14px rgba(255,107,26,0.3);
+      box-shadow: 0 0 14px rgba(122,31,238,0.3);
       transition: width .18s, height .18s, border-color .18s;
     }
   </style>
@@ -261,8 +261,8 @@
         resendBtn.className = 'btn-submit';
         resendBtn.style.marginTop = '10px';
         resendBtn.style.background = 'transparent';
-        resendBtn.style.color = '#FF6B1A';
-        resendBtn.style.border = '1.5px solid #FF6B1A';
+        resendBtn.style.color = '#7A1FEE';
+        resendBtn.style.border = '1.5px solid #7A1FEE';
         resendBtn.textContent = 'Reenviar correo de verificación';
         resendBtn.onclick = async () => {
           await sendEmailVerification(cred.user);
@@ -382,14 +382,16 @@
     if (el) {
       ring.style.width  = '52px';
       ring.style.height = '52px';
-      ring.style.borderColor = 'rgba(255,107,26,1)';
+      ring.style.borderColor = 'rgba(139,47,255,1)';
     } else {
       ring.style.width  = '38px';
       ring.style.height = '38px';
-      ring.style.borderColor = 'rgba(255,107,26,0.8)';
+      ring.style.borderColor = 'rgba(139,47,255,0.8)';
     }
   });
 })();
 </script>
 </body>
 </html>
+
+
