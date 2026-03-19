@@ -206,6 +206,144 @@
     /* saldo card full width */
     .pm-method-card.full{grid-column:1/-1}
     /* detail panels */
+
+    /* ══ PAYMENT PANELS PREMIUM ══ */
+    @keyframes pmFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes shimmerSlide{0%{background-position:200% center}100%{background-position:-200% center}}
+    @keyframes pulseGreen{0%,100%{box-shadow:0 0 0 0 rgba(77,255,145,.3)}50%{box-shadow:0 0 0 6px rgba(77,255,145,0)}}
+    @keyframes pulseSkrill{0%,100%{box-shadow:0 0 0 0 rgba(134,33,101,.4)}50%{box-shadow:0 0 0 8px rgba(134,33,101,0)}}
+    @keyframes countUp{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+    @keyframes floatCoin{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+    @keyframes scanLine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+    .pm-panel{display:none!important}
+    .pm-panel.show{display:block!important;animation:pmFadeIn .35s cubic-bezier(.34,1.2,.64,1)}
+
+    /* ─ SALDO PANEL ─ */
+    .pmp-saldo-wrap{
+      background:linear-gradient(135deg,rgba(77,255,145,.04) 0%,rgba(77,255,145,.01) 100%);
+      border:1px solid rgba(77,255,145,.18);border-radius:12px;padding:18px;
+      position:relative;overflow:hidden;
+    }
+    .pmp-saldo-wrap::before{
+      content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(77,255,145,.06),transparent);
+      animation:scanLine 3s ease-in-out infinite;
+    }
+    .pmp-saldo-amount-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+    .pmp-saldo-label{font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:2px;color:#4dff91;text-transform:uppercase;opacity:.7}
+    .pmp-saldo-amount{font-family:'Orbitron',sans-serif;font-size:1.5rem;font-weight:900;color:#4dff91;
+      text-shadow:0 0 12px rgba(77,255,145,.5);animation:countUp .4s ease}
+    .pmp-saldo-balance{display:flex;align-items:center;gap:6px;font-family:'Exo 2',sans-serif;font-size:.8rem;color:#4a8a5a}
+    .pmp-saldo-balance strong{color:#4dff91;font-family:'Orbitron',sans-serif;font-size:.75rem}
+    .pmp-saldo-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(77,255,145,.2),transparent);margin:12px 0}
+    .btn-saldo-buy{
+      width:100%;padding:14px;border:none;border-radius:8px;
+      background:linear-gradient(135deg,#1a6b3a,#0d4a28);
+      color:#4dff91;font-family:'Orbitron',sans-serif;font-weight:700;
+      font-size:.65rem;letter-spacing:2px;text-transform:uppercase;
+      transition:all .3s;position:relative;overflow:hidden;
+      box-shadow:0 4px 18px rgba(77,255,145,.15);animation:pulseGreen 2.5s infinite;
+    }
+    .btn-saldo-buy:hover{background:linear-gradient(135deg,#22834a,#165c33);transform:translateY(-2px);box-shadow:0 8px 28px rgba(77,255,145,.3);}
+    .btn-saldo-buy::after{content:'';position:absolute;inset:0;
+      background:linear-gradient(90deg,transparent,rgba(77,255,145,.12),transparent);
+      background-size:200% auto;animation:shimmerSlide 2.5s linear infinite;}
+
+    /* ─ SKRILL PANEL ─ */
+    .pmp-skrill-wrap{
+      background:linear-gradient(135deg,rgba(134,33,101,.06) 0%,rgba(108,27,84,.03) 100%);
+      border:1px solid rgba(134,33,101,.22);border-radius:12px;padding:18px;
+      position:relative;overflow:hidden;
+    }
+    .pmp-skrill-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+    .pmp-skrill-cards{display:flex;gap:5px;align-items:center}
+    .card-visa{background:#fff;border-radius:4px;padding:3px 7px;font-family:serif;font-size:.72rem;font-weight:900;font-style:italic;color:#1a1f71;letter-spacing:-.5px}
+    .card-mc{display:flex;align-items:center}
+    .card-mc-l{width:14px;height:14px;border-radius:50%;background:#EB001B}
+    .card-mc-r{width:14px;height:14px;border-radius:50%;background:#F79E1B;margin-left:-5px}
+    .pmp-skrill-ssl{display:flex;align-items:center;gap:4px;font-family:'Orbitron',sans-serif;font-size:.48rem;letter-spacing:1.5px;color:#4a4a6a;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:20px;padding:3px 10px}
+    .pmp-skrill-info{background:rgba(134,33,101,.08);border:1px solid rgba(134,33,101,.18);border-radius:8px;padding:11px 14px;margin-bottom:14px;font-family:'Exo 2',sans-serif;font-size:.82rem;color:#888;line-height:1.7}
+    .pmp-skrill-amount{font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:900;
+      background:linear-gradient(135deg,#c060a0,#862165);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;animation:countUp .4s ease;display:inline-block}
+    .btn-skrill-pay{
+      width:100%;padding:14px;border:none;border-radius:8px;
+      background:linear-gradient(135deg,#862165,#6d1b54,#4a1038);
+      color:#fff;font-family:'Orbitron',sans-serif;font-weight:700;
+      font-size:.65rem;letter-spacing:2px;text-transform:uppercase;
+      transition:all .3s;position:relative;overflow:hidden;
+      box-shadow:0 4px 18px rgba(134,33,101,.3);animation:pulseSkrill 2.5s infinite;
+    }
+    .btn-skrill-pay:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(134,33,101,.5);}
+    .btn-skrill-pay::after{content:'';position:absolute;inset:0;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+      background-size:200% auto;animation:shimmerSlide 2.5s linear infinite;}
+    .pmp-skrill-footer{text-align:center;margin-top:8px;font-family:'Exo 2',sans-serif;font-size:.62rem;color:#2a2a3a;display:flex;align-items:center;justify-content:center;gap:6px}
+
+    /* ─ WESTERN UNION PANEL ─ */
+    .pmp-wu-wrap{
+      background:linear-gradient(135deg,rgba(255,221,0,.04) 0%,rgba(200,170,0,.02) 100%);
+      border:1px solid rgba(255,221,0,.15);border-radius:12px;padding:18px;
+      position:relative;overflow:hidden;
+    }
+    .pmp-wu-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+    .wu-logo-badge{background:#FFDD00;border-radius:5px;padding:4px 10px;font-family:Arial,sans-serif;font-weight:900;font-size:.75rem;color:#000;letter-spacing:.5px}
+    .pmp-wu-amount{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:900;color:#FFD700;text-shadow:0 0 12px rgba(255,215,0,.4);animation:countUp .4s ease}
+    .pmp-wu-info{background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.1);border-radius:8px;padding:10px 13px;margin-bottom:12px;font-family:'Exo 2',sans-serif;font-size:.82rem;color:#777;line-height:1.7}
+    .wu-data-table{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.05);border-radius:10px;overflow:hidden;margin-bottom:14px}
+    .wu-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04)}
+    .wu-row:last-child{border-bottom:none}
+    .wu-row-label{font-family:'Orbitron',sans-serif;font-size:.5rem;letter-spacing:1.5px;color:#444;text-transform:uppercase}
+    .wu-row-value{font-family:'Exo 2',sans-serif;font-size:.88rem;font-weight:700}
+    .wu-row-value.gold{color:#FFD700}
+    .wu-row-value.white{color:#ddd}
+    .btn-wu-discord{
+      width:100%;padding:13px;border:none;border-radius:8px;
+      background:linear-gradient(135deg,#5865F2,#4752C4,#3a42a8);
+      color:#fff;font-family:'Orbitron',sans-serif;font-weight:700;
+      font-size:.62rem;letter-spacing:2px;text-transform:uppercase;
+      transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;
+      box-shadow:0 4px 18px rgba(88,101,242,.25);
+    }
+    .btn-wu-discord:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(88,101,242,.45);}
+
+    /* ─ CRYPTO PANEL ─ */
+    .pmp-crypto-wrap{border-radius:12px;overflow:hidden}
+    .crypto-coin-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+    .crypto-coin-tab{flex:1;min-width:52px;padding:8px 6px;border-radius:8px;
+      border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);
+      display:flex;flex-direction:column;align-items:center;gap:4px;
+      transition:all .25s;position:relative;overflow:hidden}
+    .crypto-coin-tab:hover{border-color:rgba(122,31,238,.35);background:rgba(122,31,238,.04);transform:translateY(-2px)}
+    .crypto-coin-tab.active{border-color:#7A1FEE;background:rgba(122,31,238,.08);box-shadow:0 0 16px rgba(122,31,238,.15)}
+    .cctab-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;animation:floatCoin 3s ease-in-out infinite}
+    .cctab-icon.btc{background:linear-gradient(135deg,#f7931a,#f5a623);color:#fff;animation-delay:0s}
+    .cctab-icon.usdt{background:linear-gradient(135deg,#26a17b,#1a8c6a);color:#fff;animation-delay:.4s}
+    .cctab-icon.eth{background:linear-gradient(135deg,#627eea,#4a63c8);color:#fff;animation-delay:.8s}
+    .cctab-icon.bnb{background:linear-gradient(135deg,#f3ba2f,#e0a820);color:#000;animation-delay:1.2s}
+    .cctab-icon.usdc{background:linear-gradient(135deg,#2775ca,#1a5fa0);color:#fff;animation-delay:1.6s}
+    .cctab-name{font-family:'Orbitron',sans-serif;font-size:.44rem;letter-spacing:1px;color:#777;text-transform:uppercase}
+    .crypto-coin-tab.active .cctab-name{color:#7A1FEE}
+    .coin-detail-box{animation:pmFadeIn .3s ease}
+    .coin-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px}
+    .coin-name-net{display:flex;align-items:center;gap:6px}
+    .coin-name-lbl{font-family:'Orbitron',sans-serif;font-size:.55rem;letter-spacing:1.5px;color:#bbb;text-transform:uppercase}
+    .coin-net-badge{font-family:'Exo 2',sans-serif;font-size:.65rem;color:#888;background:rgba(255,200,0,.07);border:1px solid rgba(255,200,0,.15);padding:2px 8px;border-radius:4px}
+    .coin-amount-due{font-family:'Orbitron',sans-serif;font-size:.82rem;font-weight:900;color:#7A1FEE;text-shadow:0 0 10px rgba(122,31,238,.4)}
+    .coin-addr-box{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.3);border:1px solid rgba(122,31,238,.15);border-radius:8px;padding:11px 13px;margin-bottom:10px;position:relative;overflow:hidden}
+    .coin-addr-box::before{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(122,31,238,.05),transparent);animation:scanLine 4s linear infinite}
+    .coin-addr-code{font-family:'Courier New',monospace;font-size:.65rem;color:#9a6aee;word-break:break-all;flex:1;line-height:1.6}
+    .coin-copy-btn{background:rgba(122,31,238,.12);border:1px solid rgba(122,31,238,.3);color:#7A1FEE;padding:7px 12px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.46rem;letter-spacing:1px;white-space:nowrap;transition:all .2s;flex-shrink:0}
+    .coin-copy-btn:hover{background:rgba(122,31,238,.22);transform:scale(1.05)}
+    .coin-copy-btn.copied{color:#4dff91;border-color:rgba(77,255,145,.3);background:rgba(77,255,145,.08)}
+    .coin-warning{display:flex;align-items:flex-start;gap:8px;background:rgba(255,180,0,.04);border:1px solid rgba(255,180,0,.12);border-radius:8px;padding:10px 12px;font-family:'Exo 2',sans-serif;font-size:.78rem;color:#666;line-height:1.6}
+    .coin-warning-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+    .coin-discord-link{display:block;text-align:center;margin-top:10px;font-family:'Exo 2',sans-serif;font-size:.75rem;color:#555;line-height:1.7}
+    .coin-discord-link a{color:#7A1FEE;text-decoration:none;font-weight:600;border-bottom:1px dotted rgba(122,31,238,.3);padding-bottom:1px;transition:color .2s}
+    .coin-discord-link a:hover{color:#9a4aee}
+
     .pm-panel{display:none!important}
     .pm-panel.show{display:block!important;animation:pmFadeIn .3s ease}
     .pm-detail{display:none;background:rgba(0,0,0,.2);border:1px solid rgba(122,31,238,.12);border-radius:8px;padding:16px;margin-bottom:12px;animation:pmFadeIn .3s ease}
@@ -461,75 +599,124 @@
 
         </div>
 
-        <!-- PANEL: SALDO -->
+                <!-- PANEL: SALDO -->
         <div class="pm-panel" id="pmp-saldo">
-          <div style="font-family:'Exo 2',sans-serif;font-size:.84rem;color:#888;line-height:1.7;margin-bottom:12px;background:rgba(77,255,145,.04);border:1px solid rgba(77,255,145,.1);border-radius:6px;padding:10px 13px">
-            Se descontará <strong id="pmp-s-monto" style="color:#fff">$0.00</strong> de tu saldo de <strong id="pmp-s-disp" style="color:#4dff91">$0.00</strong>.
+          <div class="pmp-saldo-wrap">
+            <div class="pmp-saldo-amount-row">
+              <div>
+                <div class="pmp-saldo-label">Total a pagar</div>
+                <div class="pmp-saldo-amount" id="pmp-s-monto">$0.00</div>
+              </div>
+              <div class="pmp-saldo-balance">
+                Saldo disponible &nbsp;<strong id="pmp-s-disp">$0.00</strong>
+              </div>
+            </div>
+            <div class="pmp-saldo-divider"></div>
+            <button class="btn-saldo-buy" id="btn-saldo-proceed" onclick="abrirResumen()">
+              ⚡ COMPRAR CON SALDO — <span id="pmp-s-total">$0.00</span>
+            </button>
           </div>
-          <button class="btn-proceed" id="btn-saldo-proceed" onclick="abrirResumen()">⚡ COMPRAR CON SALDO — <span id="pmp-s-total">$0.00</span></button>
         </div>
 
-        <!-- PANEL: SKRILL -->
+                <!-- PANEL: SKRILL -->
         <div class="pm-panel" id="pmp-skrill">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-            <div style="display:flex;gap:4px">
-              <div style="height:20px;background:#fff;border-radius:3px;padding:2px 5px;color:#1a1f71;font-family:serif;font-size:.78rem;font-weight:900;font-style:italic;display:flex;align-items:center;min-width:32px">VISA</div>
-              <div style="height:20px;border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:2px 3px;display:flex;align-items:center"><div style="display:flex"><div style="width:13px;height:13px;border-radius:50%;background:#EB001B;margin-right:-4px;z-index:1"></div><div style="width:13px;height:13px;border-radius:50%;background:#F79E1B"></div></div></div>
+          <div class="pmp-skrill-wrap">
+            <div class="pmp-skrill-header">
+              <div class="pmp-skrill-cards">
+                <div class="card-visa">VISA</div>
+                &nbsp;
+                <div class="card-mc"><div class="card-mc-l"></div><div class="card-mc-r"></div></div>
+                &nbsp;
+                <span style="font-family:'Exo 2',sans-serif;font-size:.75rem;color:#555;">Tarjeta crédito / débito</span>
+              </div>
+              <div class="pmp-skrill-ssl">🔒 SSL 256-bit</div>
             </div>
-            <span style="font-family:'Exo 2',sans-serif;font-size:.74rem;color:#555">Tarjeta crédito / débito</span>
-            <span style="font-family:'Exo 2',sans-serif;font-size:.68rem;color:#444;margin-left:auto">🔒 SSL</span>
+            <div class="pmp-skrill-info">
+              Serás redirigido a <strong style="color:#c060a0">Skrill</strong> para completar el pago de
+              <span class="pmp-skrill-amount" id="pmp-sk-total">$0.00</span>.
+              Tu acceso se activa en menos de 24h. Envía el comprobante por Discord.
+            </div>
+            <button class="btn-skrill-pay" onclick="pagarConSkrill()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="rgba(255,255,255,.15)"/><path d="M9 12l2 2 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              PAGAR CON SKRILL — <span id="pmp-sk-btn">$0.00</span>
+            </button>
+            <div class="pmp-skrill-footer">
+              <span>🔒 Skrill</span><span>·</span><span>ID: 373135134</span><span>·</span><span>Pago seguro</span>
+            </div>
           </div>
-          <div style="font-family:'Exo 2',sans-serif;font-size:.8rem;color:#666;line-height:1.7;margin-bottom:11px;background:rgba(122,31,238,.04);border:1px solid rgba(122,31,238,.12);border-radius:6px;padding:9px 12px">
-            Serás redirigido a <strong style="color:#c060a0">Skrill</strong> para pagar <strong id="pmp-sk-total" style="color:#fff">$0.00</strong>. Acceso activado en &lt;24h. Envía comprobante por Discord.
-          </div>
-          <button class="btn-proceed" style="background:linear-gradient(135deg,#6d1b54,#862165)" onclick="pagarConSkrill()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,.2)"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-            PAGAR CON SKRILL — <span id="pmp-sk-btn">$0.00</span>
-          </button>
-          <div style="text-align:center;margin-top:6px;font-family:'Exo 2',sans-serif;font-size:.65rem;color:#3a3a3a">🔒 Skrill · SSL 256-bit · ID: 373135134</div>
         </div>
 
-        <!-- PANEL: WESTERN UNION -->
+                <!-- PANEL: WESTERN UNION -->
         <div class="pm-panel" id="pmp-wu">
-          <div style="font-family:'Exo 2',sans-serif;font-size:.8rem;color:#666;margin-bottom:10px;background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.1);border-radius:6px;padding:9px 12px">
-            Envía <strong id="pmp-wu-total" style="color:#FFD700">$0.00</strong> con los datos de abajo. Comparte el número <strong style="color:#fff">MTCN</strong> en Discord y activamos en &lt;24h.
+          <div class="pmp-wu-wrap">
+            <div class="pmp-wu-header">
+              <div class="wu-logo-badge">WU</div>
+              <div>
+                <div style="font-family:'Orbitron',sans-serif;font-size:.5rem;letter-spacing:1.5px;color:#666;text-transform:uppercase;margin-bottom:3px">Monto a enviar</div>
+                <div class="pmp-wu-amount" id="pmp-wu-total">$0.00</div>
+              </div>
+            </div>
+            <div class="pmp-wu-info">
+              Envía el monto exacto con los datos de abajo. Comparte el número <strong style="color:#fff;font-family:'Orbitron',sans-serif;font-size:.75rem">MTCN</strong> en Discord y activamos tu acceso en menos de 24h.
+            </div>
+            <div class="wu-data-table">
+              <div class="wu-row">
+                <span class="wu-row-label">Nombre</span>
+                <span class="wu-row-value gold">Grecia Reinoso Mejia</span>
+              </div>
+              <div class="wu-row">
+                <span class="wu-row-label">País</span>
+                <span class="wu-row-value white">República Dominicana 🇩🇴</span>
+              </div>
+              <div class="wu-row">
+                <span class="wu-row-label">Ciudad</span>
+                <span class="wu-row-value white">La Vega</span>
+              </div>
+            </div>
+            <button class="btn-wu-discord" onclick="window.open('https://discord.gg/TU_LINK_AQUI','_blank')">
+              <svg width="18" height="14" viewBox="0 0 71 55" fill="none"><path d="M60.1 4.9A58.6 58.6 0 0 0 45.7.4a40.5 40.5 0 0 0-1.8 3.7 54.2 54.2 0 0 0-16.3 0A39.4 39.4 0 0 0 25.8.4 58.5 58.5 0 0 0 11.3 4.9C1.6 19.2-1 33.1.3 46.8a59 59 0 0 0 18 9.1 44.6 44.6 0 0 0 3.8-6.2 38.4 38.4 0 0 1-6-2.9l1.5-1.1a42 42 0 0 0 35.9 0l1.5 1.1a38.2 38.2 0 0 1-6 2.9 44.4 44.4 0 0 0 3.8 6.2 58.8 58.8 0 0 0 18-9.1C72.4 30.9 68.3 17.1 60.1 4.9Z" fill="white"/></svg>
+              ENVIAR NÚMERO MTCN POR DISCORD
+            </button>
           </div>
-          <div style="background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:11px 13px;margin-bottom:10px;font-family:'Exo 2',sans-serif;font-size:.83rem">
-            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="color:#555">Nombre</span><span style="color:#FFD700;font-weight:700">Grecia Reinoso Mejia</span></div>
-            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="color:#555">País</span><span style="color:#fff">República Dominicana 🇩🇴</span></div>
-            <div style="display:flex;justify-content:space-between;padding:5px 0"><span style="color:#555">Ciudad</span><span style="color:#fff">La Vega</span></div>
-          </div>
-          <button class="btn-proceed" style="background:linear-gradient(135deg,#5865F2,#4752C4)" onclick="window.open('https://discord.gg/TU_LINK_AQUI','_blank')">
-            💬 ENVIAR COMPROBANTE (MTCN) POR DISCORD
-          </button>
         </div>
 
-        <!-- PANEL: CRYPTO -->
+                <!-- PANEL: CRYPTO -->
         <div class="pm-panel" id="pmp-crypto">
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
-            <button class="crypto-tab-btn" onclick="selCoin('usdt',this)"><div class="ctab-ico usdt">₮</div><span class="ctab-lbl">USDT</span></button>
-            <button class="crypto-tab-btn" onclick="selCoin('btc',this)"><div class="ctab-ico btc">₿</div><span class="ctab-lbl">BTC</span></button>
-            <button class="crypto-tab-btn" onclick="selCoin('eth',this)"><div class="ctab-ico eth">Ξ</div><span class="ctab-lbl">ETH</span></button>
-            <button class="crypto-tab-btn" onclick="selCoin('bnb',this)"><div class="ctab-ico bnb">⬡</div><span class="ctab-lbl">BNB</span></button>
-            <button class="crypto-tab-btn" onclick="selCoin('usdc',this)"><div class="ctab-ico usdc">$</div><span class="ctab-lbl">USDC</span></button>
-          </div>
-          <div id="coin-detail" style="display:none">
-            <div style="font-family:'Exo 2',sans-serif;font-size:.72rem;color:#666;margin-bottom:5px"><span id="coin-lbl">—</span> <span id="coin-net" style="background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.18);padding:2px 7px;border-radius:4px;color:#888;font-size:.68rem"></span></div>
-            <div style="display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:10px 12px">
-              <code id="coin-addr" style="font-size:.68rem;color:#7A1FEE;word-break:break-all;flex:1;line-height:1.5"></code>
-              <button id="coin-copy-btn" onclick="copiarCoin()" style="background:rgba(122,31,238,.1);border:1px solid rgba(122,31,238,.25);color:#7A1FEE;padding:5px 10px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:.48rem;letter-spacing:1px;white-space:nowrap;transition:all .2s;flex-shrink:0">📋 COPIAR</button>
+          <div class="pmp-crypto-wrap">
+            <div class="crypto-coin-tabs">
+              <button class="crypto-coin-tab" onclick="selCoin('usdt',this)"><div class="cctab-icon usdt">₮</div><span class="cctab-name">USDT</span></button>
+              <button class="crypto-coin-tab" onclick="selCoin('btc',this)"><div class="cctab-icon btc">₿</div><span class="cctab-name">BTC</span></button>
+              <button class="crypto-coin-tab" onclick="selCoin('eth',this)"><div class="cctab-icon eth">Ξ</div><span class="cctab-name">ETH</span></button>
+              <button class="crypto-coin-tab" onclick="selCoin('bnb',this)"><div class="cctab-icon bnb">⬡</div><span class="cctab-name">BNB</span></button>
+              <button class="crypto-coin-tab" onclick="selCoin('usdc',this)"><div class="cctab-icon usdc">$</div><span class="cctab-name">USDC</span></button>
             </div>
-            <div style="font-family:'Exo 2',sans-serif;font-size:.75rem;color:#555;background:rgba(255,200,0,.04);border:1px solid rgba(255,200,0,.1);border-radius:6px;padding:8px 10px;margin-top:8px;line-height:1.6">
-              ⚠️ <strong style="color:#ffc800">Red incorrecta = fondos perdidos.</strong> Envía <strong id="coin-amt" style="color:#fff">$0.00</strong> y comparte el ID de tx en Discord.
+            <div id="coin-detail" style="display:none" class="coin-detail-box">
+              <div class="coin-header-row">
+                <div class="coin-name-net">
+                  <span class="coin-name-lbl" id="coin-lbl">—</span>
+                  <span class="coin-net-badge" id="coin-net"></span>
+                </div>
+                <span class="coin-amount-due" id="coin-amt">$0.00</span>
+              </div>
+              <div class="coin-addr-box">
+                <code class="coin-addr-code" id="coin-addr"></code>
+                <button class="coin-copy-btn" id="coin-copy-btn" onclick="copiarCoin()">📋 COPIAR</button>
+              </div>
+              <div class="coin-warning">
+                <span class="coin-warning-icon">⚠️</span>
+                <span><strong style="color:#ffc800">Red incorrecta = fondos perdidos.</strong> Verifica siempre la red antes de enviar. Tras el pago comparte el ID de transacción en Discord.</span>
+              </div>
+              <div class="coin-discord-link">
+                Tras pagar → <a href="https://discord.gg/TU_LINK_AQUI" target="_blank">únete al Discord</a> con tu ID de transacción → acceso activado en &lt;24h
+              </div>
             </div>
-          </div>
-          <div style="font-family:'Exo 2',sans-serif;font-size:.74rem;color:#555;text-align:center;margin-top:10px;line-height:1.7">
-            Tras pagar → <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="color:#7A1FEE;text-decoration:none">Discord</a> con ID de transacción → acceso en &lt;24h
           </div>
         </div>
 
       </div>
     </div>
+  </div>
+</div>
   </div>
 </div>
 <div class="feats">
@@ -770,7 +957,7 @@
     usdc:{ addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', net:'ERC-20 / BEP-20', lbl:'USDC' },
   };
   window.selCoin = function(coin, el) {
-    document.querySelectorAll('.crypto-tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.crypto-coin-tab').forEach(b=>b.classList.remove('active'));
     el.classList.add('active');
     const c = CRYPTO_DATA[coin];
     document.getElementById('coin-lbl').textContent  = c.lbl;
