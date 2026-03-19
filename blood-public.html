@@ -188,6 +188,70 @@
     .proc-step.done .step-check { opacity: 1 !important; }
     .proc-step.done .step-check::before { content: "✅"; }
 
+
+    /* ── TROPIPAY PAYMENT BLOCK ── */
+    .pay-divider{display:flex;align-items:center;gap:12px;margin:14px 0}
+    .pay-divider span{font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:2px;color:#444;white-space:nowrap}
+    .pay-divider::before,.pay-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.07)}
+    .tropipay-block{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:16px 16px 14px;margin-bottom:10px}
+    .tropipay-block-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+    .tropipay-block-title{font-family:'Orbitron',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2px;color:#ccc;text-transform:uppercase}
+    .tropipay-trust{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .trust-badge{display:flex;align-items:center;gap:4px;font-family:'Exo 2',sans-serif;font-size:.68rem;color:#666;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:3px 8px;border-radius:4px}
+    .card-icons{display:flex;align-items:center;gap:6px;margin-bottom:12px}
+    .card-icon{height:22px;background:#fff;border-radius:3px;padding:2px 6px;display:flex;align-items:center;justify-content:center}
+    .card-icon.visa{color:#1a1f71;font-family:serif;font-size:.8rem;font-weight:900;font-style:italic;min-width:36px}
+    .card-icon.mc{background:transparent;border:1px solid rgba(255,255,255,.1);padding:2px 4px;min-width:32px}
+    .mc-circles{display:flex}
+    .mc-circle{width:16px;height:16px;border-radius:50%}
+    .mc-circle:first-child{background:#EB001B;margin-right:-6px;z-index:1}
+    .mc-circle:last-child{background:#F79E1B}
+    .card-icon.amex{background:#2E77BC;color:#fff;font-size:.55rem;font-weight:900;min-width:34px;font-family:'Exo 2',sans-serif}
+    .tropipay-notice{background:rgba(122,31,238,.05);border:1px solid rgba(122,31,238,.15);border-radius:6px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:flex-start;gap:8px}
+    .tropipay-notice-icon{font-size:.85rem;flex-shrink:0;margin-top:1px}
+    .tropipay-notice-text{font-family:'Exo 2',sans-serif;font-size:.78rem;color:#888;line-height:1.6}
+    .tropipay-notice-text strong{color:#aa88ff}
+    .btn-tropipay{width:100%;background:linear-gradient(135deg,#6B3FA0,#8B2FFF);color:#fff;border:none;padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 18px rgba(122,31,238,.25);transition:all .25s;cursor:pointer}
+    .btn-tropipay:hover{background:linear-gradient(135deg,#7B4FB0,#9B3FFF);box-shadow:0 6px 24px rgba(122,31,238,.4);transform:translateY(-1px)}
+    .tropipay-secure{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;font-family:'Exo 2',sans-serif;font-size:.68rem;color:#444}
+
+    /* ── SKRILL BLOCK ── */
+    .skrill-block{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:16px 16px 14px;margin-bottom:10px}
+    .skrill-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+    .skrill-logo{display:flex;align-items:center;gap:8px}
+    .skrill-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,#862165,#a0277a);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.7rem;color:#fff;font-family:'Exo 2',sans-serif;letter-spacing:.5px}
+    .skrill-logo-text{font-family:'Orbitron',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:2px;color:#c060a0;text-transform:uppercase}
+    .btn-skrill{width:100%;background:linear-gradient(135deg,#6d1b54,#8B2270);color:#fff;border:none;padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 18px rgba(139,34,112,.25);transition:all .25s;cursor:pointer}
+    .btn-skrill:hover{background:linear-gradient(135deg,#7d2b64,#9B3280);box-shadow:0 6px 24px rgba(139,34,112,.4);transform:translateY(-1px)}
+
+    /* ── CRYPTO BLOCK ── */
+    .crypto-block{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:16px 16px 14px;margin-bottom:10px}
+    .crypto-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+    .crypto-title{font-family:'Orbitron',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2px;color:#ccc;text-transform:uppercase}
+    .crypto-coins{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+    .coin-btn{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:6px;border:1.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);transition:all .2s;cursor:pointer;flex:1;min-width:80px;justify-content:center}
+    .coin-btn:hover,.coin-btn.active{border-color:var(--o);background:rgba(122,31,238,.07)}
+    .coin-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;flex-shrink:0}
+    .coin-icon.btc{background:linear-gradient(135deg,#f7931a,#f5a623);color:#fff}
+    .coin-icon.usdt{background:linear-gradient(135deg,#26a17b,#1a8c6a);color:#fff}
+    .coin-icon.eth{background:linear-gradient(135deg,#627eea,#4a63c8);color:#fff}
+    .coin-icon.usdc{background:linear-gradient(135deg,#2775ca,#1a5fa0);color:#fff}
+    .coin-icon.bnb{background:linear-gradient(135deg,#f3ba2f,#e0a820);color:#000}
+    .coin-name{font-family:'Orbitron',sans-serif;font-size:.5rem;letter-spacing:1px;color:#ccc;text-transform:uppercase}
+    .crypto-addr-box{display:none;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:14px 14px;margin-bottom:12px}
+    .crypto-addr-box.show{display:block}
+    .crypto-addr-label{font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:2px;color:#666;text-transform:uppercase;margin-bottom:8px}
+    .crypto-addr-network{display:inline-block;font-family:'Exo 2',sans-serif;font-size:.7rem;color:#888;background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.2);padding:2px 8px;border-radius:4px;margin-bottom:10px}
+    .crypto-addr{font-family:'Courier New',monospace;font-size:.72rem;color:var(--o);word-break:break-all;line-height:1.6;text-shadow:0 0 6px rgba(122,31,238,.3)}
+    .btn-copy-addr{width:100%;background:rgba(122,31,238,.08);border:1px solid rgba(122,31,238,.2);color:var(--o);padding:9px;border-radius:5px;font-family:'Orbitron',sans-serif;font-size:.58rem;letter-spacing:2px;text-transform:uppercase;transition:all .2s;cursor:pointer;margin-top:10px}
+    .btn-copy-addr:hover{background:rgba(122,31,238,.15)}
+    .crypto-warning{background:rgba(255,200,0,.05);border:1px solid rgba(255,200,0,.15);border-radius:6px;padding:9px 12px;display:flex;align-items:flex-start;gap:7px;margin-bottom:12px}
+    .crypto-warning-text{font-family:'Exo 2',sans-serif;font-size:.75rem;color:#888;line-height:1.6}
+    .crypto-warning-text strong{color:#ffc800}
+    .crypto-discord-note{font-family:'Exo 2',sans-serif;font-size:.76rem;color:#666;text-align:center;line-height:1.6;padding:0 4px}
+    .crypto-discord-note a{color:var(--o);text-decoration:none}
+    .crypto-discord-note a:hover{text-decoration:underline}
+    .addr-copied{color:#4dff91!important;border-color:rgba(77,255,145,.3)!important;background:rgba(77,255,145,.08)!important}
   </style>
 </head>
 <body>
@@ -356,6 +420,36 @@
       <div class="sal-row" id="sr" style="display:none;">Tu saldo: <span class="sal-val" id="sv">$0.00</span></div>
       <div id="ba"><button class="btn-log" onclick="window.location.href='login.html'">INICIA SESIÓN PARA COMPRAR</button></div>
       <div class="msg" id="msg"></div>
+
+      <!-- ═══ TROPIPAY PAYMENT BLOCK ═══ -->
+      <div class="pay-divider"><span>O PAGA CON TARJETA</span></div>
+      <div class="tropipay-block">
+        <div class="tropipay-block-header">
+          <span class="tropipay-block-title">💳 Tarjeta de Crédito / Débito</span>
+          <div class="tropipay-trust">
+            <span class="trust-badge"><span>🔒</span> SSL</span>
+            <span class="trust-badge"><span>✓</span> Seguro</span>
+          </div>
+        </div>
+        <div class="card-icons">
+          <div class="card-icon visa">VISA</div>
+          <div class="card-icon mc"><div class="mc-circles"><div class="mc-circle"></div><div class="mc-circle"></div></div></div>
+          <div class="card-icon amex">AMEX</div>
+          <span style="font-family:'Exo 2',sans-serif;font-size:.72rem;color:#555;margin-left:2px">y más</span>
+        </div>
+        <div class="tropipay-notice">
+          <span class="tropipay-notice-icon">ℹ️</span>
+          <div class="tropipay-notice-text">
+            Serás redirigido a <strong>Tropipay</strong>, plataforma de pago segura. El acceso se activará manualmente en menos de <strong>24 horas</strong> tras confirmar el pago.
+          </div>
+        </div>
+        <button class="btn-tropipay" id="btn-tpp" onclick="pagarConTropipay()">
+          💳 PAGAR CON TARJETA — <span id="tpp-amt">$0.00</span>
+        </button>
+        <div class="tropipay-secure">
+          <span>🔒</span> Pago procesado por Tropipay · Encriptación SSL 256-bit
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -397,6 +491,8 @@
     document.getElementById('bp').textContent=`$${sv.price.toFixed(2)}`;
     document.getElementById('qv').textContent=qty;
     document.getElementById('ta').textContent=`$${t.toFixed(2)}`;
+    const tppEl=document.getElementById('tpp-amt');if(tppEl)tppEl.textContent=`$${t.toFixed(2)}`;
+    const skrillEl=document.getElementById('skrill-amt');if(skrillEl)skrillEl.textContent=`$${t.toFixed(2)}`;
   }
   window.cQty=function(d){qty=Math.max(1,Math.min(10,qty+d));upTot();updateUI();};
   function updateUI(){
@@ -530,6 +626,53 @@
   function clrMsg(){const el=document.getElementById('msg');el.className='msg';}
   window.updateUI=updateUI;
   onAuthStateChanged(auth,async u=>{user=u;if(u){document.getElementById('ng').style.display='none';document.getElementById('nu').style.display='flex';document.getElementById('nn').textContent=u.displayName||u.email.split('@')[0].toUpperCase();try{const s=await getDoc(doc(db,'users',u.uid));if(s.exists()){saldo=s.data().saldo??0;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;}}catch(e){}}rVars();upTot();updateUI();});
+
+  // ── SKRILL ──
+  window.pagarConSkrill = function() {
+    const t = sv.price * qty;
+    const SKRILL_EMAIL = 'TU_EMAIL_SKRILL_AQUI';
+    if (SKRILL_EMAIL === 'TU_EMAIL_SKRILL_AQUI') {
+      if(confirm('El pago con Skrill estará disponible muy pronto.\n\n¿Quieres contactarnos por Discord para completar tu compra?')) {
+        window.open('https://discord.gg/TU_LINK_AQUI','_blank');
+      }
+      return;
+    }
+    const url = `https://pay.skrill.com/?pay_to_email=${encodeURIComponent(SKRILL_EMAIL)}&amount=${t}&currency=USD&detail1_description=Yulian+Store&detail1_text=${encodeURIComponent(sv.name)}`;
+    window.open(url, '_blank');
+  };
+
+  // ── CRYPTO ADDRESSES ──
+  const CRYPTO_ADDRS = {
+    usdt: { addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', network:'ERC-20 / BEP-20', label:'USDT — Tether' },
+    btc:  { addr:'bc1qa3m5w2h5663du2f857czehrcljty09cmfxqhqe',  network:'Bitcoin (BTC)',    label:'Bitcoin' },
+    eth:  { addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', network:'ERC-20',          label:'Ethereum (ETH)' },
+    bnb:  { addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', network:'BEP-20 (BSC)',    label:'BNB' },
+    usdc: { addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', network:'ERC-20 / BEP-20', label:'USDC' },
+  };
+
+  window.mostrarCrypto = function(coin, el) {
+    document.querySelectorAll('.coin-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    const c = CRYPTO_ADDRS[coin];
+    document.getElementById('crypto-addr-label').textContent  = c.label;
+    document.getElementById('crypto-addr-network').textContent = 'Red: ' + c.network;
+    document.getElementById('crypto-addr').textContent         = c.addr;
+    document.getElementById('crypto-addr-box').classList.add('show');
+    const copyBtn = document.getElementById('btn-copy-addr');
+    copyBtn.textContent = '📋 COPIAR DIRECCIÓN';
+    copyBtn.classList.remove('addr-copied');
+  };
+
+  window.copiarAddr = function() {
+    const addr = document.getElementById('crypto-addr').textContent;
+    navigator.clipboard.writeText(addr).then(() => {
+      const btn = document.getElementById('btn-copy-addr');
+      btn.textContent = '✓ ¡DIRECCIÓN COPIADA!';
+      btn.classList.add('addr-copied');
+      setTimeout(() => { btn.textContent = '📋 COPIAR DIRECCIÓN'; btn.classList.remove('addr-copied'); }, 2500);
+    });
+  };
+
   window.doLogout=async()=>{await signOut(auth);window.location.href='index.html';};
 </script>
 
