@@ -693,6 +693,7 @@ function renderUsuarios(list) {
       <td class="td-muted">${fecha}</td>
       <td style="display:flex;gap:5px;flex-wrap:wrap;">
         <button class="btn btn-success btn-sm" onclick="openSaldoModal('${u.id}','${esc(u.name||u.email)}',${saldo})">💰</button>
+        <button class="btn btn-sm" style="background:rgba(255,184,0,.12);border:1px solid rgba(255,184,0,.3);color:#FFB800;" onclick="openAvisoRapido('${u.id}','${esc(u.name||u.email)}')">⚠️ Aviso</button>
         ${!banned
           ? `<button class="btn btn-danger btn-sm" onclick="openBanModal('${u.id}','${esc(u.name||u.email)}')">🚫 Ban</button>`
           : `<button class="btn btn-warn btn-sm" onclick="unbanUser('${u.id}')">🔓 Desbanear</button>`}
@@ -1390,5 +1391,52 @@ window.showPanel = (name, el) => {
   });
 })();
 </script>
+
+<!-- ══ MODAL: AVISO RÁPIDO ══ -->
+<div class="modal-overlay" id="modal-aviso" style="display:none">
+  <div class="modal-box" style="max-width:480px">
+    <button class="modal-close" onclick="closeModal('modal-aviso')">✕</button>
+    <div class="modal-title" style="color:#FFB800">⚠️ Enviar Aviso</div>
+    <div class="modal-body">
+      <div style="font-family:var(--font-b);font-size:.84rem;color:var(--text-muted);margin-bottom:18px;padding:10px 14px;background:rgba(255,184,0,.05);border:1px solid rgba(255,184,0,.15);border-radius:7px">
+        Enviando aviso a: <strong id="aviso-r-nombre" style="color:#fff">—</strong>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div>
+          <div class="modal-label">Título del aviso</div>
+          <input type="text" id="aviso-r-titulo" class="modal-input"
+            placeholder="Ej: Nombre de usuario inapropiado" maxlength="80"
+            style="width:100%;background:var(--card);border:1.5px solid rgba(255,255,255,.07);border-radius:7px;padding:10px 14px;color:#fff;font-family:var(--font-b);font-size:.88rem;outline:none;transition:border-color .2s">
+        </div>
+        <div>
+          <div class="modal-label">Mensaje</div>
+          <textarea id="aviso-r-mensaje" class="modal-input"
+            placeholder="Escribe el mensaje para el usuario..."
+            style="width:100%;background:var(--card);border:1.5px solid rgba(255,255,255,.07);border-radius:7px;padding:10px 14px;color:#fff;font-family:var(--font-b);font-size:.88rem;outline:none;resize:vertical;min-height:90px;transition:border-color .2s"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div>
+            <div class="modal-label">Botón Aceptar</div>
+            <input type="text" id="aviso-r-ok" value="✅ Entendido, lo corregiré"
+              style="width:100%;background:var(--card);border:1.5px solid rgba(255,255,255,.07);border-radius:7px;padding:9px 12px;color:#fff;font-family:var(--font-b);font-size:.82rem;outline:none">
+          </div>
+          <div>
+            <div class="modal-label">Botón Rechazar</div>
+            <input type="text" id="aviso-r-no" value="✖ No lo haré"
+              style="width:100%;background:var(--card);border:1.5px solid rgba(255,255,255,.07);border-radius:7px;padding:9px 12px;color:#fff;font-family:var(--font-b);font-size:.82rem;outline:none">
+          </div>
+        </div>
+      </div>
+      <div id="aviso-r-msg" style="font-family:var(--font-b);font-size:.8rem;padding:8px 12px;border-radius:6px;margin-top:12px;display:none"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-aviso')">Cancelar</button>
+      <button class="btn btn-sm" id="btn-aviso-r-send"
+        style="flex:1;background:linear-gradient(135deg,#b8860b,#FFB800);color:#000;border:none;font-family:var(--font-d);font-weight:700;font-size:.6rem;letter-spacing:2px;padding:10px;"
+        onclick="enviarAvisoRapido()">📤 ENVIAR AVISO</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
