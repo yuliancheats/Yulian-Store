@@ -160,6 +160,56 @@
     .flogo span{color:var(--o)}
     footer p{font-family:var(--fb);color:var(--tm);font-size:.78rem}
 
+
+    /* ══ EDITAR PERFIL ══ */
+    .edit-section{margin-bottom:28px}
+    .edit-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px 32px;position:relative;overflow:hidden}
+    .edit-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#7A1FEE,transparent)}
+    .edit-card-title{font-family:var(--fd);font-size:.65rem;font-weight:700;letter-spacing:3px;color:#7A1FEE;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+    .edit-fields{display:flex;flex-direction:column;gap:18px}
+    .edit-field-group{display:flex;flex-direction:column;gap:6px}
+    .edit-label{font-family:var(--fd);font-size:.52rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase}
+    .edit-input-row{display:flex;gap:10px;align-items:center}
+    .edit-input{flex:1;background:var(--c2);border:1.5px solid rgba(255,255,255,.07);border-radius:7px;padding:11px 16px;color:#fff;font-family:var(--fb);font-size:.9rem;outline:none;transition:border-color .25s,box-shadow .25s}
+    .edit-input:focus{border-color:#7A1FEE;box-shadow:0 0 10px rgba(122,31,238,.2)}
+    .btn-edit-save{background:#7A1FEE;color:#fff;border:none;padding:11px 20px;border-radius:7px;font-family:var(--fd);font-weight:700;font-size:.55rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s;white-space:nowrap}
+    .btn-edit-save:hover{background:#8f35ff;transform:translateY(-1px);box-shadow:0 4px 14px rgba(122,31,238,.4)}
+    .btn-edit-save:disabled{opacity:.4;transform:none;box-shadow:none}
+    .edit-hint{font-family:var(--fb);font-size:.75rem;color:var(--tm);margin-top:4px;line-height:1.5}
+    .edit-verify-notice{display:flex;align-items:flex-start;gap:10px;background:rgba(255,184,0,.05);border:1px solid rgba(255,184,0,.15);border-radius:8px;padding:11px 14px;margin-top:8px;font-family:var(--fb);font-size:.8rem;color:#888;line-height:1.65}
+    .edit-msg{font-family:var(--fb);font-size:.8rem;padding:8px 12px;border-radius:6px;margin-top:6px;display:none}
+    .edit-msg.ok{background:rgba(77,255,145,.08);border:1px solid rgba(77,255,145,.25);color:var(--green);display:block}
+    .edit-msg.err{background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.25);color:#ff6868;display:block}
+    .edit-msg.info{background:rgba(122,31,238,.08);border:1px solid rgba(122,31,238,.25);color:#a070ee;display:block}
+    .spin-sm{display:inline-block;width:11px;height:11px;border:2px solid rgba(255,255,255,.15);border-top-color:#7A1FEE;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:6px}
+
+    /* ══ AVISOS ADMIN ══ */
+    @keyframes avisoIn{from{opacity:0;transform:scale(.9) translateY(-12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    @keyframes avisoPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,184,0,.3)}50%{box-shadow:0 0 0 10px rgba(255,184,0,0)}}
+    .aviso-overlay{display:none;position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.9);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:20px}
+    .aviso-overlay.open{display:flex}
+    .aviso-modal{background:#0f0f0f;border:1px solid rgba(255,184,0,.25);border-radius:16px;padding:40px 36px;max-width:460px;width:100%;position:relative;animation:avisoIn .45s cubic-bezier(.34,1.4,.64,1) forwards;box-shadow:0 0 60px rgba(255,184,0,.08),0 24px 64px rgba(0,0,0,.7)}
+    .aviso-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:16px 16px 0 0;background:linear-gradient(90deg,transparent,#FFB800,transparent)}
+    .aviso-icon-big{font-size:2.8rem;text-align:center;margin-bottom:14px;animation:avisoPulse 2.5s infinite;display:block}
+    .aviso-from-lbl{font-family:var(--fd);font-size:.48rem;letter-spacing:3px;color:#FFB800;text-transform:uppercase;text-align:center;margin-bottom:10px;opacity:.7}
+    .aviso-title-lbl{font-family:var(--fd);font-size:.95rem;font-weight:900;color:#fff;text-align:center;letter-spacing:1.5px;margin-bottom:12px;line-height:1.3}
+    .aviso-msg-box{font-family:var(--fb);color:#888;font-size:.88rem;text-align:center;line-height:1.75;margin-bottom:26px;background:rgba(255,184,0,.04);border:1px solid rgba(255,184,0,.1);border-radius:8px;padding:14px 18px}
+    .aviso-btns{display:flex;flex-direction:column;gap:10px}
+    .btn-aviso-ok{width:100%;padding:14px;border:none;border-radius:8px;background:linear-gradient(135deg,#7A1FEE,#5a15bb);color:#fff;font-family:var(--fd);font-weight:700;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s;box-shadow:0 4px 18px rgba(122,31,238,.3)}
+    .btn-aviso-ok:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(122,31,238,.5)}
+    .btn-aviso-no{width:100%;padding:12px;border:1px solid rgba(255,80,80,.25);background:transparent;border-radius:8px;color:#ff6868;font-family:var(--fd);font-weight:700;font-size:.58rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s}
+    .btn-aviso-no:hover{background:rgba(255,80,80,.08);border-color:rgba(255,80,80,.5)}
+
+    .consec-overlay{display:none;position:fixed;inset:0;z-index:99995;background:rgba(0,0,0,.93);backdrop-filter:blur(14px);align-items:center;justify-content:center;padding:20px}
+    .consec-overlay.open{display:flex}
+    .consec-modal{background:#0f0808;border:1px solid rgba(255,68,68,.3);border-radius:16px;padding:40px 36px;max-width:420px;width:100%;position:relative;animation:avisoIn .4s cubic-bezier(.34,1.4,.64,1) forwards;box-shadow:0 0 60px rgba(255,68,68,.1),0 24px 64px rgba(0,0,0,.8)}
+    .consec-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:16px 16px 0 0;background:linear-gradient(90deg,transparent,#ff4444,transparent)}
+    .consec-icon{font-size:2.6rem;text-align:center;margin-bottom:14px;display:block}
+    .consec-title{font-family:var(--fd);font-size:.9rem;font-weight:900;color:#ff6868;text-align:center;letter-spacing:1.5px;margin-bottom:12px}
+    .consec-msg{font-family:var(--fb);color:#777;font-size:.86rem;text-align:center;line-height:1.75;margin-bottom:24px;background:rgba(255,68,68,.04);border:1px solid rgba(255,68,68,.12);border-radius:8px;padding:13px 16px}
+    .btn-consec-ok{width:100%;padding:13px;border:1px solid rgba(255,68,68,.3);background:rgba(255,68,68,.1);border-radius:8px;color:#ff6868;font-family:var(--fd);font-weight:700;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s}
+    .btn-consec-ok:hover{background:rgba(255,68,68,.2)}
+
     @media(max-width:768px){
       nav{padding:12px 18px}
       main{padding:28px 16px}
@@ -300,6 +350,40 @@
       onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.color='#666'">
         🚪 CERRAR SESIÓN
       </button>
+    </div>
+
+
+    <!-- ══ AVISOS ══ -->
+    <div id="aviso-container"></div>
+
+    <!-- ══ EDITAR PERFIL ══ -->
+    <div class="edit-section">
+      <div class="edit-card">
+        <div class="edit-card-title">✏️ Editar Perfil</div>
+        <div class="edit-fields">
+          <div class="edit-field-group">
+            <div class="edit-label">Nombre de Usuario</div>
+            <div class="edit-input-row">
+              <input type="text" class="edit-input" id="edit-name" placeholder="Tu nombre o alias" maxlength="30">
+              <button class="btn-edit-save" onclick="guardarNombre()">GUARDAR</button>
+            </div>
+            <div class="edit-hint">Máximo 30 caracteres. Sin caracteres inapropiados.</div>
+            <div class="edit-msg" id="msg-name"></div>
+          </div>
+          <div class="edit-field-group">
+            <div class="edit-label">Correo Electrónico</div>
+            <div class="edit-input-row">
+              <input type="email" class="edit-input" id="edit-email" placeholder="tu@correo.com">
+              <button class="btn-edit-save" onclick="guardarEmail()">GUARDAR</button>
+            </div>
+            <div class="edit-verify-notice">
+              <span>⚠️</span>
+              <span>Al cambiar tu correo se enviará un enlace de verificación a la nueva dirección. Deberás confirmarlo antes de que el cambio sea efectivo.</span>
+            </div>
+            <div class="edit-msg" id="msg-email"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- SALDO BOX -->
@@ -715,1921 +799,142 @@ import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasej
   </div>
 </div>
 
-</body>
-</html>
 
-codm-public:
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YULIAN STORE — CODM Público</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root{--o:#7A1FEE;--ob:#8B2FFF;--od:#5a0fcc;--dark:#080808;--d2:#0e0e0e;--card:#111;--c2:#161616;
-      --t:#fff;--tm:#777;--border:rgba(122,31,238,.18);
-      --neon:0 0 8px #7A1FEE,0 0 20px #8B2FFF,0 0 40px rgba(122,31,238,.5);
-      --green:#4dff91;--fd:'Orbitron',sans-serif;--fb:'Exo 2',sans-serif;}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{background:var(--dark);color:var(--t);font-family:var(--fb);overflow-x:hidden}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--d2)}
-    ::-webkit-scrollbar-thumb{background:var(--od);border-radius:3px}
-    * { cursor: none !important; }
-    #cdot{position:fixed;top:0;left:0;width:10px;height:10px;background:#111;border-radius:50%;
-      pointer-events:none;z-index:99999;transform:translate(-50%,-50%);
-      box-shadow:0 0 0 2.5px rgba(122,31,238,0.95),0 0 14px rgba(122,31,238,0.5);}
-    #cring{position:fixed;top:0;left:0;width:38px;height:38px;
-      border:2.5px solid rgba(122,31,238,0.8);border-radius:50%;pointer-events:none;z-index:99998;
-      transform:translate(-50%,-50%);box-shadow:0 0 14px rgba(122,31,238,0.3);
-      transition:width .18s,height .18s,border-color .18s;}
-    .tilt-wrap{perspective:900px;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
-    .tilt-box{transform-style:preserve-3d;will-change:transform;border-radius:14px;position:relative;
-      transition:transform 0.1s ease-out;filter:drop-shadow(0 24px 50px rgba(0,0,0,0.85));}
-    .tilt-shine{position:absolute;inset:0;border-radius:14px;
-      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.12) 0%,transparent 55%);
-      pointer-events:none;opacity:0;transition:opacity 0.3s;}
-    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
-      padding:14px 48px;background:rgba(8,8,8,.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
-    .logo{font-family:var(--fd);font-size:1.1rem;font-weight:900;letter-spacing:3px;text-decoration:none;color:var(--t);text-shadow:var(--neon)}
-    .logo span{color:var(--o)}
-    .nav-r{display:flex;align-items:center;gap:12px}
-    .nbtn{background:transparent;color:var(--o);border:1.5px solid var(--o);padding:7px 16px;border-radius:3px;
-      font-family:var(--fd);font-size:.58rem;letter-spacing:2px;text-decoration:none;
-      display:inline-block;text-transform:uppercase;transition:all .2s}
-    .nbtn:hover{background:var(--o);color:#000}
-    .nbtn-g{border-color:rgba(255,255,255,.12);color:var(--tm)}
-    .nbtn-g:hover{border-color:var(--o);color:var(--o);background:transparent}
-    .nav-s{font-family:var(--fd);font-size:.62rem;color:var(--green);background:rgba(77,255,145,.08);border:1px solid rgba(77,255,145,.2);padding:7px 13px;border-radius:3px}
-    .nav-n{font-family:var(--fd);font-size:.62rem;color:var(--o);text-shadow:var(--neon)}
-    .page-wrap{display:grid;grid-template-columns:1.1fr 1fr;min-height:calc(100vh - 57px)}
-    .img-col{position:relative;background:linear-gradient(135deg,#0c0a08,#100d0a);
-      display:flex;align-items:center;justify-content:center;padding:40px;overflow:hidden}
-    .img-col::before{content:'';position:absolute;inset:0;
-      background:radial-gradient(ellipse at 50% 60%,rgba(122,31,238,.15) 0%,transparent 65%);}
-    .hex-bg{position:absolute;inset:0;opacity:.035;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='52'%3E%3Cpolygon points='30,2 58,17 58,47 30,62 2,47 2,17' fill='none' stroke='%237A1FEE' stroke-width='1'/%3E%3C/svg%3E");
-      background-size:60px 52px}
-    .box-img{width:100%;max-width:380px;height:auto;border-radius:14px;display:block;position:relative;z-index:1;}
-    .status-pill{position:absolute;top:20px;left:20px;z-index:5;
-      display:flex;align-items:center;gap:7px;background:rgba(5,5,5,.8);
-      border:1px solid rgba(77,255,145,.3);backdrop-filter:blur(8px);padding:7px 13px;border-radius:30px}
-    .sdot{width:7px;height:7px;background:var(--green);border-radius:50%;
-      box-shadow:0 0 8px var(--green);animation:blink 2s infinite}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
-    .stxt{font-family:var(--fd);font-size:.52rem;letter-spacing:2px;color:var(--green);text-transform:uppercase}
-    .ver-pill{position:absolute;bottom:20px;right:20px;z-index:5;
-      background:rgba(122,31,238,.18);border:1px solid rgba(122,31,238,.4);
-      padding:5px 13px;border-radius:20px;font-family:var(--fd);font-size:.5rem;
-      letter-spacing:2px;color:var(--o);text-transform:uppercase;font-weight:700}
-    .info-col{background:var(--d2);padding:48px;display:flex;flex-direction:column;border-left:1px solid var(--border);overflow-y:auto}
-    .breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-    .breadcrumb a{font-family:var(--fd);font-size:.52rem;letter-spacing:1.5px;color:var(--tm);text-decoration:none;text-transform:uppercase;transition:color .2s}
-    .breadcrumb a:hover{color:var(--o)}
-    .breadcrumb span{color:rgba(255,255,255,.15);font-size:.8rem}
-    .ptags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
-    .ptag{font-family:var(--fd);font-size:.46rem;letter-spacing:1.5px;padding:4px 11px;border-radius:20px;font-weight:700;text-transform:uppercase;border:1px solid}
-    .ptag-g{color:var(--green);border-color:rgba(77,255,145,.3);background:rgba(77,255,145,.07)}
-    .ptag-b{color:#60b4ff;border-color:rgba(96,180,255,.3);background:rgba(96,180,255,.07)}
-    .ptag-o{color:var(--o);border-color:rgba(122,31,238,.3);background:rgba(122,31,238,.09)}
-    .ptitle{font-family:var(--fd);font-size:clamp(1.4rem,2.3vw,2rem);font-weight:900;letter-spacing:2px;color:#fff;margin-bottom:11px;line-height:1.2}
-    .pdesc{font-family:var(--fb);color:var(--tm);font-size:.93rem;line-height:1.75;margin-bottom:20px}
-    .meta-box{background:rgba(122,31,238,.05);border:1px solid rgba(122,31,238,.13);border-radius:8px;padding:15px 18px;margin-bottom:20px;display:flex;flex-direction:column;gap:9px}
-    .meta-row{display:flex;align-items:center;gap:10px;font-family:var(--fb);font-size:.88rem;color:var(--tm)}
-    .meta-row .mi{font-size:.95rem;width:22px;text-align:center}
-    .meta-row strong{color:#ddd;font-weight:600}
-    .stars-row{display:flex;align-items:center;gap:8px;margin-bottom:18px}
-    .stars{color:#bb77ff;font-size:.9rem;text-shadow:0 0 6px rgba(255,184,0,.4)}
-    .stars-txt{font-family:var(--fb);font-size:.83rem;color:var(--tm)}
-    .price-box{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:15px 18px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-    .pb-l{display:flex;flex-direction:column;gap:3px}
-    .pb-lbl{font-family:var(--fd);font-size:.55rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase}
-    .pb-price{font-family:var(--fd);font-size:1.9rem;font-weight:900;color:var(--o);text-shadow:0 0 10px rgba(122,31,238,.4)}
-    .pb-r{display:flex;flex-direction:column;gap:3px;align-items:flex-end}
-    .qty-lbl{font-family:var(--fd);font-size:.52rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase;margin-bottom:4px}
-    .qty-w{display:flex;align-items:center}
-    .qb{background:var(--c2);border:1px solid rgba(255,255,255,.08);color:#fff;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;transition:all .2s;user-select:none}
-    .qb:first-child{border-radius:4px 0 0 4px}.qb:last-child{border-radius:0 4px 4px 0}
-    .qb:hover{background:var(--o);color:#000}
-    .qv{background:var(--c2);border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);color:#fff;width:40px;height:32px;text-align:center;font-family:var(--fd);font-size:.78rem;display:flex;align-items:center;justify-content:center}
-    .vtitle{font-family:var(--fd);font-size:.6rem;letter-spacing:3px;color:var(--tm);text-transform:uppercase;margin-bottom:11px}
-    .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px}
-    .vc{background:var(--c2);border:1.5px solid rgba(255,255,255,.07);border-radius:8px;padding:13px 15px;transition:all .25s;position:relative;overflow:hidden}
-    .vc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--o),transparent);opacity:0;transition:opacity .3s}
-    .vc:hover{border-color:rgba(122,31,238,.35);background:rgba(122,31,238,.05)}
-    .vc:hover::before{opacity:1}
-    .vc.sel{border-color:var(--o);background:rgba(122,31,238,.09);box-shadow:0 0 16px rgba(122,31,238,.10)}
-    .vc.sel::before{opacity:1}
-    .vc-n{font-family:var(--fd);font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:#fff;text-transform:uppercase;margin-bottom:3px}
-    .vc-s{font-family:var(--fb);font-size:.74rem;color:var(--tm);margin-bottom:7px}
-    .vc-p{font-family:var(--fd);font-size:.95rem;font-weight:900;color:var(--o)}
-    .tot-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:17px 18px;margin-bottom:12px}
-    .tot-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
-    .tot-lbl{font-family:var(--fd);font-size:.58rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase}
-    .tot-amt{font-family:var(--fd);font-size:1.55rem;font-weight:900;color:var(--o);text-shadow:var(--neon)}
-    .sal-row{display:flex;align-items:center;gap:8px;margin-bottom:13px;font-family:var(--fb);font-size:.83rem;color:var(--tm)}
-    .sal-val{color:var(--green);font-family:var(--fd);font-size:.72rem;font-weight:700}
-    .btn-buy{width:100%;background:var(--o);color:#000;border:none;padding:15px;border-radius:6px;
-      font-family:var(--fd);font-weight:700;font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;
-      display:flex;align-items:center;justify-content:center;gap:8px;
-      box-shadow:0 4px 20px rgba(122,31,238,.3);transition:all .25s}
-    .btn-buy:hover{background:var(--ob);transform:translateY(-2px);box-shadow:var(--neon),0 8px 30px rgba(122,31,238,.4)}
-    .btn-buy:disabled{opacity:.4;transform:none;box-shadow:none}
-    .btn-log{width:100%;background:transparent;color:var(--o);border:1.5px solid var(--o);padding:15px;border-radius:6px;
-      font-family:var(--fd);font-weight:700;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s}
-    .btn-log:hover{background:rgba(122,31,238,.13)}
-    .msg{padding:11px 15px;border-radius:5px;font-size:.83rem;margin-top:10px;display:none;font-family:var(--fb)}
-    .msg.err{background:rgba(255,50,50,.1);border:1px solid rgba(255,50,50,.3);color:#ff6666;display:block}
-    .msg.ok{background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.3);color:var(--green);display:block}
-    .msg.warn{background:rgba(255,184,0,.1);border:1px solid rgba(255,184,0,.3);color:#bb77ff;display:block}
-    .spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:sp .7s linear infinite}
-    @keyframes sp{to{transform:rotate(360deg)}}
-    .feats{padding:70px 48px;max-width:1400px;margin:0 auto}
-    .feats h2{font-family:var(--fd);font-size:1.3rem;font-weight:900;letter-spacing:3px;color:#fff;margin-bottom:8px}
-    .feats .sub{font-family:var(--fb);color:var(--tm);font-size:.93rem;margin-bottom:42px;line-height:1.7}
-    .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:13px}
-    .fc{background:var(--c2);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:24px 22px;transition:border-color .25s,box-shadow .25s;position:relative;overflow:hidden}
-    .fc::after{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--o),transparent);opacity:0;transition:opacity .3s}
-    .fc:hover{border-color:rgba(122,31,238,.22);box-shadow:0 4px 28px rgba(122,31,238,.07)}
-    .fc:hover::after{opacity:1}
-    .fc-title{font-family:var(--fd);font-size:.64rem;letter-spacing:2px;color:var(--o);text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:7px;font-weight:700}
-    .fc ul{list-style:none;display:flex;flex-direction:column;gap:7px}
-    .fc ul li{font-family:var(--fb);color:var(--tm);font-size:.86rem;display:flex;align-items:flex-start;gap:9px;line-height:1.4}
-    .fc ul li::before{content:'✓';color:var(--o);font-weight:900;font-size:.75rem;flex-shrink:0;margin-top:1px}
-    .moverlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center}
-    .moverlay.open{display:flex}
-    .msuccess{background:var(--card);border:1px solid rgba(77,255,145,.25);border-radius:12px;padding:42px 34px;max-width:400px;width:90%;text-align:center;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) forwards}
-    @keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
-    .micon{font-size:3rem;margin-bottom:16px}
-    .msuccess h3{font-family:var(--fd);font-size:.88rem;font-weight:900;letter-spacing:2px;color:var(--green);margin-bottom:10px;text-transform:uppercase}
-    .msuccess p{font-family:var(--fb);color:var(--tm);font-size:.88rem;line-height:1.7;margin-bottom:16px}
-    .kbox{background:var(--c2);border:1px solid rgba(77,255,145,.18);border-radius:6px;padding:12px 16px;font-family:var(--fd);font-size:.7rem;color:var(--green);letter-spacing:2px;margin-bottom:20px;word-break:break-all;text-align:left}
-    .btn-cl{background:var(--o);color:#000;border:none;padding:12px 26px;border-radius:5px;font-family:var(--fd);font-weight:700;font-size:.62rem;letter-spacing:2px;transition:all .2s}
-    .btn-cl:hover{background:var(--ob)}
-    footer{background:var(--d2);border-top:1px solid var(--border);padding:26px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-    .flogo{font-family:var(--fd);font-size:.9rem;font-weight:900;letter-spacing:3px}
-    .flogo span{color:var(--o)}
-    footer p{font-family:var(--fb);color:var(--tm);font-size:.78rem}
-    @media(max-width:900px){
-      .page-wrap{grid-template-columns:1fr;min-height:auto}
-      .img-col{height:auto;padding:30px 24px;min-height:300px}
-      .info-col{padding:28px 18px}
-      .vgrid{grid-template-columns:1fr}
-      nav{padding:12px 20px}
-      .feats{padding:50px 18px}
-      footer{padding:20px 18px;flex-direction:column;text-align:center}
-    }
-  </style>
-</head>
-<body>
-
-<nav>
-  <a href="index.html" class="logo"><span>YULIAN</span> STORE</a>
-  <div class="nav-r">
-    <a href="index.html" class="nbtn nbtn-g" style="font-size:.54rem;">← Tienda</a>
-    <div id="ng"><a href="login.html" class="nbtn">ACCEDER</a></div>
-    <div id="nu" style="display:none;align-items:center;gap:10px;">
-      <span class="nav-n" id="nn"></span>
-      <span class="nav-s" id="ns">$0.00</span>
-    </div>
-  </div>
-</nav>
-
-<div class="moverlay" id="modal-ok">
-  <div class="msuccess">
-    <div class="micon">🎮</div>
-    <h3>¡Acceso Desbloqueado!</h3>
-    <p>Compra exitosa. Guarda tu clave y únete al Discord para instrucciones.</p>
-    <div class="kbox" id="kbox">—</div>
-    <button class="btn-cl" onclick="document.getElementById('modal-ok').classList.remove('open');updateUI()">ENTENDIDO</button>
-  </div>
-</div>
-
-<div class="page-wrap">
-  <div class="img-col">
-    <div class="hex-bg"></div>
-    <div class="status-pill"><div class="sdot"></div><span class="stxt">Indetectable</span></div>
-    <div class="tilt-wrap">
-      <div class="tilt-box">
-        <div class="tilt-shine"></div>
-        <img src="codm_public_box.png" alt="Call of Duty Mobile" class="box-img">
-      </div>
-    </div>
-    <div class="ver-pill">PÚBLICO</div>
-  </div>
-
-  <div class="info-col">
-    <div class="breadcrumb">
-      <a href="index.html">Tienda</a><span>›</span>
-      <a href="javascript:history.back()">Call of Duty Mobile</a><span>›</span>
-      <span style="color:var(--o);font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:1.5px;">PÚBLICO</span>
-    </div>
-    <div class="ptags"><span class="ptag ptag-g">✓ Indetectable</span><span class="ptag ptag-b">↻ Actualizado</span><span class="ptag ptag-o">🔥 Popular</span></div>
-    <h1 class="ptitle">Call of Duty Mobile<br><span style="color:var(--o);">— PÚBLICO</span></h1>
-    <p class="pdesc">Acceso completo con aimbot de alta precisión, ESP y Wallhack. Actualizaciones regulares tras cada parche.</p>
-    <div class="meta-box"><div class="meta-row"><span class="mi">📱</span> Compatible con <strong>Android e iOS</strong></div><div class="meta-row"><span class="mi">🛡️</span> <strong>Anti-ban activo</strong> y cifrado</div><div class="meta-row"><span class="mi">⚡</span> Actualizaciones <strong>post-parche automáticas</strong></div></div>
-    <div class="stars-row">
-      <span class="stars">★★★★☆</span>
-      <span class="stars-txt">4 (524 reseñas)</span>
-    </div>
-    <div class="price-box">
-      <div class="pb-l"><div class="pb-lbl">Precio base</div><div class="pb-price" id="bp">$0.00</div></div>
-      <div class="pb-r">
-        <div class="qty-lbl">Cantidad</div>
-        <div class="qty-w">
-          <div class="qb" onclick="cQty(-1)">−</div>
-          <div class="qv" id="qv">1</div>
-          <div class="qb" onclick="cQty(1)">+</div>
-        </div>
-      </div>
-    </div>
-    <div class="vtitle">VARIANTES</div>
-    <div class="vgrid" id="vg"></div>
-    <div class="tot-box">
-      <div class="tot-row"><span class="tot-lbl">Total</span><span class="tot-amt" id="ta">$0.00</span></div>
-      <div class="sal-row" id="sr" style="display:none;">Tu saldo: <span class="sal-val" id="sv">$0.00</span></div>
-      <div id="ba"><button class="btn-log" onclick="window.location.href='login.html'">INICIA SESIÓN PARA COMPRAR</button></div>
-      <div class="msg" id="msg"></div>
+<!-- ══ MODAL: AVISO ADMIN ══ -->
+<div class="aviso-overlay" id="aviso-overlay">
+  <div class="aviso-modal">
+    <span class="aviso-icon-big">⚠️</span>
+    <div class="aviso-from-lbl">📣 Mensaje del Administrador · YULIAN STORE</div>
+    <div class="aviso-title-lbl" id="aviso-titulo">Advertencia</div>
+    <div class="aviso-msg-box" id="aviso-mensaje">—</div>
+    <div class="aviso-btns">
+      <button class="btn-aviso-ok"  id="aviso-btn-ok" onclick="responderAviso('accept')">✅ Entendido, lo corregiré</button>
+      <button class="btn-aviso-no"  id="aviso-btn-no" onclick="responderAviso('reject')">✖ No lo haré</button>
     </div>
   </div>
 </div>
 
-<div class="feats">
-  <h2>CARACTERÍSTICAS DEL SOFTWARE</h2>
-  <p class="sub">Todo lo que incluye tu acceso — Call of Duty Mobile PÚBLICO</p>
-  <div class="fgrid"><div class="fc"><div class="fc-title"><span>🎯</span> Aimbot</div><ul><li>Config. por tipo de arma</li><li>Suavidad ajustable</li><li>Predicción de movimiento</li><li>Visible Check</li><li>FOV Circle</li><li>Hitbox seleccionable</li><li>Keybind personalizable</li></ul></div><div class="fc"><div class="fc-title"><span>👁️</span> Visuals / ESP</div><ul><li>Box ESP (Outline/Corner)</li><li>Skeleton ESP</li><li>Nombre y distancia</li><li>Arma del enemigo</li><li>Snap Lines</li><li>Show Bots</li><li>Colores personalizables</li></ul></div><div class="fc"><div class="fc-title"><span>📡</span> Radar</div><ul><li>Radar en pantalla</li><li>Rango ajustable</li><li>Posición personalizable</li><li>Rank visible</li><li>Plataforma del jugador</li></ul></div><div class="fc"><div class="fc-title"><span>⚙️</span> Misc</div><ul><li>Config SAVE/LOAD</li><li>Overlay FPS</li><li>VSync</li><li>Menú in-game</li><li>Soporte Discord 24/7</li></ul></div><div class="fc"><div class="fc-title"><span>🔒</span> Seguridad</div><ul><li>100% indetectable</li><li>Anti-ban integrado</li><li>Actualizaciones automáticas</li><li>Sin necesidad de root</li><li>Cifrado de comunicación</li></ul></div><div class="fc"><div class="fc-title"><span>ℹ️</span> Información</div><ul><li>Compatible Android e iOS</li><li>Acceso instantáneo</li><li>Clave de licencia personal</li><li>Instrucciones en Discord</li><li>Reembolso si hay detección</li></ul></div></div>
+<!-- ══ MODAL: CONSECUENCIA ══ -->
+<div class="consec-overlay" id="consec-overlay">
+  <div class="consec-modal">
+    <span class="consec-icon">🚫</span>
+    <div class="consec-title">ADVERTENCIA FINAL</div>
+    <div class="consec-msg">
+      Tu decisión ha sido registrada y el administrador ha sido notificado.<br><br>
+      <strong style="color:#ff8888">Incumplir las normas de la comunidad puede resultar en la suspensión permanente de tu cuenta, la pérdida de tu saldo y de todos tus accesos.</strong>
+    </div>
+    <button class="btn-consec-ok" onclick="document.getElementById('consec-overlay').classList.remove('open')">ENTENDIDO</button>
+  </div>
 </div>
 
-<footer>
-  <div class="flogo"><span>YULIAN</span> STORE</div>
-  <p>© 2025 Yulian Store. Todos los derechos reservados.</p>
-  <a href="index.html" style="color:var(--o);font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:1.5px;text-decoration:none;">← Volver</a>
-</footer>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, updateDoc, arrayUnion, increment, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",
-    projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",
-    messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
-  const app=initializeApp(cfg),auth=getAuth(app),db=getFirestore(app);
-  const VARS=[{id:'1d',name:'DÍA',sub:'Acceso 24 horas',price:5},
-    {id:'3d',name:'3 DÍAS',sub:'Acceso 72 horas',price:12},
-    {id:'1s',name:'SEMANA',sub:'Acceso 7 días',price:20},
-    {id:'1m',name:'MES',sub:'Acceso 30 días',price:35},
-    {id:'lf',name:'LIFETIME',sub:'De por vida',price:70}];
-  const PID='CODM-PUBLIC',PNAME='Call of Duty Mobile (Público)';
-  let sv=VARS[0],qty=1,user=null,saldo=0;
-  function rVars(){
-    const g=document.getElementById('vg');
-    g.innerHTML=VARS.map(v=>`<div class="vc${v.id===sv.id?' sel':''}" data-id="${v.id}"><div class="vc-n">${v.name}</div><div class="vc-s">${v.sub}</div><div class="vc-p">$${v.price.toFixed(2)}</div></div>`).join('');
-    g.querySelectorAll('.vc').forEach(el=>el.addEventListener('click',()=>{sv=VARS.find(v=>v.id===el.dataset.id);rVars();upTot();updateUI();}));
-  }
-  function upTot(){
-    const t=sv.price*qty;
-    document.getElementById('bp').textContent=`$${sv.price.toFixed(2)}`;
-    document.getElementById('qv').textContent=qty;
-    document.getElementById('ta').textContent=`$${t.toFixed(2)}`;
-  }
-  window.cQty=function(d){qty=Math.max(1,Math.min(10,qty+d));upTot();updateUI();};
-  function updateUI(){
-    const ba=document.getElementById('ba');clrMsg();
-    if(!user){ba.innerHTML='<button class="btn-log" onclick="window.location.href=\'login.html\'">INICIA SESIÓN PARA COMPRAR</button>';document.getElementById('sr').style.display='none';return;}
-    document.getElementById('sr').style.display='flex';
-    document.getElementById('sv').textContent=`$${saldo.toFixed(2)}`;
-    const t=sv.price*qty;
-    if(saldo>=t){ba.innerHTML=`<button class="btn-buy" id="bc">🛒 COMPRAR — $${t.toFixed(2)}</button>`;document.getElementById('bc').addEventListener('click',comprar);}
-    else{ba.innerHTML=`<button class="btn-buy" disabled>🛒 COMPRAR — $${t.toFixed(2)}</button>`;showMsg('warn',`Saldo insuficiente. Necesitas $${t.toFixed(2)}, tienes $${saldo.toFixed(2)}. Contacta al admin para recargar.`);}
-  }
-  async function comprar(){
-    const btn=document.getElementById('bc');btn.disabled=true;btn.innerHTML='<span class="spin"></span> Procesando...';clrMsg();
-    try{
-      const snap=await getDoc(doc(db,'users',user.uid));const sr=snap.data().saldo??0;const t=sv.price*qty;
-      if(sr<t){showMsg('err','Saldo insuficiente.');btn.disabled=false;btn.textContent='🛒 COMPRAR';return;}
-      await updateDoc(doc(db,'users',user.uid),{saldo:increment(-t),purchases:arrayUnion(`${PID} — ${sv.name} x${qty}`)});
-      const key=`YS-${PID}-${sv.id.toUpperCase()}-${Math.random().toString(36).slice(2,8).toUpperCase()}`;
-      await addDoc(collection(db,'compras'),{uid:user.uid,nombre:user.displayName||'—',email:user.email,producto:PNAME,plan:sv.name,cantidad:qty,precio:t,clave:key,fecha:serverTimestamp()});
-      saldo=sr-t;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;document.getElementById('sv').textContent=`$${saldo.toFixed(2)}`;
-      document.getElementById('kbox').textContent=key;document.getElementById('modal-ok').classList.add('open');
-    }catch(e){showMsg('err','Error al procesar. Intenta de nuevo.');btn.disabled=false;btn.innerHTML=`🛒 COMPRAR — $${(sv.price*qty).toFixed(2)}`;}
-  }
-  function showMsg(t,txt){const el=document.getElementById('msg');el.className=`msg ${t}`;el.textContent=txt;}
-  function clrMsg(){const el=document.getElementById('msg');el.className='msg';}
-  window.updateUI=updateUI;
-  onAuthStateChanged(auth,async u=>{user=u;if(u){document.getElementById('ng').style.display='none';document.getElementById('nu').style.display='flex';document.getElementById('nn').textContent=u.displayName||u.email.split('@')[0].toUpperCase();try{const s=await getDoc(doc(db,'users',u.uid));if(s.exists()){saldo=s.data().saldo??0;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;}}catch(e){}}rVars();upTot();updateUI();});
-  window.doLogout=async()=>{await signOut(auth);window.location.href='index.html';};
-</script>
+import { initializeApp }           from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged,
+         updateProfile, verifyBeforeUpdateEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, updateDoc,
+         collection, query, where,
+         onSnapshot, serverTimestamp }            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-<script>
-/* CURSOR */
-const cdot=document.createElement('div');cdot.id='cdot';
-const cring=document.createElement('div');cring.id='cring';
-document.body.appendChild(cdot);document.body.appendChild(cring);
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function animC(){
-  requestAnimationFrame(animC);
-  cdot.style.left=mx+'px';cdot.style.top=my+'px';
-  rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;
-  cring.style.left=rx+'px';cring.style.top=ry+'px';
-})();
-document.querySelectorAll('button,a,.vc,.qb').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cring.style.width='52px';cring.style.height='52px';cring.style.borderColor='rgba(139,47,255,1)';});
-  el.addEventListener('mouseleave',()=>{cring.style.width='38px';cring.style.height='38px';cring.style.borderColor='rgba(122,31,238,0.8)';});
+const _cfg = {
+  apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",
+  authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",
+  storageBucket:"yulian-store.firebasestorage.app",
+  messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"
+};
+const _app  = initializeApp(_cfg, 'edit-mod');
+const _auth = getAuth(_app);
+const _db   = getFirestore(_app);
+
+let _user = null;
+let _avisoId = null;
+
+onAuthStateChanged(_auth, user => {
+  if (!user) return;
+  _user = user;
+  document.getElementById('edit-name').value  = user.displayName || '';
+  document.getElementById('edit-email').value = user.email || '';
+  listenAvisos(user.uid);
 });
 
-/* 3D TILT */
-document.querySelectorAll('.tilt-box').forEach(box=>{
-  const wrap=box.closest('.tilt-wrap');
-  wrap.addEventListener('mousemove',e=>{
-    const r=box.getBoundingClientRect();
-    const dx=(e.clientX-(r.left+r.width/2))/(r.width/2);
-    const dy=(e.clientY-(r.top+r.height/2))/(r.height/2);
-    box.style.transform=`rotateX(${-dy*14}deg) rotateY(${dx*14}deg) scale3d(1.04,1.04,1.04)`;
-    const shine=box.querySelector('.tilt-shine');
-    if(shine){
-      shine.style.background=`radial-gradient(circle at ${((e.clientX-r.left)/r.width)*100}% ${((e.clientY-r.top)/r.height)*100}%,rgba(255,255,255,0.14) 0%,transparent 55%)`;
-      shine.style.opacity='1';
-    }
-  });
-  wrap.addEventListener('mouseleave',()=>{
-    box.style.transform='rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
-    const shine=box.querySelector('.tilt-shine');
-    if(shine) shine.style.opacity='0';
-  });
-});
-</script>
+// ── GUARDAR NOMBRE ──
+window.guardarNombre = async function() {
+  const btn  = document.querySelector('#edit-name + button') || document.querySelector('.btn-edit-save');
+  const msg  = document.getElementById('msg-name');
+  const name = document.getElementById('edit-name').value.trim();
+  if (!name || name.length < 2) { showEM(msg,'err','El nombre debe tener al menos 2 caracteres.'); return; }
+  btn.disabled = true; btn.innerHTML = '<span class="spin-sm"></span>Guardando...';
+  try {
+    await updateProfile(_user, { displayName: name });
+    await updateDoc(doc(_db,'users',_user.uid), { name });
+    const pn = document.getElementById('p-name');
+    if (pn) pn.textContent = name.toUpperCase();
+    const av = document.getElementById('avatar-letra');
+    if (av) av.textContent = name.charAt(0).toUpperCase();
+    showEM(msg,'ok','✅ Nombre actualizado correctamente.');
+  } catch(e) { showEM(msg,'err','Error al guardar. Intenta de nuevo.'); }
+  btn.disabled = false; btn.textContent = 'GUARDAR';
+};
 
-<!-- MODAL CERRAR SESIÓN -->
-<div id="logout-modal" style="
-  display:none;position:fixed;inset:0;z-index:99999;
-  background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);
-  align-items:center;justify-content:center;padding:20px;
-">
-  <div style="
-    background:#111;border:1px solid rgba(122,31,238,0.25);border-radius:14px;
-    padding:40px 36px;max-width:420px;width:100%;position:relative;
-    box-shadow:0 0 60px rgba(122,31,238,0.08);
-    animation:popInL .4s cubic-bezier(.34,1.56,.64,1) forwards;
-  ">
-    <div style="text-align:center;margin-bottom:20px;font-size:2.8rem;">⚠️</div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:900;
-      letter-spacing:2px;color:#7A1FEE;text-align:center;margin-bottom:14px;text-transform:uppercase;">
-      ¿Cerrar Sesión?
-    </h3>
-    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.88rem;line-height:1.75;
-      text-align:center;margin-bottom:10px;">
-      Recuerda que tu <strong style="color:#fff;">saldo y compras</strong> están guardados en tu cuenta.
-    </p>
-    <p style="font-family:'Exo 2',sans-serif;color:#aa77ff;font-size:.82rem;line-height:1.7;
-      text-align:center;margin-bottom:28px;
-      background:rgba(122,31,238,0.07);border:1px solid rgba(122,31,238,0.2);
-      border-radius:8px;padding:12px 16px;">
-      🔑 Si no recuerdas tu contraseña, <strong>no podrás recuperar el acceso</strong> a tu saldo ni a tus claves de productos. Asegúrate de tenerla guardada antes de salir.
-    </p>
-    <div style="display:flex;gap:12px;">
-      <button onclick="document.getElementById('logout-modal').style.display='none'"
-        style="flex:1;background:transparent;color:#777;border:1px solid rgba(255,255,255,.12);
-        padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.6rem;
-        letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
-        onmouseover="this.style.borderColor='#7A1FEE';this.style.color='#7A1FEE'"
-        onmouseout="this.style.borderColor='rgba(255,255,255,.12)';this.style.color='#777'">
-        CANCELAR
-      </button>
-      <button onclick="confirmarLogout()"
-        style="flex:1;background:#7A1FEE;color:#000;border:none;padding:13px;border-radius:6px;
-        font-family:'Orbitron',sans-serif;font-weight:700;font-size:.6rem;
-        letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
-        onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
-        SÍ, CERRAR SESIÓN
-      </button>
-    </div>
-  </div>
-</div>
-<style>
-@keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
-</style>
+// ── GUARDAR EMAIL ──
+window.guardarEmail = async function() {
+  const btns = document.querySelectorAll('.btn-edit-save');
+  const btn  = btns[1]; // second save button is email
+  const msg  = document.getElementById('msg-email');
+  const email = document.getElementById('edit-email').value.trim();
+  if (!email) { showEM(msg,'err','El correo no puede estar vacío.'); return; }
+  if (email === _user.email) { showEM(msg,'info','Ese ya es tu correo actual.'); return; }
+  btn.disabled = true; btn.innerHTML = '<span class="spin-sm"></span>Enviando...';
+  try {
+    await verifyBeforeUpdateEmail(_user, email);
+    showEM(msg,'ok','📧 Enlace de verificación enviado a ' + email + '. Confírmalo para aplicar el cambio.');
+  } catch(e) {
+    const errs = {
+      'auth/email-already-in-use':'Ese correo ya está en uso por otra cuenta.',
+      'auth/invalid-email':'El correo no tiene un formato válido.',
+      'auth/requires-recent-login':'Por seguridad, cierra sesión y vuelve a entrar antes de cambiar el correo.',
+    };
+    showEM(msg,'err', errs[e.code] || 'Error: ' + e.message);
+  }
+  btn.disabled = false; btn.textContent = 'GUARDAR';
+};
 
-
-<!-- ═══ PANTALLA DE BAN EN TIEMPO REAL ═══ -->
-<div id="ban-screen" style="
-  display:none; position:fixed; inset:0; z-index:999999;
-  background:#06040f; align-items:center; justify-content:center;
-  padding:20px; flex-direction:column;
-">
-  <div style="
-    background:#0d0a1a; border:2px solid rgba(255,68,68,0.4);
-    border-radius:16px; padding:48px 40px; max-width:480px; width:100%;
-    text-align:center; box-shadow:0 0 60px rgba(255,68,68,0.12);
-    animation:popInBan .5s cubic-bezier(.34,1.56,.64,1) forwards;
-  ">
-    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
-    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;
-      letter-spacing:3px;color:#ff4444;text-transform:uppercase;margin-bottom:16px;
-      text-shadow:0 0 20px rgba(255,68,68,0.5);">
-      Cuenta Suspendida
-    </h2>
-    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:12px;">
-      Tu cuenta ha sido suspendida por un administrador.
-    </p>
-    <div id="ban-reason-rt" style="
-      font-family:'Exo 2',sans-serif;color:#ff9966;font-size:.85rem;
-      background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);
-      border-radius:8px;padding:12px 16px;margin-bottom:24px;line-height:1.7;
-      display:none;
-    "></div>
-    <p style="font-family:'Exo 2',sans-serif;color:#666;font-size:.82rem;line-height:1.7;margin-bottom:24px;">
-      Si crees que es un error, abre un ticket en nuestro Discord o contacta un administrador para apelar.
-    </p>
-    <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="
-      display:inline-flex;align-items:center;gap:8px;
-      background:#7A1FEE;color:#000;text-decoration:none;
-      font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;
-      letter-spacing:2px;padding:13px 28px;border-radius:6px;
-      text-transform:uppercase;box-shadow:0 4px 18px rgba(122,31,238,.35);
-      transition:all .2s;
-    " onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
-      🎮 Abrir Discord
-    </a>
-  </div>
-</div>
-<style>
-@keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
-</style>
-
-<script type="module">
-/* ── REAL-TIME BAN LISTENER ── */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-(function(){
-  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
-  const app2 = initializeApp(cfg, 'ban-listener');
-  const auth2 = getAuth(app2);
-  const db2   = getFirestore(app2);
-  let unsub = null;
-  onAuthStateChanged(auth2, user => {
-    if (unsub) unsub();
-    if (!user) return;
-    unsub = onSnapshot(doc(db2,'users',user.uid), snap => {
-      if (!snap.exists()) return;
-      const data = snap.data();
-      if (data.banned) {
-        const screen = document.getElementById('ban-screen');
-        if (screen) {
-          screen.style.display = 'flex';
-          if (data.banReason) {
-            const el = document.getElementById('ban-reason-rt');
-            if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
-          }
-        }
+// ── AVISOS EN TIEMPO REAL ──
+function listenAvisos(uid) {
+  const q = query(collection(_db,'avisos'), where('uid','==',uid), where('estado','==','pendiente'));
+  onSnapshot(q, snap => {
+    snap.docChanges().forEach(ch => {
+      if (ch.type === 'added') {
+        _avisoId = ch.doc.id;
+        const d = ch.doc.data();
+        document.getElementById('aviso-titulo').textContent  = d.titulo  || 'Advertencia';
+        document.getElementById('aviso-mensaje').textContent = d.mensaje || '—';
+        if (d.btnAceptar)  document.getElementById('aviso-btn-ok').textContent = d.btnAceptar;
+        if (d.btnRechazar) document.getElementById('aviso-btn-no').textContent = d.btnRechazar;
+        document.getElementById('aviso-overlay').classList.add('open');
       }
     });
   });
-})();
+}
+
+window.responderAviso = async function(resp) {
+  if (!_avisoId) return;
+  document.getElementById('aviso-overlay').classList.remove('open');
+  try {
+    await updateDoc(doc(_db,'avisos',_avisoId), { estado:'respondido', respuesta:resp, respondidoEn:serverTimestamp() });
+  } catch(e) { console.error(e); }
+  _avisoId = null;
+  if (resp === 'reject') {
+    setTimeout(() => document.getElementById('consec-overlay').classList.add('open'), 350);
+  }
+};
+
+function showEM(el, type, txt) {
+  el.className = 'edit-msg ' + type; el.textContent = txt;
+  setTimeout(() => { el.className = 'edit-msg'; }, 7000);
+}
 </script>
 
 </body>
 </html>
-
-codm-private:
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YULIAN STORE — CODM Privado</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root{--o:#7A1FEE;--ob:#8B2FFF;--od:#5a0fcc;--dark:#080808;--d2:#0e0e0e;--card:#111;--c2:#161616;
-      --t:#fff;--tm:#777;--border:rgba(122,31,238,.18);
-      --neon:0 0 8px #7A1FEE,0 0 20px #8B2FFF,0 0 40px rgba(122,31,238,.5);
-      --green:#4dff91;--fd:'Orbitron',sans-serif;--fb:'Exo 2',sans-serif;}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{background:var(--dark);color:var(--t);font-family:var(--fb);overflow-x:hidden}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--d2)}
-    ::-webkit-scrollbar-thumb{background:var(--od);border-radius:3px}
-    * { cursor: none !important; }
-    #cdot{position:fixed;top:0;left:0;width:10px;height:10px;background:#111;border-radius:50%;
-      pointer-events:none;z-index:99999;transform:translate(-50%,-50%);
-      box-shadow:0 0 0 2.5px rgba(122,31,238,0.95),0 0 14px rgba(122,31,238,0.5);}
-    #cring{position:fixed;top:0;left:0;width:38px;height:38px;
-      border:2.5px solid rgba(122,31,238,0.8);border-radius:50%;pointer-events:none;z-index:99998;
-      transform:translate(-50%,-50%);box-shadow:0 0 14px rgba(122,31,238,0.3);
-      transition:width .18s,height .18s,border-color .18s;}
-    .tilt-wrap{perspective:900px;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
-    .tilt-box{transform-style:preserve-3d;will-change:transform;border-radius:14px;position:relative;
-      transition:transform 0.1s ease-out;filter:drop-shadow(0 24px 50px rgba(0,0,0,0.85));}
-    .tilt-shine{position:absolute;inset:0;border-radius:14px;
-      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.12) 0%,transparent 55%);
-      pointer-events:none;opacity:0;transition:opacity 0.3s;}
-    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
-      padding:14px 48px;background:rgba(8,8,8,.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
-    .logo{font-family:var(--fd);font-size:1.1rem;font-weight:900;letter-spacing:3px;text-decoration:none;color:var(--t);text-shadow:var(--neon)}
-    .logo span{color:var(--o)}
-    .nav-r{display:flex;align-items:center;gap:12px}
-    .nbtn{background:transparent;color:var(--o);border:1.5px solid var(--o);padding:7px 16px;border-radius:3px;
-      font-family:var(--fd);font-size:.58rem;letter-spacing:2px;text-decoration:none;
-      display:inline-block;text-transform:uppercase;transition:all .2s}
-    .nbtn:hover{background:var(--o);color:#000}
-    .nbtn-g{border-color:rgba(255,255,255,.12);color:var(--tm)}
-    .nbtn-g:hover{border-color:var(--o);color:var(--o);background:transparent}
-    .nav-s{font-family:var(--fd);font-size:.62rem;color:var(--green);background:rgba(77,255,145,.08);border:1px solid rgba(77,255,145,.2);padding:7px 13px;border-radius:3px}
-    .nav-n{font-family:var(--fd);font-size:.62rem;color:var(--o);text-shadow:var(--neon)}
-    .page-wrap{display:grid;grid-template-columns:1.1fr 1fr;min-height:calc(100vh - 57px)}
-    .img-col{position:relative;background:linear-gradient(135deg,#0c0a08,#100d0a);
-      display:flex;align-items:center;justify-content:center;padding:40px;overflow:hidden}
-    .img-col::before{content:'';position:absolute;inset:0;
-      background:radial-gradient(ellipse at 50% 60%,rgba(122,31,238,.15) 0%,transparent 65%);}
-    .hex-bg{position:absolute;inset:0;opacity:.035;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='52'%3E%3Cpolygon points='30,2 58,17 58,47 30,62 2,47 2,17' fill='none' stroke='%237A1FEE' stroke-width='1'/%3E%3C/svg%3E");
-      background-size:60px 52px}
-    .box-img{width:100%;max-width:380px;height:auto;border-radius:14px;display:block;position:relative;z-index:1;}
-    .status-pill{position:absolute;top:20px;left:20px;z-index:5;
-      display:flex;align-items:center;gap:7px;background:rgba(5,5,5,.8);
-      border:1px solid rgba(77,255,145,.3);backdrop-filter:blur(8px);padding:7px 13px;border-radius:30px}
-    .sdot{width:7px;height:7px;background:var(--green);border-radius:50%;
-      box-shadow:0 0 8px var(--green);animation:blink 2s infinite}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
-    .stxt{font-family:var(--fd);font-size:.52rem;letter-spacing:2px;color:var(--green);text-transform:uppercase}
-    .ver-pill{position:absolute;bottom:20px;right:20px;z-index:5;
-      background:rgba(122,31,238,.18);border:1px solid rgba(122,31,238,.4);
-      padding:5px 13px;border-radius:20px;font-family:var(--fd);font-size:.5rem;
-      letter-spacing:2px;color:var(--o);text-transform:uppercase;font-weight:700}
-    .info-col{background:var(--d2);padding:48px;display:flex;flex-direction:column;border-left:1px solid var(--border);overflow-y:auto}
-    .breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-    .breadcrumb a{font-family:var(--fd);font-size:.52rem;letter-spacing:1.5px;color:var(--tm);text-decoration:none;text-transform:uppercase;transition:color .2s}
-    .breadcrumb a:hover{color:var(--o)}
-    .breadcrumb span{color:rgba(255,255,255,.15);font-size:.8rem}
-    .ptags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
-    .ptag{font-family:var(--fd);font-size:.46rem;letter-spacing:1.5px;padding:4px 11px;border-radius:20px;font-weight:700;text-transform:uppercase;border:1px solid}
-    .ptag-g{color:var(--green);border-color:rgba(77,255,145,.3);background:rgba(77,255,145,.07)}
-    .ptag-b{color:#60b4ff;border-color:rgba(96,180,255,.3);background:rgba(96,180,255,.07)}
-    .ptag-o{color:var(--o);border-color:rgba(122,31,238,.3);background:rgba(122,31,238,.09)}
-    .ptitle{font-family:var(--fd);font-size:clamp(1.4rem,2.3vw,2rem);font-weight:900;letter-spacing:2px;color:#fff;margin-bottom:11px;line-height:1.2}
-    .pdesc{font-family:var(--fb);color:var(--tm);font-size:.93rem;line-height:1.75;margin-bottom:20px}
-    .meta-box{background:rgba(122,31,238,.05);border:1px solid rgba(122,31,238,.13);border-radius:8px;padding:15px 18px;margin-bottom:20px;display:flex;flex-direction:column;gap:9px}
-    .meta-row{display:flex;align-items:center;gap:10px;font-family:var(--fb);font-size:.88rem;color:var(--tm)}
-    .meta-row .mi{font-size:.95rem;width:22px;text-align:center}
-    .meta-row strong{color:#ddd;font-weight:600}
-    .stars-row{display:flex;align-items:center;gap:8px;margin-bottom:18px}
-    .stars{color:#bb77ff;font-size:.9rem;text-shadow:0 0 6px rgba(255,184,0,.4)}
-    .stars-txt{font-family:var(--fb);font-size:.83rem;color:var(--tm)}
-    .price-box{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:15px 18px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-    .pb-l{display:flex;flex-direction:column;gap:3px}
-    .pb-lbl{font-family:var(--fd);font-size:.55rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase}
-    .pb-price{font-family:var(--fd);font-size:1.9rem;font-weight:900;color:var(--o);text-shadow:0 0 10px rgba(122,31,238,.4)}
-    .pb-r{display:flex;flex-direction:column;gap:3px;align-items:flex-end}
-    .qty-lbl{font-family:var(--fd);font-size:.52rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase;margin-bottom:4px}
-    .qty-w{display:flex;align-items:center}
-    .qb{background:var(--c2);border:1px solid rgba(255,255,255,.08);color:#fff;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;transition:all .2s;user-select:none}
-    .qb:first-child{border-radius:4px 0 0 4px}.qb:last-child{border-radius:0 4px 4px 0}
-    .qb:hover{background:var(--o);color:#000}
-    .qv{background:var(--c2);border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);color:#fff;width:40px;height:32px;text-align:center;font-family:var(--fd);font-size:.78rem;display:flex;align-items:center;justify-content:center}
-    .vtitle{font-family:var(--fd);font-size:.6rem;letter-spacing:3px;color:var(--tm);text-transform:uppercase;margin-bottom:11px}
-    .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px}
-    .vc{background:var(--c2);border:1.5px solid rgba(255,255,255,.07);border-radius:8px;padding:13px 15px;transition:all .25s;position:relative;overflow:hidden}
-    .vc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--o),transparent);opacity:0;transition:opacity .3s}
-    .vc:hover{border-color:rgba(122,31,238,.35);background:rgba(122,31,238,.05)}
-    .vc:hover::before{opacity:1}
-    .vc.sel{border-color:var(--o);background:rgba(122,31,238,.09);box-shadow:0 0 16px rgba(122,31,238,.10)}
-    .vc.sel::before{opacity:1}
-    .vc-n{font-family:var(--fd);font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:#fff;text-transform:uppercase;margin-bottom:3px}
-    .vc-s{font-family:var(--fb);font-size:.74rem;color:var(--tm);margin-bottom:7px}
-    .vc-p{font-family:var(--fd);font-size:.95rem;font-weight:900;color:var(--o)}
-    .tot-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:17px 18px;margin-bottom:12px}
-    .tot-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
-    .tot-lbl{font-family:var(--fd);font-size:.58rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase}
-    .tot-amt{font-family:var(--fd);font-size:1.55rem;font-weight:900;color:var(--o);text-shadow:var(--neon)}
-    .sal-row{display:flex;align-items:center;gap:8px;margin-bottom:13px;font-family:var(--fb);font-size:.83rem;color:var(--tm)}
-    .sal-val{color:var(--green);font-family:var(--fd);font-size:.72rem;font-weight:700}
-    .btn-buy{width:100%;background:var(--o);color:#000;border:none;padding:15px;border-radius:6px;
-      font-family:var(--fd);font-weight:700;font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;
-      display:flex;align-items:center;justify-content:center;gap:8px;
-      box-shadow:0 4px 20px rgba(122,31,238,.3);transition:all .25s}
-    .btn-buy:hover{background:var(--ob);transform:translateY(-2px);box-shadow:var(--neon),0 8px 30px rgba(122,31,238,.4)}
-    .btn-buy:disabled{opacity:.4;transform:none;box-shadow:none}
-    .btn-log{width:100%;background:transparent;color:var(--o);border:1.5px solid var(--o);padding:15px;border-radius:6px;
-      font-family:var(--fd);font-weight:700;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s}
-    .btn-log:hover{background:rgba(122,31,238,.13)}
-    .msg{padding:11px 15px;border-radius:5px;font-size:.83rem;margin-top:10px;display:none;font-family:var(--fb)}
-    .msg.err{background:rgba(255,50,50,.1);border:1px solid rgba(255,50,50,.3);color:#ff6666;display:block}
-    .msg.ok{background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.3);color:var(--green);display:block}
-    .msg.warn{background:rgba(255,184,0,.1);border:1px solid rgba(255,184,0,.3);color:#bb77ff;display:block}
-    .spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:sp .7s linear infinite}
-    @keyframes sp{to{transform:rotate(360deg)}}
-    .feats{padding:70px 48px;max-width:1400px;margin:0 auto}
-    .feats h2{font-family:var(--fd);font-size:1.3rem;font-weight:900;letter-spacing:3px;color:#fff;margin-bottom:8px}
-    .feats .sub{font-family:var(--fb);color:var(--tm);font-size:.93rem;margin-bottom:42px;line-height:1.7}
-    .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:13px}
-    .fc{background:var(--c2);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:24px 22px;transition:border-color .25s,box-shadow .25s;position:relative;overflow:hidden}
-    .fc::after{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--o),transparent);opacity:0;transition:opacity .3s}
-    .fc:hover{border-color:rgba(122,31,238,.22);box-shadow:0 4px 28px rgba(122,31,238,.07)}
-    .fc:hover::after{opacity:1}
-    .fc-title{font-family:var(--fd);font-size:.64rem;letter-spacing:2px;color:var(--o);text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:7px;font-weight:700}
-    .fc ul{list-style:none;display:flex;flex-direction:column;gap:7px}
-    .fc ul li{font-family:var(--fb);color:var(--tm);font-size:.86rem;display:flex;align-items:flex-start;gap:9px;line-height:1.4}
-    .fc ul li::before{content:'✓';color:var(--o);font-weight:900;font-size:.75rem;flex-shrink:0;margin-top:1px}
-    .moverlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center}
-    .moverlay.open{display:flex}
-    .msuccess{background:var(--card);border:1px solid rgba(77,255,145,.25);border-radius:12px;padding:42px 34px;max-width:400px;width:90%;text-align:center;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) forwards}
-    @keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
-    .micon{font-size:3rem;margin-bottom:16px}
-    .msuccess h3{font-family:var(--fd);font-size:.88rem;font-weight:900;letter-spacing:2px;color:var(--green);margin-bottom:10px;text-transform:uppercase}
-    .msuccess p{font-family:var(--fb);color:var(--tm);font-size:.88rem;line-height:1.7;margin-bottom:16px}
-    .kbox{background:var(--c2);border:1px solid rgba(77,255,145,.18);border-radius:6px;padding:12px 16px;font-family:var(--fd);font-size:.7rem;color:var(--green);letter-spacing:2px;margin-bottom:20px;word-break:break-all;text-align:left}
-    .btn-cl{background:var(--o);color:#000;border:none;padding:12px 26px;border-radius:5px;font-family:var(--fd);font-weight:700;font-size:.62rem;letter-spacing:2px;transition:all .2s}
-    .btn-cl:hover{background:var(--ob)}
-    footer{background:var(--d2);border-top:1px solid var(--border);padding:26px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-    .flogo{font-family:var(--fd);font-size:.9rem;font-weight:900;letter-spacing:3px}
-    .flogo span{color:var(--o)}
-    footer p{font-family:var(--fb);color:var(--tm);font-size:.78rem}
-    @media(max-width:900px){
-      .page-wrap{grid-template-columns:1fr;min-height:auto}
-      .img-col{height:auto;padding:30px 24px;min-height:300px}
-      .info-col{padding:28px 18px}
-      .vgrid{grid-template-columns:1fr}
-      nav{padding:12px 20px}
-      .feats{padding:50px 18px}
-      footer{padding:20px 18px;flex-direction:column;text-align:center}
-    }
-  </style>
-</head>
-<body>
-
-<nav>
-  <a href="index.html" class="logo"><span>YULIAN</span> STORE</a>
-  <div class="nav-r">
-    <a href="index.html" class="nbtn nbtn-g" style="font-size:.54rem;">← Tienda</a>
-    <div id="ng"><a href="login.html" class="nbtn">ACCEDER</a></div>
-    <div id="nu" style="display:none;align-items:center;gap:10px;">
-      <span class="nav-n" id="nn"></span>
-      <span class="nav-s" id="ns">$0.00</span>
-    </div>
-  </div>
-</nav>
-
-<div class="moverlay" id="modal-ok">
-  <div class="msuccess">
-    <div class="micon">🎮</div>
-    <h3>¡Acceso Desbloqueado!</h3>
-    <p>Compra exitosa. Guarda tu clave y únete al Discord para instrucciones.</p>
-    <div class="kbox" id="kbox">—</div>
-    <button class="btn-cl" onclick="document.getElementById('modal-ok').classList.remove('open');updateUI()">ENTENDIDO</button>
-  </div>
-</div>
-
-<div class="page-wrap">
-  <div class="img-col">
-    <div class="hex-bg"></div>
-    <div class="status-pill"><div class="sdot"></div><span class="stxt">Indetectable</span></div>
-    <div class="tilt-wrap">
-      <div class="tilt-box">
-        <div class="tilt-shine"></div>
-        <img src="codm_private_box.png" alt="Call of Duty Mobile" class="box-img">
-      </div>
-    </div>
-    <div class="ver-pill">PRIVADO</div>
-  </div>
-
-  <div class="info-col">
-    <div class="breadcrumb">
-      <a href="index.html">Tienda</a><span>›</span>
-      <a href="javascript:history.back()">Call of Duty Mobile</a><span>›</span>
-      <span style="color:var(--o);font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:1.5px;">PRIVADO</span>
-    </div>
-    <div class="ptags"><span class="ptag ptag-g">✓ Indetectable</span><span class="ptag ptag-b">🔒 Privado</span><span class="ptag ptag-o">👑 VIP</span></div>
-    <h1 class="ptitle">Call of Duty Mobile<br><span style="color:var(--green);">— PRIVADO</span></h1>
-    <p class="pdesc">Versión exclusiva VIP con funciones avanzadas, soporte dedicado y máxima seguridad anti-detección.</p>
-    <div class="meta-box"><div class="meta-row"><span class="mi">📱</span> Compatible con <strong>Android e iOS</strong></div><div class="meta-row"><span class="mi">🛡️</span> <strong>Anti-ban activo</strong> y cifrado</div><div class="meta-row"><span class="mi">⚡</span> Actualizaciones <strong>post-parche automáticas</strong></div></div>
-    <div class="stars-row">
-      <span class="stars">★★★★☆</span>
-      <span class="stars-txt">4 (187 reseñas)</span>
-    </div>
-    <div class="price-box">
-      <div class="pb-l"><div class="pb-lbl">Precio base</div><div class="pb-price" id="bp">$0.00</div></div>
-      <div class="pb-r">
-        <div class="qty-lbl">Cantidad</div>
-        <div class="qty-w">
-          <div class="qb" onclick="cQty(-1)">−</div>
-          <div class="qv" id="qv">1</div>
-          <div class="qb" onclick="cQty(1)">+</div>
-        </div>
-      </div>
-    </div>
-    <div class="vtitle">VARIANTES</div>
-    <div class="vgrid" id="vg"></div>
-    <div class="tot-box">
-      <div class="tot-row"><span class="tot-lbl">Total</span><span class="tot-amt" id="ta">$0.00</span></div>
-      <div class="sal-row" id="sr" style="display:none;">Tu saldo: <span class="sal-val" id="sv">$0.00</span></div>
-      <div id="ba"><button class="btn-log" onclick="window.location.href='login.html'">INICIA SESIÓN PARA COMPRAR</button></div>
-      <div class="msg" id="msg"></div>
-    </div>
-  </div>
-</div>
-
-<div class="feats">
-  <h2>CARACTERÍSTICAS DEL SOFTWARE</h2>
-  <p class="sub">Todo lo que incluye tu acceso — Call of Duty Mobile PRIVADO</p>
-  <div class="fgrid"><div class="fc"><div class="fc-title"><span>🎯</span> Aimbot</div><ul><li>Config. por tipo de arma</li><li>Suavidad ajustable</li><li>Predicción de movimiento</li><li>Visible Check</li><li>FOV Circle</li><li>Hitbox seleccionable</li><li>Keybind personalizable</li></ul></div><div class="fc"><div class="fc-title"><span>👁️</span> Visuals / ESP</div><ul><li>Box ESP (Outline/Corner)</li><li>Skeleton ESP</li><li>Nombre y distancia</li><li>Arma del enemigo</li><li>Snap Lines</li><li>Show Bots</li><li>Colores personalizables</li></ul></div><div class="fc"><div class="fc-title"><span>📡</span> Radar</div><ul><li>Radar en pantalla</li><li>Rango ajustable</li><li>Posición personalizable</li><li>Rank visible</li><li>Plataforma del jugador</li></ul></div><div class="fc"><div class="fc-title"><span>⚙️</span> Misc</div><ul><li>Config SAVE/LOAD</li><li>Overlay FPS</li><li>VSync</li><li>Menú in-game</li><li>Soporte Discord 24/7</li></ul></div><div class="fc"><div class="fc-title"><span>🔒</span> Seguridad</div><ul><li>100% indetectable</li><li>Anti-ban integrado</li><li>Actualizaciones automáticas</li><li>Sin necesidad de root</li><li>Cifrado de comunicación</li></ul></div><div class="fc"><div class="fc-title"><span>ℹ️</span> Información</div><ul><li>Compatible Android e iOS</li><li>Acceso instantáneo</li><li>Clave de licencia personal</li><li>Instrucciones en Discord</li><li>Reembolso si hay detección</li></ul></div></div>
-</div>
-
-<footer>
-  <div class="flogo"><span>YULIAN</span> STORE</div>
-  <p>© 2025 Yulian Store. Todos los derechos reservados.</p>
-  <a href="index.html" style="color:var(--o);font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:1.5px;text-decoration:none;">← Volver</a>
-</footer>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, updateDoc, arrayUnion, increment, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",
-    projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",
-    messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
-  const app=initializeApp(cfg),auth=getAuth(app),db=getFirestore(app);
-  const VARS=[{id:'1d',name:'DÍA',sub:'Acceso 24 horas',price:15},
-    {id:'3d',name:'3 DÍAS',sub:'Acceso 72 horas',price:30},
-    {id:'1s',name:'SEMANA',sub:'Acceso 7 días',price:50},
-    {id:'1m',name:'MES',sub:'Acceso 30 días',price:80},
-    {id:'lf',name:'LIFETIME',sub:'De por vida',price:150}];
-  const PID='CODM-PRIVATE',PNAME='Call of Duty Mobile (Privado)';
-  let sv=VARS[0],qty=1,user=null,saldo=0;
-  function rVars(){
-    const g=document.getElementById('vg');
-    g.innerHTML=VARS.map(v=>`<div class="vc${v.id===sv.id?' sel':''}" data-id="${v.id}"><div class="vc-n">${v.name}</div><div class="vc-s">${v.sub}</div><div class="vc-p">$${v.price.toFixed(2)}</div></div>`).join('');
-    g.querySelectorAll('.vc').forEach(el=>el.addEventListener('click',()=>{sv=VARS.find(v=>v.id===el.dataset.id);rVars();upTot();updateUI();}));
-  }
-  function upTot(){
-    const t=sv.price*qty;
-    document.getElementById('bp').textContent=`$${sv.price.toFixed(2)}`;
-    document.getElementById('qv').textContent=qty;
-    document.getElementById('ta').textContent=`$${t.toFixed(2)}`;
-  }
-  window.cQty=function(d){qty=Math.max(1,Math.min(10,qty+d));upTot();updateUI();};
-  function updateUI(){
-    const ba=document.getElementById('ba');clrMsg();
-    if(!user){ba.innerHTML='<button class="btn-log" onclick="window.location.href=\'login.html\'">INICIA SESIÓN PARA COMPRAR</button>';document.getElementById('sr').style.display='none';return;}
-    document.getElementById('sr').style.display='flex';
-    document.getElementById('sv').textContent=`$${saldo.toFixed(2)}`;
-    const t=sv.price*qty;
-    if(saldo>=t){ba.innerHTML=`<button class="btn-buy" id="bc">🛒 COMPRAR — $${t.toFixed(2)}</button>`;document.getElementById('bc').addEventListener('click',comprar);}
-    else{ba.innerHTML=`<button class="btn-buy" disabled>🛒 COMPRAR — $${t.toFixed(2)}</button>`;showMsg('warn',`Saldo insuficiente. Necesitas $${t.toFixed(2)}, tienes $${saldo.toFixed(2)}. Contacta al admin para recargar.`);}
-  }
-  async function comprar(){
-    const btn=document.getElementById('bc');btn.disabled=true;btn.innerHTML='<span class="spin"></span> Procesando...';clrMsg();
-    try{
-      const snap=await getDoc(doc(db,'users',user.uid));const sr=snap.data().saldo??0;const t=sv.price*qty;
-      if(sr<t){showMsg('err','Saldo insuficiente.');btn.disabled=false;btn.textContent='🛒 COMPRAR';return;}
-      await updateDoc(doc(db,'users',user.uid),{saldo:increment(-t),purchases:arrayUnion(`${PID} — ${sv.name} x${qty}`)});
-      const key=`YS-${PID}-${sv.id.toUpperCase()}-${Math.random().toString(36).slice(2,8).toUpperCase()}`;
-      await addDoc(collection(db,'compras'),{uid:user.uid,nombre:user.displayName||'—',email:user.email,producto:PNAME,plan:sv.name,cantidad:qty,precio:t,clave:key,fecha:serverTimestamp()});
-      saldo=sr-t;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;document.getElementById('sv').textContent=`$${saldo.toFixed(2)}`;
-      document.getElementById('kbox').textContent=key;document.getElementById('modal-ok').classList.add('open');
-    }catch(e){showMsg('err','Error al procesar. Intenta de nuevo.');btn.disabled=false;btn.innerHTML=`🛒 COMPRAR — $${(sv.price*qty).toFixed(2)}`;}
-  }
-  function showMsg(t,txt){const el=document.getElementById('msg');el.className=`msg ${t}`;el.textContent=txt;}
-  function clrMsg(){const el=document.getElementById('msg');el.className='msg';}
-  window.updateUI=updateUI;
-  onAuthStateChanged(auth,async u=>{user=u;if(u){document.getElementById('ng').style.display='none';document.getElementById('nu').style.display='flex';document.getElementById('nn').textContent=u.displayName||u.email.split('@')[0].toUpperCase();try{const s=await getDoc(doc(db,'users',u.uid));if(s.exists()){saldo=s.data().saldo??0;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;}}catch(e){}}rVars();upTot();updateUI();});
-  window.doLogout=async()=>{await signOut(auth);window.location.href='index.html';};
-</script>
-
-<script>
-/* CURSOR */
-const cdot=document.createElement('div');cdot.id='cdot';
-const cring=document.createElement('div');cring.id='cring';
-document.body.appendChild(cdot);document.body.appendChild(cring);
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function animC(){
-  requestAnimationFrame(animC);
-  cdot.style.left=mx+'px';cdot.style.top=my+'px';
-  rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;
-  cring.style.left=rx+'px';cring.style.top=ry+'px';
-})();
-document.querySelectorAll('button,a,.vc,.qb').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cring.style.width='52px';cring.style.height='52px';cring.style.borderColor='rgba(139,47,255,1)';});
-  el.addEventListener('mouseleave',()=>{cring.style.width='38px';cring.style.height='38px';cring.style.borderColor='rgba(122,31,238,0.8)';});
-});
-
-/* 3D TILT */
-document.querySelectorAll('.tilt-box').forEach(box=>{
-  const wrap=box.closest('.tilt-wrap');
-  wrap.addEventListener('mousemove',e=>{
-    const r=box.getBoundingClientRect();
-    const dx=(e.clientX-(r.left+r.width/2))/(r.width/2);
-    const dy=(e.clientY-(r.top+r.height/2))/(r.height/2);
-    box.style.transform=`rotateX(${-dy*14}deg) rotateY(${dx*14}deg) scale3d(1.04,1.04,1.04)`;
-    const shine=box.querySelector('.tilt-shine');
-    if(shine){
-      shine.style.background=`radial-gradient(circle at ${((e.clientX-r.left)/r.width)*100}% ${((e.clientY-r.top)/r.height)*100}%,rgba(255,255,255,0.14) 0%,transparent 55%)`;
-      shine.style.opacity='1';
-    }
-  });
-  wrap.addEventListener('mouseleave',()=>{
-    box.style.transform='rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
-    const shine=box.querySelector('.tilt-shine');
-    if(shine) shine.style.opacity='0';
-  });
-});
-</script>
-
-<!-- MODAL CERRAR SESIÓN -->
-<div id="logout-modal" style="
-  display:none;position:fixed;inset:0;z-index:99999;
-  background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);
-  align-items:center;justify-content:center;padding:20px;
-">
-  <div style="
-    background:#111;border:1px solid rgba(122,31,238,0.25);border-radius:14px;
-    padding:40px 36px;max-width:420px;width:100%;position:relative;
-    box-shadow:0 0 60px rgba(122,31,238,0.08);
-    animation:popInL .4s cubic-bezier(.34,1.56,.64,1) forwards;
-  ">
-    <div style="text-align:center;margin-bottom:20px;font-size:2.8rem;">⚠️</div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:900;
-      letter-spacing:2px;color:#7A1FEE;text-align:center;margin-bottom:14px;text-transform:uppercase;">
-      ¿Cerrar Sesión?
-    </h3>
-    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.88rem;line-height:1.75;
-      text-align:center;margin-bottom:10px;">
-      Recuerda que tu <strong style="color:#fff;">saldo y compras</strong> están guardados en tu cuenta.
-    </p>
-    <p style="font-family:'Exo 2',sans-serif;color:#aa77ff;font-size:.82rem;line-height:1.7;
-      text-align:center;margin-bottom:28px;
-      background:rgba(122,31,238,0.07);border:1px solid rgba(122,31,238,0.2);
-      border-radius:8px;padding:12px 16px;">
-      🔑 Si no recuerdas tu contraseña, <strong>no podrás recuperar el acceso</strong> a tu saldo ni a tus claves de productos. Asegúrate de tenerla guardada antes de salir.
-    </p>
-    <div style="display:flex;gap:12px;">
-      <button onclick="document.getElementById('logout-modal').style.display='none'"
-        style="flex:1;background:transparent;color:#777;border:1px solid rgba(255,255,255,.12);
-        padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.6rem;
-        letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
-        onmouseover="this.style.borderColor='#7A1FEE';this.style.color='#7A1FEE'"
-        onmouseout="this.style.borderColor='rgba(255,255,255,.12)';this.style.color='#777'">
-        CANCELAR
-      </button>
-      <button onclick="confirmarLogout()"
-        style="flex:1;background:#7A1FEE;color:#000;border:none;padding:13px;border-radius:6px;
-        font-family:'Orbitron',sans-serif;font-weight:700;font-size:.6rem;
-        letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
-        onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
-        SÍ, CERRAR SESIÓN
-      </button>
-    </div>
-  </div>
-</div>
-<style>
-@keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
-</style>
-
-
-<!-- ═══ PANTALLA DE BAN EN TIEMPO REAL ═══ -->
-<div id="ban-screen" style="
-  display:none; position:fixed; inset:0; z-index:999999;
-  background:#06040f; align-items:center; justify-content:center;
-  padding:20px; flex-direction:column;
-">
-  <div style="
-    background:#0d0a1a; border:2px solid rgba(255,68,68,0.4);
-    border-radius:16px; padding:48px 40px; max-width:480px; width:100%;
-    text-align:center; box-shadow:0 0 60px rgba(255,68,68,0.12);
-    animation:popInBan .5s cubic-bezier(.34,1.56,.64,1) forwards;
-  ">
-    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
-    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;
-      letter-spacing:3px;color:#ff4444;text-transform:uppercase;margin-bottom:16px;
-      text-shadow:0 0 20px rgba(255,68,68,0.5);">
-      Cuenta Suspendida
-    </h2>
-    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:12px;">
-      Tu cuenta ha sido suspendida por un administrador.
-    </p>
-    <div id="ban-reason-rt" style="
-      font-family:'Exo 2',sans-serif;color:#ff9966;font-size:.85rem;
-      background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);
-      border-radius:8px;padding:12px 16px;margin-bottom:24px;line-height:1.7;
-      display:none;
-    "></div>
-    <p style="font-family:'Exo 2',sans-serif;color:#666;font-size:.82rem;line-height:1.7;margin-bottom:24px;">
-      Si crees que es un error, abre un ticket en nuestro Discord o contacta un administrador para apelar.
-    </p>
-    <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="
-      display:inline-flex;align-items:center;gap:8px;
-      background:#7A1FEE;color:#000;text-decoration:none;
-      font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;
-      letter-spacing:2px;padding:13px 28px;border-radius:6px;
-      text-transform:uppercase;box-shadow:0 4px 18px rgba(122,31,238,.35);
-      transition:all .2s;
-    " onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
-      🎮 Abrir Discord
-    </a>
-  </div>
-</div>
-<style>
-@keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
-</style>
-
-<script type="module">
-/* ── REAL-TIME BAN LISTENER ── */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-(function(){
-  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
-  const app2 = initializeApp(cfg, 'ban-listener');
-  const auth2 = getAuth(app2);
-  const db2   = getFirestore(app2);
-  let unsub = null;
-  onAuthStateChanged(auth2, user => {
-    if (unsub) unsub();
-    if (!user) return;
-    unsub = onSnapshot(doc(db2,'users',user.uid), snap => {
-      if (!snap.exists()) return;
-      const data = snap.data();
-      if (data.banned) {
-        const screen = document.getElementById('ban-screen');
-        if (screen) {
-          screen.style.display = 'flex';
-          if (data.banReason) {
-            const el = document.getElementById('ban-reason-rt');
-            if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
-          }
-        }
-      }
-    });
-  });
-})();
-</script>
-
-</body>
-</html>
-
-
-blood-public:
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YULIAN STORE — Blood Strike Público</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root{--o:#7A1FEE;--ob:#8B2FFF;--od:#5a0fcc;--dark:#080808;--d2:#0e0e0e;--card:#111;--c2:#161616;
-      --t:#fff;--tm:#777;--border:rgba(122,31,238,.18);
-      --neon:0 0 8px #7A1FEE,0 0 20px #8B2FFF,0 0 40px rgba(122,31,238,.5);
-      --green:#4dff91;--fd:'Orbitron',sans-serif;--fb:'Exo 2',sans-serif;}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{background:var(--dark);color:var(--t);font-family:var(--fb);overflow-x:hidden}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--d2)}
-    ::-webkit-scrollbar-thumb{background:var(--od);border-radius:3px}
-    * { cursor: none !important; }
-    #cdot{position:fixed;top:0;left:0;width:10px;height:10px;background:#111;border-radius:50%;
-      pointer-events:none;z-index:99999;transform:translate(-50%,-50%);
-      box-shadow:0 0 0 2.5px rgba(122,31,238,0.95),0 0 14px rgba(122,31,238,0.5);}
-    #cring{position:fixed;top:0;left:0;width:38px;height:38px;
-      border:2.5px solid rgba(122,31,238,0.8);border-radius:50%;pointer-events:none;z-index:99998;
-      transform:translate(-50%,-50%);box-shadow:0 0 14px rgba(122,31,238,0.3);
-      transition:width .18s,height .18s,border-color .18s;}
-    .tilt-wrap{perspective:900px;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
-    .tilt-box{transform-style:preserve-3d;will-change:transform;border-radius:14px;position:relative;
-      transition:transform 0.1s ease-out;filter:drop-shadow(0 24px 50px rgba(0,0,0,0.85));}
-    .tilt-shine{position:absolute;inset:0;border-radius:14px;
-      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.12) 0%,transparent 55%);
-      pointer-events:none;opacity:0;transition:opacity 0.3s;}
-    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
-      padding:14px 48px;background:rgba(8,8,8,.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
-    .logo{font-family:var(--fd);font-size:1.1rem;font-weight:900;letter-spacing:3px;text-decoration:none;color:var(--t);text-shadow:var(--neon)}
-    .logo span{color:var(--o)}
-    .nav-r{display:flex;align-items:center;gap:12px}
-    .nbtn{background:transparent;color:var(--o);border:1.5px solid var(--o);padding:7px 16px;border-radius:3px;
-      font-family:var(--fd);font-size:.58rem;letter-spacing:2px;text-decoration:none;
-      display:inline-block;text-transform:uppercase;transition:all .2s}
-    .nbtn:hover{background:var(--o);color:#000}
-    .nbtn-g{border-color:rgba(255,255,255,.12);color:var(--tm)}
-    .nbtn-g:hover{border-color:var(--o);color:var(--o);background:transparent}
-    .nav-s{font-family:var(--fd);font-size:.62rem;color:var(--green);background:rgba(77,255,145,.08);border:1px solid rgba(77,255,145,.2);padding:7px 13px;border-radius:3px}
-    .nav-n{font-family:var(--fd);font-size:.62rem;color:var(--o);text-shadow:var(--neon)}
-    .page-wrap{display:grid;grid-template-columns:1.1fr 1fr;min-height:calc(100vh - 57px)}
-    .img-col{position:relative;background:linear-gradient(135deg,#0c0a08,#100d0a);
-      display:flex;align-items:center;justify-content:center;padding:40px;overflow:hidden}
-    .img-col::before{content:'';position:absolute;inset:0;
-      background:radial-gradient(ellipse at 50% 60%,rgba(122,31,238,.15) 0%,transparent 65%);}
-    .hex-bg{position:absolute;inset:0;opacity:.035;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='52'%3E%3Cpolygon points='30,2 58,17 58,47 30,62 2,47 2,17' fill='none' stroke='%237A1FEE' stroke-width='1'/%3E%3C/svg%3E");
-      background-size:60px 52px}
-    .box-img{width:100%;max-width:380px;height:auto;border-radius:14px;display:block;position:relative;z-index:1;}
-    .status-pill{position:absolute;top:20px;left:20px;z-index:5;
-      display:flex;align-items:center;gap:7px;background:rgba(5,5,5,.8);
-      border:1px solid rgba(77,255,145,.3);backdrop-filter:blur(8px);padding:7px 13px;border-radius:30px}
-    .sdot{width:7px;height:7px;background:var(--green);border-radius:50%;
-      box-shadow:0 0 8px var(--green);animation:blink 2s infinite}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
-    .stxt{font-family:var(--fd);font-size:.52rem;letter-spacing:2px;color:var(--green);text-transform:uppercase}
-    .ver-pill{position:absolute;bottom:20px;right:20px;z-index:5;
-      background:rgba(122,31,238,.18);border:1px solid rgba(122,31,238,.4);
-      padding:5px 13px;border-radius:20px;font-family:var(--fd);font-size:.5rem;
-      letter-spacing:2px;color:var(--o);text-transform:uppercase;font-weight:700}
-    .info-col{background:var(--d2);padding:48px;display:flex;flex-direction:column;border-left:1px solid var(--border);overflow-y:auto}
-    .breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-    .breadcrumb a{font-family:var(--fd);font-size:.52rem;letter-spacing:1.5px;color:var(--tm);text-decoration:none;text-transform:uppercase;transition:color .2s}
-    .breadcrumb a:hover{color:var(--o)}
-    .breadcrumb span{color:rgba(255,255,255,.15);font-size:.8rem}
-    .ptags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
-    .ptag{font-family:var(--fd);font-size:.46rem;letter-spacing:1.5px;padding:4px 11px;border-radius:20px;font-weight:700;text-transform:uppercase;border:1px solid}
-    .ptag-g{color:var(--green);border-color:rgba(77,255,145,.3);background:rgba(77,255,145,.07)}
-    .ptag-b{color:#60b4ff;border-color:rgba(96,180,255,.3);background:rgba(96,180,255,.07)}
-    .ptag-o{color:var(--o);border-color:rgba(122,31,238,.3);background:rgba(122,31,238,.09)}
-    .ptitle{font-family:var(--fd);font-size:clamp(1.4rem,2.3vw,2rem);font-weight:900;letter-spacing:2px;color:#fff;margin-bottom:11px;line-height:1.2}
-    .pdesc{font-family:var(--fb);color:var(--tm);font-size:.93rem;line-height:1.75;margin-bottom:20px}
-    .meta-box{background:rgba(122,31,238,.05);border:1px solid rgba(122,31,238,.13);border-radius:8px;padding:15px 18px;margin-bottom:20px;display:flex;flex-direction:column;gap:9px}
-    .meta-row{display:flex;align-items:center;gap:10px;font-family:var(--fb);font-size:.88rem;color:var(--tm)}
-    .meta-row .mi{font-size:.95rem;width:22px;text-align:center}
-    .meta-row strong{color:#ddd;font-weight:600}
-    .stars-row{display:flex;align-items:center;gap:8px;margin-bottom:18px}
-    .stars{color:#bb77ff;font-size:.9rem;text-shadow:0 0 6px rgba(255,184,0,.4)}
-    .stars-txt{font-family:var(--fb);font-size:.83rem;color:var(--tm)}
-    .price-box{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:15px 18px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-    .pb-l{display:flex;flex-direction:column;gap:3px}
-    .pb-lbl{font-family:var(--fd);font-size:.55rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase}
-    .pb-price{font-family:var(--fd);font-size:1.9rem;font-weight:900;color:var(--o);text-shadow:0 0 10px rgba(122,31,238,.4)}
-    .pb-r{display:flex;flex-direction:column;gap:3px;align-items:flex-end}
-    .qty-lbl{font-family:var(--fd);font-size:.52rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase;margin-bottom:4px}
-    .qty-w{display:flex;align-items:center}
-    .qb{background:var(--c2);border:1px solid rgba(255,255,255,.08);color:#fff;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;transition:all .2s;user-select:none}
-    .qb:first-child{border-radius:4px 0 0 4px}.qb:last-child{border-radius:0 4px 4px 0}
-    .qb:hover{background:var(--o);color:#000}
-    .qv{background:var(--c2);border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);color:#fff;width:40px;height:32px;text-align:center;font-family:var(--fd);font-size:.78rem;display:flex;align-items:center;justify-content:center}
-    .vtitle{font-family:var(--fd);font-size:.6rem;letter-spacing:3px;color:var(--tm);text-transform:uppercase;margin-bottom:11px}
-    .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px}
-    .vc{background:var(--c2);border:1.5px solid rgba(255,255,255,.07);border-radius:8px;padding:13px 15px;transition:all .25s;position:relative;overflow:hidden}
-    .vc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--o),transparent);opacity:0;transition:opacity .3s}
-    .vc:hover{border-color:rgba(122,31,238,.35);background:rgba(122,31,238,.05)}
-    .vc:hover::before{opacity:1}
-    .vc.sel{border-color:var(--o);background:rgba(122,31,238,.09);box-shadow:0 0 16px rgba(122,31,238,.10)}
-    .vc.sel::before{opacity:1}
-    .vc-n{font-family:var(--fd);font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:#fff;text-transform:uppercase;margin-bottom:3px}
-    .vc-s{font-family:var(--fb);font-size:.74rem;color:var(--tm);margin-bottom:7px}
-    .vc-p{font-family:var(--fd);font-size:.95rem;font-weight:900;color:var(--o)}
-    .tot-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:17px 18px;margin-bottom:12px}
-    .tot-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
-    .tot-lbl{font-family:var(--fd);font-size:.58rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase}
-    .tot-amt{font-family:var(--fd);font-size:1.55rem;font-weight:900;color:var(--o);text-shadow:var(--neon)}
-    .sal-row{display:flex;align-items:center;gap:8px;margin-bottom:13px;font-family:var(--fb);font-size:.83rem;color:var(--tm)}
-    .sal-val{color:var(--green);font-family:var(--fd);font-size:.72rem;font-weight:700}
-    .btn-buy{width:100%;background:var(--o);color:#000;border:none;padding:15px;border-radius:6px;
-      font-family:var(--fd);font-weight:700;font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;
-      display:flex;align-items:center;justify-content:center;gap:8px;
-      box-shadow:0 4px 20px rgba(122,31,238,.3);transition:all .25s}
-    .btn-buy:hover{background:var(--ob);transform:translateY(-2px);box-shadow:var(--neon),0 8px 30px rgba(122,31,238,.4)}
-    .btn-buy:disabled{opacity:.4;transform:none;box-shadow:none}
-    .btn-log{width:100%;background:transparent;color:var(--o);border:1.5px solid var(--o);padding:15px;border-radius:6px;
-      font-family:var(--fd);font-weight:700;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s}
-    .btn-log:hover{background:rgba(122,31,238,.13)}
-    .msg{padding:11px 15px;border-radius:5px;font-size:.83rem;margin-top:10px;display:none;font-family:var(--fb)}
-    .msg.err{background:rgba(255,50,50,.1);border:1px solid rgba(255,50,50,.3);color:#ff6666;display:block}
-    .msg.ok{background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.3);color:var(--green);display:block}
-    .msg.warn{background:rgba(255,184,0,.1);border:1px solid rgba(255,184,0,.3);color:#bb77ff;display:block}
-    .spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:sp .7s linear infinite}
-    @keyframes sp{to{transform:rotate(360deg)}}
-    .feats{padding:70px 48px;max-width:1400px;margin:0 auto}
-    .feats h2{font-family:var(--fd);font-size:1.3rem;font-weight:900;letter-spacing:3px;color:#fff;margin-bottom:8px}
-    .feats .sub{font-family:var(--fb);color:var(--tm);font-size:.93rem;margin-bottom:42px;line-height:1.7}
-    .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:13px}
-    .fc{background:var(--c2);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:24px 22px;transition:border-color .25s,box-shadow .25s;position:relative;overflow:hidden}
-    .fc::after{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--o),transparent);opacity:0;transition:opacity .3s}
-    .fc:hover{border-color:rgba(122,31,238,.22);box-shadow:0 4px 28px rgba(122,31,238,.07)}
-    .fc:hover::after{opacity:1}
-    .fc-title{font-family:var(--fd);font-size:.64rem;letter-spacing:2px;color:var(--o);text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:7px;font-weight:700}
-    .fc ul{list-style:none;display:flex;flex-direction:column;gap:7px}
-    .fc ul li{font-family:var(--fb);color:var(--tm);font-size:.86rem;display:flex;align-items:flex-start;gap:9px;line-height:1.4}
-    .fc ul li::before{content:'✓';color:var(--o);font-weight:900;font-size:.75rem;flex-shrink:0;margin-top:1px}
-    .moverlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center}
-    .moverlay.open{display:flex}
-    .msuccess{background:var(--card);border:1px solid rgba(77,255,145,.25);border-radius:12px;padding:42px 34px;max-width:400px;width:90%;text-align:center;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) forwards}
-    @keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
-    .micon{font-size:3rem;margin-bottom:16px}
-    .msuccess h3{font-family:var(--fd);font-size:.88rem;font-weight:900;letter-spacing:2px;color:var(--green);margin-bottom:10px;text-transform:uppercase}
-    .msuccess p{font-family:var(--fb);color:var(--tm);font-size:.88rem;line-height:1.7;margin-bottom:16px}
-    .kbox{background:var(--c2);border:1px solid rgba(77,255,145,.18);border-radius:6px;padding:12px 16px;font-family:var(--fd);font-size:.7rem;color:var(--green);letter-spacing:2px;margin-bottom:20px;word-break:break-all;text-align:left}
-    .btn-cl{background:var(--o);color:#000;border:none;padding:12px 26px;border-radius:5px;font-family:var(--fd);font-weight:700;font-size:.62rem;letter-spacing:2px;transition:all .2s}
-    .btn-cl:hover{background:var(--ob)}
-    footer{background:var(--d2);border-top:1px solid var(--border);padding:26px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-    .flogo{font-family:var(--fd);font-size:.9rem;font-weight:900;letter-spacing:3px}
-    .flogo span{color:var(--o)}
-    footer p{font-family:var(--fb);color:var(--tm);font-size:.78rem}
-    @media(max-width:900px){
-      .page-wrap{grid-template-columns:1fr;min-height:auto}
-      .img-col{height:auto;padding:30px 24px;min-height:300px}
-      .info-col{padding:28px 18px}
-      .vgrid{grid-template-columns:1fr}
-      nav{padding:12px 20px}
-      .feats{padding:50px 18px}
-      footer{padding:20px 18px;flex-direction:column;text-align:center}
-    }
-  </style>
-</head>
-<body>
-
-<nav>
-  <a href="index.html" class="logo"><span>YULIAN</span> STORE</a>
-  <div class="nav-r">
-    <a href="index.html" class="nbtn nbtn-g" style="font-size:.54rem;">← Tienda</a>
-    <div id="ng"><a href="login.html" class="nbtn">ACCEDER</a></div>
-    <div id="nu" style="display:none;align-items:center;gap:10px;">
-      <span class="nav-n" id="nn"></span>
-      <span class="nav-s" id="ns">$0.00</span>
-    </div>
-  </div>
-</nav>
-
-<div class="moverlay" id="modal-ok">
-  <div class="msuccess">
-    <div class="micon">🎮</div>
-    <h3>¡Acceso Desbloqueado!</h3>
-    <p>Compra exitosa. Guarda tu clave y únete al Discord para instrucciones.</p>
-    <div class="kbox" id="kbox">—</div>
-    <button class="btn-cl" onclick="document.getElementById('modal-ok').classList.remove('open');updateUI()">ENTENDIDO</button>
-  </div>
-</div>
-
-<div class="page-wrap">
-  <div class="img-col">
-    <div class="hex-bg"></div>
-    <div class="status-pill"><div class="sdot"></div><span class="stxt">Indetectable</span></div>
-    <div class="tilt-wrap">
-      <div class="tilt-box">
-        <div class="tilt-shine"></div>
-        <img src="blood_public_box.png" alt="Blood Strike" class="box-img">
-      </div>
-    </div>
-    <div class="ver-pill">PÚBLICO</div>
-  </div>
-
-  <div class="info-col">
-    <div class="breadcrumb">
-      <a href="index.html">Tienda</a><span>›</span>
-      <a href="javascript:history.back()">Blood Strike</a><span>›</span>
-      <span style="color:var(--o);font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:1.5px;">PÚBLICO</span>
-    </div>
-    <div class="ptags"><span class="ptag ptag-g">✓ Indetectable</span><span class="ptag ptag-b">↻ Actualizado</span><span class="ptag ptag-o">🔥 Popular</span></div>
-    <h1 class="ptitle">Blood Strike<br><span style="color:var(--o);">— PÚBLICO</span></h1>
-    <p class="pdesc">Aimbot de precisión, Radar & Wallhack en tiempo real. Sin detección garantizada y siempre actualizado.</p>
-    <div class="meta-box"><div class="meta-row"><span class="mi">📱</span> Compatible con <strong>Android e iOS</strong></div><div class="meta-row"><span class="mi">🛡️</span> <strong>Sin detección garantizada</strong></div><div class="meta-row"><span class="mi">⚡</span> Actualizaciones <strong>post-parche automáticas</strong></div></div>
-    <div class="stars-row">
-      <span class="stars">★★★★☆</span>
-      <span class="stars-txt">4 (312 reseñas)</span>
-    </div>
-    <div class="price-box">
-      <div class="pb-l"><div class="pb-lbl">Precio base</div><div class="pb-price" id="bp">$0.00</div></div>
-      <div class="pb-r">
-        <div class="qty-lbl">Cantidad</div>
-        <div class="qty-w">
-          <div class="qb" onclick="cQty(-1)">−</div>
-          <div class="qv" id="qv">1</div>
-          <div class="qb" onclick="cQty(1)">+</div>
-        </div>
-      </div>
-    </div>
-    <div class="vtitle">VARIANTES</div>
-    <div class="vgrid" id="vg"></div>
-    <div class="tot-box">
-      <div class="tot-row"><span class="tot-lbl">Total</span><span class="tot-amt" id="ta">$0.00</span></div>
-      <div class="sal-row" id="sr" style="display:none;">Tu saldo: <span class="sal-val" id="sv">$0.00</span></div>
-      <div id="ba"><button class="btn-log" onclick="window.location.href='login.html'">INICIA SESIÓN PARA COMPRAR</button></div>
-      <div class="msg" id="msg"></div>
-    </div>
-  </div>
-</div>
-
-<div class="feats">
-  <h2>CARACTERÍSTICAS DEL SOFTWARE</h2>
-  <p class="sub">Todo lo que incluye tu acceso — Blood Strike PÚBLICO</p>
-  <div class="fgrid"><div class="fc"><div class="fc-title"><span>🎯</span> Aimbot</div><ul><li>Aimbot de alta precisión</li><li>Predicción de movimiento</li><li>FOV Circle personalizable</li><li>Hitbox seleccionable</li><li>Keybind personalizable</li><li>Suavidad ajustable</li></ul></div><div class="fc"><div class="fc-title"><span>👁️</span> Visuals / ESP</div><ul><li>Box ESP completo</li><li>Skeleton ESP</li><li>Nombre, distancia y arma</li><li>Wallhack activado</li><li>Snap Lines</li><li>Colores personalizables</li></ul></div><div class="fc"><div class="fc-title"><span>📡</span> Radar & Extra</div><ul><li>Radar en pantalla</li><li>Rango y posición ajustable</li><li>Rank visible</li><li>Team Check</li><li>Show Bots</li></ul></div><div class="fc"><div class="fc-title"><span>⚙️</span> Misc</div><ul><li>Config SAVE/LOAD</li><li>Overlay FPS</li><li>VSync</li><li>Menú in-game</li><li>Soporte Discord 24/7</li></ul></div><div class="fc"><div class="fc-title"><span>🔒</span> Seguridad</div><ul><li>100% indetectable</li><li>Sin detección garantizada</li><li>Actualizaciones automáticas</li><li>Cifrado de comunicación</li></ul></div><div class="fc"><div class="fc-title"><span>ℹ️</span> Información</div><ul><li>Compatible Android e iOS</li><li>Acceso instantáneo</li><li>Clave de licencia personal</li><li>Instrucciones en Discord</li><li>Reembolso si hay detección</li></ul></div></div>
-</div>
-
-<footer>
-  <div class="flogo"><span>YULIAN</span> STORE</div>
-  <p>© 2025 Yulian Store. Todos los derechos reservados.</p>
-  <a href="index.html" style="color:var(--o);font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:1.5px;text-decoration:none;">← Volver</a>
-</footer>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, updateDoc, arrayUnion, increment, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",
-    projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",
-    messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
-  const app=initializeApp(cfg),auth=getAuth(app),db=getFirestore(app);
-  const VARS=[{id:'1d',name:'DÍA',sub:'Acceso 24 horas',price:5},
-    {id:'3d',name:'3 DÍAS',sub:'Acceso 72 horas',price:12},
-    {id:'1s',name:'SEMANA',sub:'Acceso 7 días',price:20},
-    {id:'1m',name:'MES',sub:'Acceso 30 días',price:35},
-    {id:'lf',name:'LIFETIME',sub:'De por vida',price:70}];
-  const PID='BLOOD-PUBLIC',PNAME='Blood Strike (Público)';
-  let sv=VARS[0],qty=1,user=null,saldo=0;
-  function rVars(){
-    const g=document.getElementById('vg');
-    g.innerHTML=VARS.map(v=>`<div class="vc${v.id===sv.id?' sel':''}" data-id="${v.id}"><div class="vc-n">${v.name}</div><div class="vc-s">${v.sub}</div><div class="vc-p">$${v.price.toFixed(2)}</div></div>`).join('');
-    g.querySelectorAll('.vc').forEach(el=>el.addEventListener('click',()=>{sv=VARS.find(v=>v.id===el.dataset.id);rVars();upTot();updateUI();}));
-  }
-  function upTot(){
-    const t=sv.price*qty;
-    document.getElementById('bp').textContent=`$${sv.price.toFixed(2)}`;
-    document.getElementById('qv').textContent=qty;
-    document.getElementById('ta').textContent=`$${t.toFixed(2)}`;
-  }
-  window.cQty=function(d){qty=Math.max(1,Math.min(10,qty+d));upTot();updateUI();};
-  function updateUI(){
-    const ba=document.getElementById('ba');clrMsg();
-    if(!user){ba.innerHTML='<button class="btn-log" onclick="window.location.href=\'login.html\'">INICIA SESIÓN PARA COMPRAR</button>';document.getElementById('sr').style.display='none';return;}
-    document.getElementById('sr').style.display='flex';
-    document.getElementById('sv').textContent=`$${saldo.toFixed(2)}`;
-    const t=sv.price*qty;
-    if(saldo>=t){ba.innerHTML=`<button class="btn-buy" id="bc">🛒 COMPRAR — $${t.toFixed(2)}</button>`;document.getElementById('bc').addEventListener('click',comprar);}
-    else{ba.innerHTML=`<button class="btn-buy" disabled>🛒 COMPRAR — $${t.toFixed(2)}</button>`;showMsg('warn',`Saldo insuficiente. Necesitas $${t.toFixed(2)}, tienes $${saldo.toFixed(2)}. Contacta al admin para recargar.`);}
-  }
-  async function comprar(){
-    const btn=document.getElementById('bc');btn.disabled=true;btn.innerHTML='<span class="spin"></span> Procesando...';clrMsg();
-    try{
-      const snap=await getDoc(doc(db,'users',user.uid));const sr=snap.data().saldo??0;const t=sv.price*qty;
-      if(sr<t){showMsg('err','Saldo insuficiente.');btn.disabled=false;btn.textContent='🛒 COMPRAR';return;}
-      await updateDoc(doc(db,'users',user.uid),{saldo:increment(-t),purchases:arrayUnion(`${PID} — ${sv.name} x${qty}`)});
-      const key=`YS-${PID}-${sv.id.toUpperCase()}-${Math.random().toString(36).slice(2,8).toUpperCase()}`;
-      await addDoc(collection(db,'compras'),{uid:user.uid,nombre:user.displayName||'—',email:user.email,producto:PNAME,plan:sv.name,cantidad:qty,precio:t,clave:key,fecha:serverTimestamp()});
-      saldo=sr-t;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;document.getElementById('sv').textContent=`$${saldo.toFixed(2)}`;
-      document.getElementById('kbox').textContent=key;document.getElementById('modal-ok').classList.add('open');
-    }catch(e){showMsg('err','Error al procesar. Intenta de nuevo.');btn.disabled=false;btn.innerHTML=`🛒 COMPRAR — $${(sv.price*qty).toFixed(2)}`;}
-  }
-  function showMsg(t,txt){const el=document.getElementById('msg');el.className=`msg ${t}`;el.textContent=txt;}
-  function clrMsg(){const el=document.getElementById('msg');el.className='msg';}
-  window.updateUI=updateUI;
-  onAuthStateChanged(auth,async u=>{user=u;if(u){document.getElementById('ng').style.display='none';document.getElementById('nu').style.display='flex';document.getElementById('nn').textContent=u.displayName||u.email.split('@')[0].toUpperCase();try{const s=await getDoc(doc(db,'users',u.uid));if(s.exists()){saldo=s.data().saldo??0;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;}}catch(e){}}rVars();upTot();updateUI();});
-  window.doLogout=async()=>{await signOut(auth);window.location.href='index.html';};
-</script>
-
-<script>
-/* CURSOR */
-const cdot=document.createElement('div');cdot.id='cdot';
-const cring=document.createElement('div');cring.id='cring';
-document.body.appendChild(cdot);document.body.appendChild(cring);
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function animC(){
-  requestAnimationFrame(animC);
-  cdot.style.left=mx+'px';cdot.style.top=my+'px';
-  rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;
-  cring.style.left=rx+'px';cring.style.top=ry+'px';
-})();
-document.querySelectorAll('button,a,.vc,.qb').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cring.style.width='52px';cring.style.height='52px';cring.style.borderColor='rgba(139,47,255,1)';});
-  el.addEventListener('mouseleave',()=>{cring.style.width='38px';cring.style.height='38px';cring.style.borderColor='rgba(122,31,238,0.8)';});
-});
-
-/* 3D TILT */
-document.querySelectorAll('.tilt-box').forEach(box=>{
-  const wrap=box.closest('.tilt-wrap');
-  wrap.addEventListener('mousemove',e=>{
-    const r=box.getBoundingClientRect();
-    const dx=(e.clientX-(r.left+r.width/2))/(r.width/2);
-    const dy=(e.clientY-(r.top+r.height/2))/(r.height/2);
-    box.style.transform=`rotateX(${-dy*14}deg) rotateY(${dx*14}deg) scale3d(1.04,1.04,1.04)`;
-    const shine=box.querySelector('.tilt-shine');
-    if(shine){
-      shine.style.background=`radial-gradient(circle at ${((e.clientX-r.left)/r.width)*100}% ${((e.clientY-r.top)/r.height)*100}%,rgba(255,255,255,0.14) 0%,transparent 55%)`;
-      shine.style.opacity='1';
-    }
-  });
-  wrap.addEventListener('mouseleave',()=>{
-    box.style.transform='rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
-    const shine=box.querySelector('.tilt-shine');
-    if(shine) shine.style.opacity='0';
-  });
-});
-</script>
-
-<!-- MODAL CERRAR SESIÓN -->
-<div id="logout-modal" style="
-  display:none;position:fixed;inset:0;z-index:99999;
-  background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);
-  align-items:center;justify-content:center;padding:20px;
-">
-  <div style="
-    background:#111;border:1px solid rgba(122,31,238,0.25);border-radius:14px;
-    padding:40px 36px;max-width:420px;width:100%;position:relative;
-    box-shadow:0 0 60px rgba(122,31,238,0.08);
-    animation:popInL .4s cubic-bezier(.34,1.56,.64,1) forwards;
-  ">
-    <div style="text-align:center;margin-bottom:20px;font-size:2.8rem;">⚠️</div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:900;
-      letter-spacing:2px;color:#7A1FEE;text-align:center;margin-bottom:14px;text-transform:uppercase;">
-      ¿Cerrar Sesión?
-    </h3>
-    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.88rem;line-height:1.75;
-      text-align:center;margin-bottom:10px;">
-      Recuerda que tu <strong style="color:#fff;">saldo y compras</strong> están guardados en tu cuenta.
-    </p>
-    <p style="font-family:'Exo 2',sans-serif;color:#aa77ff;font-size:.82rem;line-height:1.7;
-      text-align:center;margin-bottom:28px;
-      background:rgba(122,31,238,0.07);border:1px solid rgba(122,31,238,0.2);
-      border-radius:8px;padding:12px 16px;">
-      🔑 Si no recuerdas tu contraseña, <strong>no podrás recuperar el acceso</strong> a tu saldo ni a tus claves de productos. Asegúrate de tenerla guardada antes de salir.
-    </p>
-    <div style="display:flex;gap:12px;">
-      <button onclick="document.getElementById('logout-modal').style.display='none'"
-        style="flex:1;background:transparent;color:#777;border:1px solid rgba(255,255,255,.12);
-        padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.6rem;
-        letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
-        onmouseover="this.style.borderColor='#7A1FEE';this.style.color='#7A1FEE'"
-        onmouseout="this.style.borderColor='rgba(255,255,255,.12)';this.style.color='#777'">
-        CANCELAR
-      </button>
-      <button onclick="confirmarLogout()"
-        style="flex:1;background:#7A1FEE;color:#000;border:none;padding:13px;border-radius:6px;
-        font-family:'Orbitron',sans-serif;font-weight:700;font-size:.6rem;
-        letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
-        onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
-        SÍ, CERRAR SESIÓN
-      </button>
-    </div>
-  </div>
-</div>
-<style>
-@keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
-</style>
-
-
-<!-- ═══ PANTALLA DE BAN EN TIEMPO REAL ═══ -->
-<div id="ban-screen" style="
-  display:none; position:fixed; inset:0; z-index:999999;
-  background:#06040f; align-items:center; justify-content:center;
-  padding:20px; flex-direction:column;
-">
-  <div style="
-    background:#0d0a1a; border:2px solid rgba(255,68,68,0.4);
-    border-radius:16px; padding:48px 40px; max-width:480px; width:100%;
-    text-align:center; box-shadow:0 0 60px rgba(255,68,68,0.12);
-    animation:popInBan .5s cubic-bezier(.34,1.56,.64,1) forwards;
-  ">
-    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
-    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;
-      letter-spacing:3px;color:#ff4444;text-transform:uppercase;margin-bottom:16px;
-      text-shadow:0 0 20px rgba(255,68,68,0.5);">
-      Cuenta Suspendida
-    </h2>
-    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:12px;">
-      Tu cuenta ha sido suspendida por un administrador.
-    </p>
-    <div id="ban-reason-rt" style="
-      font-family:'Exo 2',sans-serif;color:#ff9966;font-size:.85rem;
-      background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);
-      border-radius:8px;padding:12px 16px;margin-bottom:24px;line-height:1.7;
-      display:none;
-    "></div>
-    <p style="font-family:'Exo 2',sans-serif;color:#666;font-size:.82rem;line-height:1.7;margin-bottom:24px;">
-      Si crees que es un error, abre un ticket en nuestro Discord o contacta un administrador para apelar.
-    </p>
-    <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="
-      display:inline-flex;align-items:center;gap:8px;
-      background:#7A1FEE;color:#000;text-decoration:none;
-      font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;
-      letter-spacing:2px;padding:13px 28px;border-radius:6px;
-      text-transform:uppercase;box-shadow:0 4px 18px rgba(122,31,238,.35);
-      transition:all .2s;
-    " onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
-      🎮 Abrir Discord
-    </a>
-  </div>
-</div>
-<style>
-@keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
-</style>
-
-<script type="module">
-/* ── REAL-TIME BAN LISTENER ── */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-(function(){
-  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
-  const app2 = initializeApp(cfg, 'ban-listener');
-  const auth2 = getAuth(app2);
-  const db2   = getFirestore(app2);
-  let unsub = null;
-  onAuthStateChanged(auth2, user => {
-    if (unsub) unsub();
-    if (!user) return;
-    unsub = onSnapshot(doc(db2,'users',user.uid), snap => {
-      if (!snap.exists()) return;
-      const data = snap.data();
-      if (data.banned) {
-        const screen = document.getElementById('ban-screen');
-        if (screen) {
-          screen.style.display = 'flex';
-          if (data.banReason) {
-            const el = document.getElementById('ban-reason-rt');
-            if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
-          }
-        }
-      }
-    });
-  });
-})();
-</script>
-
-</body>
-</html>
-
-
-blood-private:
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YULIAN STORE — Blood Strike Privado</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root{--o:#7A1FEE;--ob:#8B2FFF;--od:#5a0fcc;--dark:#080808;--d2:#0e0e0e;--card:#111;--c2:#161616;
-      --t:#fff;--tm:#777;--border:rgba(122,31,238,.18);
-      --neon:0 0 8px #7A1FEE,0 0 20px #8B2FFF,0 0 40px rgba(122,31,238,.5);
-      --green:#4dff91;--fd:'Orbitron',sans-serif;--fb:'Exo 2',sans-serif;}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
-    body{background:var(--dark);color:var(--t);font-family:var(--fb);overflow-x:hidden}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--d2)}
-    ::-webkit-scrollbar-thumb{background:var(--od);border-radius:3px}
-    * { cursor: none !important; }
-    #cdot{position:fixed;top:0;left:0;width:10px;height:10px;background:#111;border-radius:50%;
-      pointer-events:none;z-index:99999;transform:translate(-50%,-50%);
-      box-shadow:0 0 0 2.5px rgba(122,31,238,0.95),0 0 14px rgba(122,31,238,0.5);}
-    #cring{position:fixed;top:0;left:0;width:38px;height:38px;
-      border:2.5px solid rgba(122,31,238,0.8);border-radius:50%;pointer-events:none;z-index:99998;
-      transform:translate(-50%,-50%);box-shadow:0 0 14px rgba(122,31,238,0.3);
-      transition:width .18s,height .18s,border-color .18s;}
-    .tilt-wrap{perspective:900px;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
-    .tilt-box{transform-style:preserve-3d;will-change:transform;border-radius:14px;position:relative;
-      transition:transform 0.1s ease-out;filter:drop-shadow(0 24px 50px rgba(0,0,0,0.85));}
-    .tilt-shine{position:absolute;inset:0;border-radius:14px;
-      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.12) 0%,transparent 55%);
-      pointer-events:none;opacity:0;transition:opacity 0.3s;}
-    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
-      padding:14px 48px;background:rgba(8,8,8,.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
-    .logo{font-family:var(--fd);font-size:1.1rem;font-weight:900;letter-spacing:3px;text-decoration:none;color:var(--t);text-shadow:var(--neon)}
-    .logo span{color:var(--o)}
-    .nav-r{display:flex;align-items:center;gap:12px}
-    .nbtn{background:transparent;color:var(--o);border:1.5px solid var(--o);padding:7px 16px;border-radius:3px;
-      font-family:var(--fd);font-size:.58rem;letter-spacing:2px;text-decoration:none;
-      display:inline-block;text-transform:uppercase;transition:all .2s}
-    .nbtn:hover{background:var(--o);color:#000}
-    .nbtn-g{border-color:rgba(255,255,255,.12);color:var(--tm)}
-    .nbtn-g:hover{border-color:var(--o);color:var(--o);background:transparent}
-    .nav-s{font-family:var(--fd);font-size:.62rem;color:var(--green);background:rgba(77,255,145,.08);border:1px solid rgba(77,255,145,.2);padding:7px 13px;border-radius:3px}
-    .nav-n{font-family:var(--fd);font-size:.62rem;color:var(--o);text-shadow:var(--neon)}
-    .page-wrap{display:grid;grid-template-columns:1.1fr 1fr;min-height:calc(100vh - 57px)}
-    .img-col{position:relative;background:linear-gradient(135deg,#0c0a08,#100d0a);
-      display:flex;align-items:center;justify-content:center;padding:40px;overflow:hidden}
-    .img-col::before{content:'';position:absolute;inset:0;
-      background:radial-gradient(ellipse at 50% 60%,rgba(122,31,238,.15) 0%,transparent 65%);}
-    .hex-bg{position:absolute;inset:0;opacity:.035;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='52'%3E%3Cpolygon points='30,2 58,17 58,47 30,62 2,47 2,17' fill='none' stroke='%237A1FEE' stroke-width='1'/%3E%3C/svg%3E");
-      background-size:60px 52px}
-    .box-img{width:100%;max-width:380px;height:auto;border-radius:14px;display:block;position:relative;z-index:1;}
-    .status-pill{position:absolute;top:20px;left:20px;z-index:5;
-      display:flex;align-items:center;gap:7px;background:rgba(5,5,5,.8);
-      border:1px solid rgba(77,255,145,.3);backdrop-filter:blur(8px);padding:7px 13px;border-radius:30px}
-    .sdot{width:7px;height:7px;background:var(--green);border-radius:50%;
-      box-shadow:0 0 8px var(--green);animation:blink 2s infinite}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
-    .stxt{font-family:var(--fd);font-size:.52rem;letter-spacing:2px;color:var(--green);text-transform:uppercase}
-    .ver-pill{position:absolute;bottom:20px;right:20px;z-index:5;
-      background:rgba(122,31,238,.18);border:1px solid rgba(122,31,238,.4);
-      padding:5px 13px;border-radius:20px;font-family:var(--fd);font-size:.5rem;
-      letter-spacing:2px;color:var(--o);text-transform:uppercase;font-weight:700}
-    .info-col{background:var(--d2);padding:48px;display:flex;flex-direction:column;border-left:1px solid var(--border);overflow-y:auto}
-    .breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-    .breadcrumb a{font-family:var(--fd);font-size:.52rem;letter-spacing:1.5px;color:var(--tm);text-decoration:none;text-transform:uppercase;transition:color .2s}
-    .breadcrumb a:hover{color:var(--o)}
-    .breadcrumb span{color:rgba(255,255,255,.15);font-size:.8rem}
-    .ptags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
-    .ptag{font-family:var(--fd);font-size:.46rem;letter-spacing:1.5px;padding:4px 11px;border-radius:20px;font-weight:700;text-transform:uppercase;border:1px solid}
-    .ptag-g{color:var(--green);border-color:rgba(77,255,145,.3);background:rgba(77,255,145,.07)}
-    .ptag-b{color:#60b4ff;border-color:rgba(96,180,255,.3);background:rgba(96,180,255,.07)}
-    .ptag-o{color:var(--o);border-color:rgba(122,31,238,.3);background:rgba(122,31,238,.09)}
-    .ptitle{font-family:var(--fd);font-size:clamp(1.4rem,2.3vw,2rem);font-weight:900;letter-spacing:2px;color:#fff;margin-bottom:11px;line-height:1.2}
-    .pdesc{font-family:var(--fb);color:var(--tm);font-size:.93rem;line-height:1.75;margin-bottom:20px}
-    .meta-box{background:rgba(122,31,238,.05);border:1px solid rgba(122,31,238,.13);border-radius:8px;padding:15px 18px;margin-bottom:20px;display:flex;flex-direction:column;gap:9px}
-    .meta-row{display:flex;align-items:center;gap:10px;font-family:var(--fb);font-size:.88rem;color:var(--tm)}
-    .meta-row .mi{font-size:.95rem;width:22px;text-align:center}
-    .meta-row strong{color:#ddd;font-weight:600}
-    .stars-row{display:flex;align-items:center;gap:8px;margin-bottom:18px}
-    .stars{color:#bb77ff;font-size:.9rem;text-shadow:0 0 6px rgba(255,184,0,.4)}
-    .stars-txt{font-family:var(--fb);font-size:.83rem;color:var(--tm)}
-    .price-box{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:15px 18px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-    .pb-l{display:flex;flex-direction:column;gap:3px}
-    .pb-lbl{font-family:var(--fd);font-size:.55rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase}
-    .pb-price{font-family:var(--fd);font-size:1.9rem;font-weight:900;color:var(--o);text-shadow:0 0 10px rgba(122,31,238,.4)}
-    .pb-r{display:flex;flex-direction:column;gap:3px;align-items:flex-end}
-    .qty-lbl{font-family:var(--fd);font-size:.52rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase;margin-bottom:4px}
-    .qty-w{display:flex;align-items:center}
-    .qb{background:var(--c2);border:1px solid rgba(255,255,255,.08);color:#fff;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;transition:all .2s;user-select:none}
-    .qb:first-child{border-radius:4px 0 0 4px}.qb:last-child{border-radius:0 4px 4px 0}
-    .qb:hover{background:var(--o);color:#000}
-    .qv{background:var(--c2);border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);color:#fff;width:40px;height:32px;text-align:center;font-family:var(--fd);font-size:.78rem;display:flex;align-items:center;justify-content:center}
-    .vtitle{font-family:var(--fd);font-size:.6rem;letter-spacing:3px;color:var(--tm);text-transform:uppercase;margin-bottom:11px}
-    .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px}
-    .vc{background:var(--c2);border:1.5px solid rgba(255,255,255,.07);border-radius:8px;padding:13px 15px;transition:all .25s;position:relative;overflow:hidden}
-    .vc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--o),transparent);opacity:0;transition:opacity .3s}
-    .vc:hover{border-color:rgba(122,31,238,.35);background:rgba(122,31,238,.05)}
-    .vc:hover::before{opacity:1}
-    .vc.sel{border-color:var(--o);background:rgba(122,31,238,.09);box-shadow:0 0 16px rgba(122,31,238,.10)}
-    .vc.sel::before{opacity:1}
-    .vc-n{font-family:var(--fd);font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:#fff;text-transform:uppercase;margin-bottom:3px}
-    .vc-s{font-family:var(--fb);font-size:.74rem;color:var(--tm);margin-bottom:7px}
-    .vc-p{font-family:var(--fd);font-size:.95rem;font-weight:900;color:var(--o)}
-    .tot-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:17px 18px;margin-bottom:12px}
-    .tot-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
-    .tot-lbl{font-family:var(--fd);font-size:.58rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase}
-    .tot-amt{font-family:var(--fd);font-size:1.55rem;font-weight:900;color:var(--o);text-shadow:var(--neon)}
-    .sal-row{display:flex;align-items:center;gap:8px;margin-bottom:13px;font-family:var(--fb);font-size:.83rem;color:var(--tm)}
-    .sal-val{color:var(--green);font-family:var(--fd);font-size:.72rem;font-weight:700}
-    .btn-buy{width:100%;background:var(--o);color:#000;border:none;padding:15px;border-radius:6px;
-      font-family:var(--fd);font-weight:700;font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;
-      display:flex;align-items:center;justify-content:center;gap:8px;
-      box-shadow:0 4px 20px rgba(122,31,238,.3);transition:all .25s}
-    .btn-buy:hover{background:var(--ob);transform:translateY(-2px);box-shadow:var(--neon),0 8px 30px rgba(122,31,238,.4)}
-    .btn-buy:disabled{opacity:.4;transform:none;box-shadow:none}
-    .btn-log{width:100%;background:transparent;color:var(--o);border:1.5px solid var(--o);padding:15px;border-radius:6px;
-      font-family:var(--fd);font-weight:700;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s}
-    .btn-log:hover{background:rgba(122,31,238,.13)}
-    .msg{padding:11px 15px;border-radius:5px;font-size:.83rem;margin-top:10px;display:none;font-family:var(--fb)}
-    .msg.err{background:rgba(255,50,50,.1);border:1px solid rgba(255,50,50,.3);color:#ff6666;display:block}
-    .msg.ok{background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.3);color:var(--green);display:block}
-    .msg.warn{background:rgba(255,184,0,.1);border:1px solid rgba(255,184,0,.3);color:#bb77ff;display:block}
-    .spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:sp .7s linear infinite}
-    @keyframes sp{to{transform:rotate(360deg)}}
-    .feats{padding:70px 48px;max-width:1400px;margin:0 auto}
-    .feats h2{font-family:var(--fd);font-size:1.3rem;font-weight:900;letter-spacing:3px;color:#fff;margin-bottom:8px}
-    .feats .sub{font-family:var(--fb);color:var(--tm);font-size:.93rem;margin-bottom:42px;line-height:1.7}
-    .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:13px}
-    .fc{background:var(--c2);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:24px 22px;transition:border-color .25s,box-shadow .25s;position:relative;overflow:hidden}
-    .fc::after{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--o),transparent);opacity:0;transition:opacity .3s}
-    .fc:hover{border-color:rgba(122,31,238,.22);box-shadow:0 4px 28px rgba(122,31,238,.07)}
-    .fc:hover::after{opacity:1}
-    .fc-title{font-family:var(--fd);font-size:.64rem;letter-spacing:2px;color:var(--o);text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:7px;font-weight:700}
-    .fc ul{list-style:none;display:flex;flex-direction:column;gap:7px}
-    .fc ul li{font-family:var(--fb);color:var(--tm);font-size:.86rem;display:flex;align-items:flex-start;gap:9px;line-height:1.4}
-    .fc ul li::before{content:'✓';color:var(--o);font-weight:900;font-size:.75rem;flex-shrink:0;margin-top:1px}
-    .moverlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center}
-    .moverlay.open{display:flex}
-    .msuccess{background:var(--card);border:1px solid rgba(77,255,145,.25);border-radius:12px;padding:42px 34px;max-width:400px;width:90%;text-align:center;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) forwards}
-    @keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
-    .micon{font-size:3rem;margin-bottom:16px}
-    .msuccess h3{font-family:var(--fd);font-size:.88rem;font-weight:900;letter-spacing:2px;color:var(--green);margin-bottom:10px;text-transform:uppercase}
-    .msuccess p{font-family:var(--fb);color:var(--tm);font-size:.88rem;line-height:1.7;margin-bottom:16px}
-    .kbox{background:var(--c2);border:1px solid rgba(77,255,145,.18);border-radius:6px;padding:12px 16px;font-family:var(--fd);font-size:.7rem;color:var(--green);letter-spacing:2px;margin-bottom:20px;word-break:break-all;text-align:left}
-    .btn-cl{background:var(--o);color:#000;border:none;padding:12px 26px;border-radius:5px;font-family:var(--fd);font-weight:700;font-size:.62rem;letter-spacing:2px;transition:all .2s}
-    .btn-cl:hover{background:var(--ob)}
-    footer{background:var(--d2);border-top:1px solid var(--border);padding:26px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-    .flogo{font-family:var(--fd);font-size:.9rem;font-weight:900;letter-spacing:3px}
-    .flogo span{color:var(--o)}
-    footer p{font-family:var(--fb);color:var(--tm);font-size:.78rem}
-    @media(max-width:900px){
-      .page-wrap{grid-template-columns:1fr;min-height:auto}
-      .img-col{height:auto;padding:30px 24px;min-height:300px}
-      .info-col{padding:28px 18px}
-      .vgrid{grid-template-columns:1fr}
-      nav{padding:12px 20px}
-      .feats{padding:50px 18px}
-      footer{padding:20px 18px;flex-direction:column;text-align:center}
-    }
-  </style>
-</head>
-<body>
-
-<nav>
-  <a href="index.html" class="logo"><span>YULIAN</span> STORE</a>
-  <div class="nav-r">
-    <a href="index.html" class="nbtn nbtn-g" style="font-size:.54rem;">← Tienda</a>
-    <div id="ng"><a href="login.html" class="nbtn">ACCEDER</a></div>
-    <div id="nu" style="display:none;align-items:center;gap:10px;">
-      <span class="nav-n" id="nn"></span>
-      <span class="nav-s" id="ns">$0.00</span>
-    </div>
-  </div>
-</nav>
-
-<div class="moverlay" id="modal-ok">
-  <div class="msuccess">
-    <div class="micon">🎮</div>
-    <h3>¡Acceso Desbloqueado!</h3>
-    <p>Compra exitosa. Guarda tu clave y únete al Discord para instrucciones.</p>
-    <div class="kbox" id="kbox">—</div>
-    <button class="btn-cl" onclick="document.getElementById('modal-ok').classList.remove('open');updateUI()">ENTENDIDO</button>
-  </div>
-</div>
-
-<div class="page-wrap">
-  <div class="img-col">
-    <div class="hex-bg"></div>
-    <div class="status-pill"><div class="sdot"></div><span class="stxt">Indetectable</span></div>
-    <div class="tilt-wrap">
-      <div class="tilt-box">
-        <div class="tilt-shine"></div>
-        <img src="blood_private_box.png" alt="Blood Strike" class="box-img">
-      </div>
-    </div>
-    <div class="ver-pill">PRIVADO</div>
-  </div>
-
-  <div class="info-col">
-    <div class="breadcrumb">
-      <a href="index.html">Tienda</a><span>›</span>
-      <a href="javascript:history.back()">Blood Strike</a><span>›</span>
-      <span style="color:var(--o);font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:1.5px;">PRIVADO</span>
-    </div>
-    <div class="ptags"><span class="ptag ptag-g">✓ Indetectable</span><span class="ptag ptag-b">🔒 Privado</span><span class="ptag ptag-o">👑 VIP</span></div>
-    <h1 class="ptitle">Blood Strike<br><span style="color:var(--green);">— PRIVADO</span></h1>
-    <p class="pdesc">Versión VIP exclusiva con funciones avanzadas, soporte prioritario y actualizaciones anticipadas.</p>
-    <div class="meta-box"><div class="meta-row"><span class="mi">📱</span> Compatible con <strong>Android e iOS</strong></div><div class="meta-row"><span class="mi">🛡️</span> <strong>Sin detección garantizada</strong></div><div class="meta-row"><span class="mi">⚡</span> Actualizaciones <strong>post-parche automáticas</strong></div></div>
-    <div class="stars-row">
-      <span class="stars">★★★★☆</span>
-      <span class="stars-txt">4 (98 reseñas)</span>
-    </div>
-    <div class="price-box">
-      <div class="pb-l"><div class="pb-lbl">Precio base</div><div class="pb-price" id="bp">$0.00</div></div>
-      <div class="pb-r">
-        <div class="qty-lbl">Cantidad</div>
-        <div class="qty-w">
-          <div class="qb" onclick="cQty(-1)">−</div>
-          <div class="qv" id="qv">1</div>
-          <div class="qb" onclick="cQty(1)">+</div>
-        </div>
-      </div>
-    </div>
-    <div class="vtitle">VARIANTES</div>
-    <div class="vgrid" id="vg"></div>
-    <div class="tot-box">
-      <div class="tot-row"><span class="tot-lbl">Total</span><span class="tot-amt" id="ta">$0.00</span></div>
-      <div class="sal-row" id="sr" style="display:none;">Tu saldo: <span class="sal-val" id="sv">$0.00</span></div>
-      <div id="ba"><button class="btn-log" onclick="window.location.href='login.html'">INICIA SESIÓN PARA COMPRAR</button></div>
-      <div class="msg" id="msg"></div>
-    </div>
-  </div>
-</div>
-
-<div class="feats">
-  <h2>CARACTERÍSTICAS DEL SOFTWARE</h2>
-  <p class="sub">Todo lo que incluye tu acceso — Blood Strike PRIVADO</p>
-  <div class="fgrid"><div class="fc"><div class="fc-title"><span>🎯</span> Aimbot</div><ul><li>Aimbot de alta precisión</li><li>Predicción de movimiento</li><li>FOV Circle personalizable</li><li>Hitbox seleccionable</li><li>Keybind personalizable</li><li>Suavidad ajustable</li></ul></div><div class="fc"><div class="fc-title"><span>👁️</span> Visuals / ESP</div><ul><li>Box ESP completo</li><li>Skeleton ESP</li><li>Nombre, distancia y arma</li><li>Wallhack activado</li><li>Snap Lines</li><li>Colores personalizables</li></ul></div><div class="fc"><div class="fc-title"><span>📡</span> Radar & Extra</div><ul><li>Radar en pantalla</li><li>Rango y posición ajustable</li><li>Rank visible</li><li>Team Check</li><li>Show Bots</li></ul></div><div class="fc"><div class="fc-title"><span>⚙️</span> Misc</div><ul><li>Config SAVE/LOAD</li><li>Overlay FPS</li><li>VSync</li><li>Menú in-game</li><li>Soporte Discord 24/7</li></ul></div><div class="fc"><div class="fc-title"><span>🔒</span> Seguridad</div><ul><li>100% indetectable</li><li>Sin detección garantizada</li><li>Actualizaciones automáticas</li><li>Cifrado de comunicación</li></ul></div><div class="fc"><div class="fc-title"><span>ℹ️</span> Información</div><ul><li>Compatible Android e iOS</li><li>Acceso instantáneo</li><li>Clave de licencia personal</li><li>Instrucciones en Discord</li><li>Reembolso si hay detección</li></ul></div></div>
-</div>
-
-<footer>
-  <div class="flogo"><span>YULIAN</span> STORE</div>
-  <p>© 2025 Yulian Store. Todos los derechos reservados.</p>
-  <a href="index.html" style="color:var(--o);font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:1.5px;text-decoration:none;">← Volver</a>
-</footer>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, updateDoc, arrayUnion, increment, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",
-    projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",
-    messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
-  const app=initializeApp(cfg),auth=getAuth(app),db=getFirestore(app);
-  const VARS=[{id:'1d',name:'DÍA',sub:'Acceso 24 horas',price:15},
-    {id:'3d',name:'3 DÍAS',sub:'Acceso 72 horas',price:30},
-    {id:'1s',name:'SEMANA',sub:'Acceso 7 días',price:50},
-    {id:'1m',name:'MES',sub:'Acceso 30 días',price:80},
-    {id:'lf',name:'LIFETIME',sub:'De por vida',price:150}];
-  const PID='BLOOD-PRIVATE',PNAME='Blood Strike (Privado)';
-  let sv=VARS[0],qty=1,user=null,saldo=0;
-  function rVars(){
-    const g=document.getElementById('vg');
-    g.innerHTML=VARS.map(v=>`<div class="vc${v.id===sv.id?' sel':''}" data-id="${v.id}"><div class="vc-n">${v.name}</div><div class="vc-s">${v.sub}</div><div class="vc-p">$${v.price.toFixed(2)}</div></div>`).join('');
-    g.querySelectorAll('.vc').forEach(el=>el.addEventListener('click',()=>{sv=VARS.find(v=>v.id===el.dataset.id);rVars();upTot();updateUI();}));
-  }
-  function upTot(){
-    const t=sv.price*qty;
-    document.getElementById('bp').textContent=`$${sv.price.toFixed(2)}`;
-    document.getElementById('qv').textContent=qty;
-    document.getElementById('ta').textContent=`$${t.toFixed(2)}`;
-  }
-  window.cQty=function(d){qty=Math.max(1,Math.min(10,qty+d));upTot();updateUI();};
-  function updateUI(){
-    const ba=document.getElementById('ba');clrMsg();
-    if(!user){ba.innerHTML='<button class="btn-log" onclick="window.location.href=\'login.html\'">INICIA SESIÓN PARA COMPRAR</button>';document.getElementById('sr').style.display='none';return;}
-    document.getElementById('sr').style.display='flex';
-    document.getElementById('sv').textContent=`$${saldo.toFixed(2)}`;
-    const t=sv.price*qty;
-    if(saldo>=t){ba.innerHTML=`<button class="btn-buy" id="bc">🛒 COMPRAR — $${t.toFixed(2)}</button>`;document.getElementById('bc').addEventListener('click',comprar);}
-    else{ba.innerHTML=`<button class="btn-buy" disabled>🛒 COMPRAR — $${t.toFixed(2)}</button>`;showMsg('warn',`Saldo insuficiente. Necesitas $${t.toFixed(2)}, tienes $${saldo.toFixed(2)}. Contacta al admin para recargar.`);}
-  }
-  async function comprar(){
-    const btn=document.getElementById('bc');btn.disabled=true;btn.innerHTML='<span class="spin"></span> Procesando...';clrMsg();
-    try{
-      const snap=await getDoc(doc(db,'users',user.uid));const sr=snap.data().saldo??0;const t=sv.price*qty;
-      if(sr<t){showMsg('err','Saldo insuficiente.');btn.disabled=false;btn.textContent='🛒 COMPRAR';return;}
-      await updateDoc(doc(db,'users',user.uid),{saldo:increment(-t),purchases:arrayUnion(`${PID} — ${sv.name} x${qty}`)});
-      const key=`YS-${PID}-${sv.id.toUpperCase()}-${Math.random().toString(36).slice(2,8).toUpperCase()}`;
-      await addDoc(collection(db,'compras'),{uid:user.uid,nombre:user.displayName||'—',email:user.email,producto:PNAME,plan:sv.name,cantidad:qty,precio:t,clave:key,fecha:serverTimestamp()});
-      saldo=sr-t;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;document.getElementById('sv').textContent=`$${saldo.toFixed(2)}`;
-      document.getElementById('kbox').textContent=key;document.getElementById('modal-ok').classList.add('open');
-    }catch(e){showMsg('err','Error al procesar. Intenta de nuevo.');btn.disabled=false;btn.innerHTML=`🛒 COMPRAR — $${(sv.price*qty).toFixed(2)}`;}
-  }
-  function showMsg(t,txt){const el=document.getElementById('msg');el.className=`msg ${t}`;el.textContent=txt;}
-  function clrMsg(){const el=document.getElementById('msg');el.className='msg';}
-  window.updateUI=updateUI;
-  onAuthStateChanged(auth,async u=>{user=u;if(u){document.getElementById('ng').style.display='none';document.getElementById('nu').style.display='flex';document.getElementById('nn').textContent=u.displayName||u.email.split('@')[0].toUpperCase();try{const s=await getDoc(doc(db,'users',u.uid));if(s.exists()){saldo=s.data().saldo??0;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;}}catch(e){}}rVars();upTot();updateUI();});
-  window.doLogout=async()=>{await signOut(auth);window.location.href='index.html';};
-</script>
-
-<script>
-/* CURSOR */
-const cdot=document.createElement('div');cdot.id='cdot';
-const cring=document.createElement('div');cring.id='cring';
-document.body.appendChild(cdot);document.body.appendChild(cring);
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-(function animC(){
-  requestAnimationFrame(animC);
-  cdot.style.left=mx+'px';cdot.style.top=my+'px';
-  rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;
-  cring.style.left=rx+'px';cring.style.top=ry+'px';
-})();
-document.querySelectorAll('button,a,.vc,.qb').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cring.style.width='52px';cring.style.height='52px';cring.style.borderColor='rgba(139,47,255,1)';});
-  el.addEventListener('mouseleave',()=>{cring.style.width='38px';cring.style.height='38px';cring.style.borderColor='rgba(122,31,238,0.8)';});
-});
-
-/* 3D TILT */
-document.querySelectorAll('.tilt-box').forEach(box=>{
-  const wrap=box.closest('.tilt-wrap');
-  wrap.addEventListener('mousemove',e=>{
-    const r=box.getBoundingClientRect();
-    const dx=(e.clientX-(r.left+r.width/2))/(r.width/2);
-    const dy=(e.clientY-(r.top+r.height/2))/(r.height/2);
-    box.style.transform=`rotateX(${-dy*14}deg) rotateY(${dx*14}deg) scale3d(1.04,1.04,1.04)`;
-    const shine=box.querySelector('.tilt-shine');
-    if(shine){
-      shine.style.background=`radial-gradient(circle at ${((e.clientX-r.left)/r.width)*100}% ${((e.clientY-r.top)/r.height)*100}%,rgba(255,255,255,0.14) 0%,transparent 55%)`;
-      shine.style.opacity='1';
-    }
-  });
-  wrap.addEventListener('mouseleave',()=>{
-    box.style.transform='rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
-    const shine=box.querySelector('.tilt-shine');
-    if(shine) shine.style.opacity='0';
-  });
-});
-</script>
-
-<!-- MODAL CERRAR SESIÓN -->
-<div id="logout-modal" style="
-  display:none;position:fixed;inset:0;z-index:99999;
-  background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);
-  align-items:center;justify-content:center;padding:20px;
-">
-  <div style="
-    background:#111;border:1px solid rgba(122,31,238,0.25);border-radius:14px;
-    padding:40px 36px;max-width:420px;width:100%;position:relative;
-    box-shadow:0 0 60px rgba(122,31,238,0.08);
-    animation:popInL .4s cubic-bezier(.34,1.56,.64,1) forwards;
-  ">
-    <div style="text-align:center;margin-bottom:20px;font-size:2.8rem;">⚠️</div>
-    <h3 style="font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:900;
-      letter-spacing:2px;color:#7A1FEE;text-align:center;margin-bottom:14px;text-transform:uppercase;">
-      ¿Cerrar Sesión?
-    </h3>
-    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.88rem;line-height:1.75;
-      text-align:center;margin-bottom:10px;">
-      Recuerda que tu <strong style="color:#fff;">saldo y compras</strong> están guardados en tu cuenta.
-    </p>
-    <p style="font-family:'Exo 2',sans-serif;color:#aa77ff;font-size:.82rem;line-height:1.7;
-      text-align:center;margin-bottom:28px;
-      background:rgba(122,31,238,0.07);border:1px solid rgba(122,31,238,0.2);
-      border-radius:8px;padding:12px 16px;">
-      🔑 Si no recuerdas tu contraseña, <strong>no podrás recuperar el acceso</strong> a tu saldo ni a tus claves de productos. Asegúrate de tenerla guardada antes de salir.
-    </p>
-    <div style="display:flex;gap:12px;">
-      <button onclick="document.getElementById('logout-modal').style.display='none'"
-        style="flex:1;background:transparent;color:#777;border:1px solid rgba(255,255,255,.12);
-        padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.6rem;
-        letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
-        onmouseover="this.style.borderColor='#7A1FEE';this.style.color='#7A1FEE'"
-        onmouseout="this.style.borderColor='rgba(255,255,255,.12)';this.style.color='#777'">
-        CANCELAR
-      </button>
-      <button onclick="confirmarLogout()"
-        style="flex:1;background:#7A1FEE;color:#000;border:none;padding:13px;border-radius:6px;
-        font-family:'Orbitron',sans-serif;font-weight:700;font-size:.6rem;
-        letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
-        onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
-        SÍ, CERRAR SESIÓN
-      </button>
-    </div>
-  </div>
-</div>
-<style>
-@keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
-</style>
-
-
-<!-- ═══ PANTALLA DE BAN EN TIEMPO REAL ═══ -->
-<div id="ban-screen" style="
-  display:none; position:fixed; inset:0; z-index:999999;
-  background:#06040f; align-items:center; justify-content:center;
-  padding:20px; flex-direction:column;
-">
-  <div style="
-    background:#0d0a1a; border:2px solid rgba(255,68,68,0.4);
-    border-radius:16px; padding:48px 40px; max-width:480px; width:100%;
-    text-align:center; box-shadow:0 0 60px rgba(255,68,68,0.12);
-    animation:popInBan .5s cubic-bezier(.34,1.56,.64,1) forwards;
-  ">
-    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
-    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;
-      letter-spacing:3px;color:#ff4444;text-transform:uppercase;margin-bottom:16px;
-      text-shadow:0 0 20px rgba(255,68,68,0.5);">
-      Cuenta Suspendida
-    </h2>
-    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:12px;">
-      Tu cuenta ha sido suspendida por un administrador.
-    </p>
-    <div id="ban-reason-rt" style="
-      font-family:'Exo 2',sans-serif;color:#ff9966;font-size:.85rem;
-      background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);
-      border-radius:8px;padding:12px 16px;margin-bottom:24px;line-height:1.7;
-      display:none;
-    "></div>
-    <p style="font-family:'Exo 2',sans-serif;color:#666;font-size:.82rem;line-height:1.7;margin-bottom:24px;">
-      Si crees que es un error, abre un ticket en nuestro Discord o contacta un administrador para apelar.
-    </p>
-    <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="
-      display:inline-flex;align-items:center;gap:8px;
-      background:#7A1FEE;color:#000;text-decoration:none;
-      font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;
-      letter-spacing:2px;padding:13px 28px;border-radius:6px;
-      text-transform:uppercase;box-shadow:0 4px 18px rgba(122,31,238,.35);
-      transition:all .2s;
-    " onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
-      🎮 Abrir Discord
-    </a>
-  </div>
-</div>
-<style>
-@keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
-</style>
-
-<script type="module">
-/* ── REAL-TIME BAN LISTENER ── */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-(function(){
-  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
-  const app2 = initializeApp(cfg, 'ban-listener');
-  const auth2 = getAuth(app2);
-  const db2   = getFirestore(app2);
-  let unsub = null;
-  onAuthStateChanged(auth2, user => {
-    if (unsub) unsub();
-    if (!user) return;
-    unsub = onSnapshot(doc(db2,'users',user.uid), snap => {
-      if (!snap.exists()) return;
-      const data = snap.data();
-      if (data.banned) {
-        const screen = document.getElementById('ban-screen');
-        if (screen) {
-          screen.style.display = 'flex';
-          if (data.banReason) {
-            const el = document.getElementById('ban-reason-rt');
-            if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
-          }
-        }
-      }
-    });
-  });
-})();
-</script>
-
-</body>
-</html>
-
-
-
-

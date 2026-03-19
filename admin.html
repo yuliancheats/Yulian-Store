@@ -178,6 +178,30 @@
 
     @media (max-width:1024px) { .stat-grid { grid-template-columns:repeat(2,1fr); } }
     @media (max-width:768px) { .sidebar { display:none; } .main { margin-left:0;padding:20px; } }
+
+    /* ══ AVISOS PANEL CSS ══ */
+    .aviso-form-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px;position:relative;overflow:hidden}
+    .aviso-form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#FFB800,transparent)}
+    .aviso-form-title{font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:3px;color:#FFB800;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:8px}
+    .aviso-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+    .aviso-form-group{display:flex;flex-direction:column;gap:6px}
+    .aviso-form-full{grid-column:1/-1}
+    .aviso-form-label{font-family:var(--font-d);font-size:.52rem;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
+    .aviso-form-input,.aviso-form-select,.aviso-form-textarea{background:var(--card);border:1.5px solid rgba(255,255,255,.07);border-radius:7px;padding:10px 14px;color:#fff;font-family:var(--font-b);font-size:.88rem;outline:none;transition:border-color .2s,box-shadow .2s;width:100%}
+    .aviso-form-input:focus,.aviso-form-select:focus,.aviso-form-textarea:focus{border-color:#FFB800;box-shadow:0 0 8px rgba(255,184,0,.15)}
+    .aviso-form-select option{background:#111}
+    .aviso-form-textarea{resize:vertical;min-height:80px}
+    .btn-send-aviso{background:linear-gradient(135deg,#b8860b,#FFB800);color:#000;border:none;padding:12px 28px;border-radius:7px;font-family:var(--font-d);font-weight:700;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s;box-shadow:0 4px 16px rgba(255,184,0,.25);display:flex;align-items:center;gap:8px}
+    .btn-send-aviso:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,184,0,.4)}
+    .btn-send-aviso:disabled{opacity:.4;transform:none}
+    .aviso-send-msg{font-family:var(--font-b);font-size:.8rem;padding:8px 14px;border-radius:6px;margin-top:10px;display:none}
+    .aviso-send-msg.ok{background:rgba(77,255,145,.08);border:1px solid rgba(77,255,145,.2);color:#4dff91;display:block}
+    .aviso-send-msg.err{background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.2);color:#ff6868;display:block}
+    .resp-badge{font-family:var(--font-d);font-size:.48rem;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;font-weight:700;display:inline-block}
+    .resp-badge.accept{background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.25);color:#4dff91}
+    .resp-badge.reject{background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.25);color:#ff6868}
+    .resp-badge.pendiente{background:rgba(255,184,0,.08);border:1px solid rgba(255,184,0,.2);color:#FFB800}
+
   </style>
 </head>
 <body>
@@ -208,6 +232,7 @@
     <div class="sidebar-section">Licencias</div>
     <div class="nav-item" onclick="showPanel('claves',this)"><span class="nav-icon">🔑</span> Claves<span class="nav-badge" id="badge-claves">—</span></div>
     <div class="sidebar-section">Moderación</div>
+    <div class="nav-item" onclick="showPanel('avisos',this)"><span class="nav-icon">⚠️</span> Avisos<span class="nav-badge" id="badge-avisos">0</span></div>
     <div class="nav-item" onclick="showPanel('baneados',this)"><span class="nav-icon">🚫</span> Baneados<span class="nav-badge" id="badge-baneados">—</span></div>
     <div class="nav-item" onclick="showPanel('resellers',this)"><span class="nav-icon">⭐</span> Resellers<span class="nav-badge" id="badge-resellers">—</span></div>
     <div class="sidebar-section">Sistema</div>
@@ -328,6 +353,68 @@
         </table>
       </div>
     </div>
+
+
+    <!-- ══ AVISOS ══ -->
+    <div class="panel" id="panel-avisos">
+      <div class="page-header">
+        <div>
+          <div class="page-title">AVI<span>SOS</span></div>
+          <div class="page-sub">Envía advertencias a usuarios en tiempo real</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="loadAvisos()">🔄 Actualizar</button>
+      </div>
+
+      <!-- FORM: Enviar aviso -->
+      <div class="aviso-form-card">
+        <div class="aviso-form-title">⚠️ Enviar Nuevo Aviso</div>
+        <div class="aviso-form-grid">
+          <div class="aviso-form-group aviso-form-full">
+            <div class="aviso-form-label">Destinatario</div>
+            <select class="aviso-form-select" id="aviso-uid-sel">
+              <option value="">— Selecciona un usuario —</option>
+            </select>
+          </div>
+          <div class="aviso-form-group aviso-form-full">
+            <div class="aviso-form-label">Título del aviso</div>
+            <input type="text" class="aviso-form-input" id="aviso-titulo-inp" placeholder="Ej: Nombre de usuario inapropiado" maxlength="80">
+          </div>
+          <div class="aviso-form-group aviso-form-full">
+            <div class="aviso-form-label">Mensaje</div>
+            <textarea class="aviso-form-textarea" id="aviso-mensaje-inp" placeholder="Ej: El nombre que tienes actualmente no cumple con las normas de la comunidad. Te pedimos que lo cambies lo antes posible para evitar acciones adicionales."></textarea>
+          </div>
+          <div class="aviso-form-group">
+            <div class="aviso-form-label">Texto botón — Aceptar</div>
+            <input type="text" class="aviso-form-input" id="aviso-btn-ok" value="✅ Entendido, lo corregiré" maxlength="50">
+          </div>
+          <div class="aviso-form-group">
+            <div class="aviso-form-label">Texto botón — Rechazar</div>
+            <input type="text" class="aviso-form-input" id="aviso-btn-no" value="✖ No lo haré" maxlength="50">
+          </div>
+        </div>
+        <button class="btn-send-aviso" onclick="enviarAviso()">📤 ENVIAR AVISO AL USUARIO</button>
+        <div class="aviso-send-msg" id="aviso-send-msg"></div>
+      </div>
+
+      <!-- TABLA: Historial de respuestas -->
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">📋 Historial de Respuestas</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Usuario</th><th>Título del Aviso</th>
+              <th>Respuesta</th><th>Estado</th><th>Fecha Envío</th><th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="avisos-tbody">
+            <tr class="loading-row"><td colspan="7"><span class="spinner"></span> Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
 
     <!-- ═══ PANEL: BANEADOS ═══ -->
     <div class="panel" id="panel-baneados">
