@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YULIAN STORE — Recargar Saldo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --o:#7A1FEE;--ob:#8B2FFF;--od:#5a0fcc;
+      --dark:#080808;--d2:#0e0e0e;--card:#111;--c2:#161616;--c3:#1c1c1c;
+      --t:#fff;--tm:#777;--border:rgba(122,31,238,.18);
+      --neon:0 0 8px #7A1FEE,0 0 20px #8B2FFF,0 0 40px rgba(122,31,238,.5);
+      --green:#4dff91;--gg:0 0 8px rgba(77,255,145,.6);
+      --fd:'Orbitron',sans-serif;--fb:'Exo 2',sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--dark);color:var(--t);font-family:var(--fb);min-height:100vh;overflow-x:hidden}
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-track{background:var(--d2)}
+    ::-webkit-scrollbar-thumb{background:var(--od);border-radius:3px}
+    *{cursor:none!important}
+
+    /* ── CURSOR ── */
+    #cdot{position:fixed;top:0;left:0;width:10px;height:10px;background:#111;border-radius:50%;
+      pointer-events:none;z-index:999999;transform:translate(-50%,-50%);
+      box-shadow:0 0 0 2.5px rgba(139,47,255,.95),0 0 14px rgba(122,31,238,.5)}
+    #cring{position:fixed;top:0;left:0;width:38px;height:38px;
+      border:2.5px solid rgba(139,47,255,.8);border-radius:50%;pointer-events:none;z-index:999998;
+      transform:translate(-50%,-50%);box-shadow:0 0 14px rgba(122,31,238,.3);
+      transition:width .18s,height .18s,border-color .18s}
+
+    /* ── NAV ── */
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+      padding:14px 48px;background:rgba(8,8,8,.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+    .logo{font-family:var(--fd);font-size:1.1rem;font-weight:900;letter-spacing:3px;
+      text-decoration:none;color:var(--t);text-shadow:var(--neon)}
+    .logo span{color:var(--o)}
+    .nav-r{display:flex;align-items:center;gap:12px}
+    .nbtn{background:transparent;color:var(--o);border:1.5px solid var(--o);padding:7px 16px;
+      border-radius:3px;font-family:var(--fd);font-size:.58rem;letter-spacing:2px;
+      text-decoration:none;display:inline-block;text-transform:uppercase;transition:all .2s;cursor:pointer!important}
+    .nbtn:hover{background:var(--o);color:#000}
+    .nbtn-g{border-color:rgba(255,255,255,.12);color:var(--tm)}
+    .nbtn-g:hover{border-color:var(--o);color:var(--o);background:transparent}
+
+    /* ── MAIN ── */
+    main{max-width:900px;margin:0 auto;padding:48px 24px 80px}
+
+    /* ── PAGE HEADER ── */
+    .page-header{text-align:center;margin-bottom:48px}
+    .page-tag{display:inline-block;font-family:var(--fd);font-size:.6rem;letter-spacing:4px;
+      color:var(--o);border-bottom:1px solid var(--o);padding-bottom:4px;margin-bottom:16px;
+      text-shadow:0 0 8px var(--o)}
+    .page-title{font-family:var(--fd);font-size:clamp(1.6rem,4vw,2.8rem);font-weight:900;
+      letter-spacing:3px;text-transform:uppercase;color:#fff;margin-bottom:12px}
+    .page-sub{font-family:var(--fb);color:var(--tm);font-size:.95rem;line-height:1.7;max-width:500px;margin:0 auto}
+
+    /* ── SALDO ACTUAL (si está logueado) ── */
+    .saldo-actual{
+      background:linear-gradient(135deg,rgba(77,255,145,.05),rgba(77,255,145,.02));
+      border:1px solid rgba(77,255,145,.2);border-radius:10px;
+      padding:20px 28px;margin-bottom:36px;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    }
+    .saldo-actual-label{font-family:var(--fd);font-size:.58rem;letter-spacing:3px;color:var(--tm);text-transform:uppercase}
+    .saldo-actual-val{font-family:var(--fd);font-size:1.8rem;font-weight:900;color:var(--green);text-shadow:var(--gg);margin-top:4px}
+    .saldo-actual-info{font-family:var(--fb);font-size:.82rem;color:var(--tm);margin-top:4px}
+    #saldo-box{display:none}
+
+    /* ── MONTOS ── */
+    .sec-title{font-family:var(--fd);font-size:.7rem;letter-spacing:3px;color:var(--o);
+      text-transform:uppercase;text-shadow:0 0 6px rgba(122,31,238,.4);
+      margin-bottom:20px;display:flex;align-items:center;gap:10px}
+    .sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+
+    .montos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:36px}
+    .monto-btn{
+      background:var(--c2);border:1.5px solid rgba(255,255,255,.07);border-radius:8px;
+      padding:20px 12px;text-align:center;transition:all .25s;cursor:pointer!important;
+      position:relative;overflow:hidden;
+    }
+    .monto-btn:hover,.monto-btn.selected{
+      border-color:var(--o);background:rgba(122,31,238,.08);
+      box-shadow:0 0 20px rgba(122,31,238,.15);transform:translateY(-3px);
+    }
+    .monto-btn.selected::before{
+      content:'✓';position:absolute;top:8px;right:10px;
+      font-size:.7rem;color:var(--o);font-family:var(--fd);
+    }
+    .monto-usd{font-family:var(--fd);font-size:1.4rem;font-weight:900;color:var(--o);
+      text-shadow:0 0 10px rgba(122,31,238,.4);margin-bottom:4px}
+    .monto-label{font-family:var(--fb);font-size:.75rem;color:var(--tm)}
+
+    .monto-custom{
+      background:var(--c2);border:1.5px solid rgba(255,255,255,.07);border-radius:8px;
+      padding:16px 20px;margin-bottom:36px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    }
+    .monto-custom label{font-family:var(--fd);font-size:.58rem;letter-spacing:2px;color:var(--tm);
+      text-transform:uppercase;white-space:nowrap}
+    .monto-custom input{
+      flex:1;min-width:120px;background:transparent;border:none;border-bottom:1.5px solid rgba(122,31,238,.3);
+      padding:8px 4px;color:#fff;font-family:var(--fd);font-size:1.1rem;outline:none;
+      transition:border-color .2s;
+    }
+    .monto-custom input:focus{border-bottom-color:var(--o)}
+    .monto-custom input::placeholder{color:rgba(255,255,255,.15);font-size:.9rem}
+
+    /* ── MÉTODOS DE PAGO ── */
+    .metodos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:36px}
+
+    .metodo-card{
+      background:var(--c2);border:1.5px solid rgba(255,255,255,.07);border-radius:10px;
+      padding:24px 22px;transition:all .25s;cursor:pointer!important;position:relative;
+    }
+    .metodo-card:hover,.metodo-card.selected{
+      border-color:var(--o);box-shadow:0 0 24px rgba(122,31,238,.12);
+    }
+    .metodo-card.selected{background:rgba(122,31,238,.06)}
+    .metodo-card.selected::after{
+      content:'✓ SELECCIONADO';position:absolute;top:12px;right:12px;
+      font-family:var(--fd);font-size:.45rem;letter-spacing:1.5px;
+      color:var(--o);text-shadow:0 0 6px rgba(122,31,238,.4);
+    }
+    .metodo-card.disabled{opacity:.4;pointer-events:none}
+
+    .metodo-icon{font-size:2rem;margin-bottom:12px}
+    .metodo-nombre{font-family:var(--fd);font-size:.75rem;font-weight:700;letter-spacing:2px;
+      color:#fff;text-transform:uppercase;margin-bottom:6px}
+    .metodo-desc{font-family:var(--fb);font-size:.82rem;color:var(--tm);line-height:1.6}
+    .metodo-badge{display:inline-block;font-family:var(--fd);font-size:.45rem;letter-spacing:1.5px;
+      padding:3px 8px;border-radius:3px;margin-top:8px;text-transform:uppercase}
+    .badge-disponible{background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.3);color:var(--green)}
+    .badge-pronto{background:rgba(255,200,0,.1);border:1px solid rgba(255,200,0,.3);color:#ffc800}
+
+    /* ── INSTRUCCIONES TROPIPAY ── */
+    #instrucciones-tropipay,#instrucciones-binance,#instrucciones-banco{display:none}
+
+    .instruccion-box{
+      background:var(--card);border:1px solid var(--border);border-radius:10px;
+      padding:28px 28px;margin-bottom:28px;position:relative;overflow:hidden;
+    }
+    .instruccion-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent,var(--o),transparent)}
+
+    .inst-title{font-family:var(--fd);font-size:.7rem;letter-spacing:2px;color:var(--o);
+      text-transform:uppercase;margin-bottom:16px;text-shadow:0 0 6px rgba(122,31,238,.4)}
+
+    /* TROPIPAY MONTOS LINKS */
+    .tropipay-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:20px}
+    .tropipay-link{
+      display:flex;flex-direction:column;align-items:center;gap:4px;
+      background:rgba(122,31,238,.08);border:1px solid rgba(122,31,238,.25);
+      border-radius:8px;padding:16px 12px;text-decoration:none;
+      transition:all .25s;
+    }
+    .tropipay-link:hover{background:rgba(122,31,238,.15);border-color:var(--o);
+      box-shadow:0 0 16px rgba(122,31,238,.2);transform:translateY(-2px)}
+    .tropipay-link-amt{font-family:var(--fd);font-size:1.1rem;font-weight:900;color:var(--o);
+      text-shadow:0 0 8px rgba(122,31,238,.4)}
+    .tropipay-link-label{font-family:var(--fb);font-size:.72rem;color:var(--tm)}
+    .tropipay-placeholder{
+      background:rgba(122,31,238,.05);border:1.5px dashed rgba(122,31,238,.25);
+      border-radius:8px;padding:24px;text-align:center;margin-bottom:16px;
+    }
+    .tropipay-placeholder p{font-family:var(--fb);font-size:.88rem;color:var(--tm);line-height:1.7}
+    .tropipay-placeholder strong{color:var(--o);font-family:var(--fd);font-size:.7rem;letter-spacing:1px}
+
+    /* PASOS */
+    .pasos{list-style:none;margin-bottom:20px}
+    .pasos li{display:flex;gap:14px;align-items:flex-start;padding:10px 0;
+      border-bottom:1px solid rgba(255,255,255,.04);font-family:var(--fb);
+      font-size:.88rem;color:var(--tm);line-height:1.6}
+    .pasos li:last-child{border-bottom:none}
+    .paso-num{width:24px;height:24px;border-radius:50%;background:rgba(122,31,238,.15);
+      border:1px solid rgba(122,31,238,.3);display:flex;align-items:center;justify-content:center;
+      font-family:var(--fd);font-size:.55rem;color:var(--o);flex-shrink:0;margin-top:2px}
+
+    /* COMPROBANTE */
+    .comprobante-box{margin-top:20px}
+    .comprobante-label{font-family:var(--fd);font-size:.58rem;letter-spacing:2px;color:var(--tm);
+      text-transform:uppercase;margin-bottom:8px;display:block}
+    .comprobante-input{
+      width:100%;background:var(--c2);border:1px solid rgba(255,255,255,.08);
+      border-radius:6px;padding:12px 16px;color:#fff;font-family:var(--fb);
+      font-size:.9rem;outline:none;resize:vertical;min-height:80px;
+      transition:border-color .2s;font-size:.88rem;
+    }
+    .comprobante-input:focus{border-color:var(--o)}
+    .comprobante-input::placeholder{color:rgba(255,255,255,.2)}
+
+    /* BTN ENVIAR */
+    .btn-enviar{
+      width:100%;background:var(--o);color:#000;border:none;
+      padding:15px;border-radius:6px;font-family:var(--fd);font-weight:700;
+      font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;
+      cursor:pointer!important;transition:all .25s;margin-top:16px;
+      box-shadow:0 4px 20px rgba(122,31,238,.3);
+    }
+    .btn-enviar:hover{background:var(--ob);box-shadow:var(--neon);transform:translateY(-2px)}
+    .btn-enviar:disabled{opacity:.5;cursor:not-allowed!important;transform:none}
+
+    /* MSG */
+    .msg-box{padding:12px 16px;border-radius:6px;font-family:var(--fb);font-size:.88rem;
+      margin-top:14px;display:none;line-height:1.6}
+    .msg-box.success{background:rgba(77,255,145,.08);border:1px solid rgba(77,255,145,.25);color:var(--green);display:block}
+    .msg-box.error{background:rgba(255,68,68,.08);border:1px solid rgba(255,68,68,.25);color:#ff6666;display:block}
+    .msg-box.info{background:rgba(122,31,238,.08);border:1px solid rgba(122,31,238,.25);color:#bb88ff;display:block}
+
+    /* DISCORD BOX */
+    .discord-box{
+      background:linear-gradient(135deg,rgba(88,101,242,.08),rgba(88,101,242,.03));
+      border:1px solid rgba(88,101,242,.25);border-radius:10px;
+      padding:24px 28px;margin-bottom:40px;
+      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
+    }
+    .discord-info{}
+    .discord-title{font-family:var(--fd);font-size:.7rem;letter-spacing:2px;color:#7289da;
+      text-transform:uppercase;margin-bottom:6px}
+    .discord-desc{font-family:var(--fb);font-size:.85rem;color:var(--tm);line-height:1.6}
+    .btn-discord{
+      display:inline-flex;align-items:center;gap:8px;
+      background:#5865F2;color:#fff;text-decoration:none;
+      font-family:var(--fd);font-weight:700;font-size:.6rem;
+      letter-spacing:2px;padding:11px 22px;border-radius:6px;
+      text-transform:uppercase;transition:all .2s;white-space:nowrap;
+    }
+    .btn-discord:hover{background:#4752c4;box-shadow:0 4px 18px rgba(88,101,242,.35)}
+
+    /* FOOTER */
+    footer{background:var(--d2);border-top:1px solid var(--border);
+      padding:28px 48px;display:flex;justify-content:space-between;
+      align-items:center;flex-wrap:wrap;gap:16px}
+    .flogo{font-family:var(--fd);font-size:1rem;font-weight:900;letter-spacing:3px;text-shadow:0 0 8px rgba(122,31,238,.4)}
+    .flogo span{color:var(--o)}
+    footer p{font-family:var(--fb);color:var(--tm);font-size:.8rem}
+    footer a{color:var(--o);font-family:var(--fd);font-size:.58rem;letter-spacing:1.5px;text-decoration:none}
+
+    /* BAN SCREEN */
+    #ban-screen{display:none;position:fixed;inset:0;z-index:999999;
+      background:#06040f;align-items:center;justify-content:center;padding:20px;flex-direction:column}
+    @keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+
+    /* SPINNER */
+    .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.3);
+      border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;
+      margin-right:8px;vertical-align:middle}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    @media(max-width:600px){
+      nav{padding:14px 20px}
+      main{padding:32px 16px 60px}
+      footer{flex-direction:column;text-align:center}
+    }
+  </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cdot"></div>
+<div id="cring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo"><span>YULIAN</span> STORE</a>
+  <div class="nav-r">
+    <span id="nav-nombre" style="font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:2px;color:var(--o);text-shadow:0 0 8px var(--o);display:none"></span>
+    <span id="nav-saldo" style="font-family:'Orbitron',sans-serif;font-size:.65rem;letter-spacing:1px;color:var(--green);text-shadow:var(--gg);background:rgba(77,255,145,.07);border:1px solid rgba(77,255,145,.18);padding:5px 12px;border-radius:3px;display:none">$0.00</span>
+    <a href="perfil.html" class="nbtn" id="btn-perfil" style="display:none">MI PERFIL</a>
+    <a href="login.html" class="nbtn" id="btn-acceder">ACCEDER</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="page-tag">💳 RECARGAR SALDO</div>
+    <h1 class="page-title">Añade Saldo a tu Cuenta</h1>
+    <p class="page-sub">Elige el monto que deseas recargar y el método de pago. Tu saldo se acreditará después de confirmar el pago.</p>
+  </div>
+
+  <!-- SALDO ACTUAL (visible si está logueado) -->
+  <div class="saldo-actual" id="saldo-box">
+    <div>
+      <div class="saldo-actual-label">Tu saldo actual</div>
+      <div class="saldo-actual-val" id="saldo-display">$0.00</div>
+      <div class="saldo-actual-info">El nuevo saldo se añadirá después de verificar el pago</div>
+    </div>
+    <a href="perfil.html" class="nbtn">Ver mi perfil →</a>
+  </div>
+
+  <!-- PASO 1: MONTO -->
+  <div class="sec-title">① Elige el monto a recargar</div>
+
+  <div class="montos-grid">
+    <div class="monto-btn" onclick="seleccionarMonto(5, this)">
+      <div class="monto-usd">$5</div>
+      <div class="monto-label">Básico</div>
+    </div>
+    <div class="monto-btn" onclick="seleccionarMonto(10, this)">
+      <div class="monto-usd">$10</div>
+      <div class="monto-label">Estándar</div>
+    </div>
+    <div class="monto-btn" onclick="seleccionarMonto(20, this)">
+      <div class="monto-usd">$20</div>
+      <div class="monto-label">Popular ⭐</div>
+    </div>
+    <div class="monto-btn" onclick="seleccionarMonto(35, this)">
+      <div class="monto-usd">$35</div>
+      <div class="monto-label">Pro</div>
+    </div>
+    <div class="monto-btn" onclick="seleccionarMonto(50, this)">
+      <div class="monto-usd">$50</div>
+      <div class="monto-label">Premium</div>
+    </div>
+    <div class="monto-btn" onclick="seleccionarMonto(100, this)">
+      <div class="monto-usd">$100</div>
+      <div class="monto-label">VIP</div>
+    </div>
+  </div>
+
+  <div class="monto-custom">
+    <label>Otro monto:</label>
+    <input type="number" id="monto-custom-input" placeholder="Ej: 15" min="1" max="500"
+      oninput="seleccionarMontoCustom(this.value)">
+    <span style="font-family:'Orbitron',sans-serif;font-size:.65rem;color:var(--tm)">USD</span>
+  </div>
+
+  <!-- PASO 2: MÉTODO -->
+  <div class="sec-title">② Elige el método de pago</div>
+
+  <div class="metodos-grid">
+
+    <!-- TROPIPAY -->
+    <div class="metodo-card" id="card-tropipay" onclick="seleccionarMetodo('tropipay')">
+      <div class="metodo-icon">💳</div>
+      <div class="metodo-nombre">Tropipay</div>
+      <div class="metodo-desc">Tarjeta de crédito o débito (Visa, Mastercard). Cualquier país.</div>
+      <span class="metodo-badge badge-disponible">✓ Disponible</span>
+    </div>
+
+    <!-- BINANCE -->
+    <div class="metodo-card" id="card-binance" onclick="seleccionarMetodo('binance')">
+      <div class="metodo-icon">🔶</div>
+      <div class="metodo-nombre">Binance Pay</div>
+      <div class="metodo-desc">Pago en USDT u otras criptomonedas. Rápido y sin comisión.</div>
+      <span class="metodo-badge badge-disponible">✓ Disponible</span>
+    </div>
+
+    <!-- TRANSFERENCIA -->
+    <div class="metodo-card" id="card-banco" onclick="seleccionarMetodo('banco')">
+      <div class="metodo-icon">🏦</div>
+      <div class="metodo-nombre">Transferencia RD</div>
+      <div class="metodo-desc">Transferencia bancaria local desde República Dominicana.</div>
+      <span class="metodo-badge badge-disponible">✓ Disponible</span>
+    </div>
+
+  </div>
+
+  <!-- INSTRUCCIONES TROPIPAY -->
+  <div id="instrucciones-tropipay">
+    <div class="instruccion-box">
+      <div class="inst-title">💳 Pagar con Tropipay</div>
+
+      <!-- PLACEHOLDER mientras no hay links reales -->
+      <div class="tropipay-placeholder">
+        <div style="font-size:2rem;margin-bottom:12px">⏳</div>
+        <p>Los links de pago de Tropipay estarán disponibles muy pronto.<br>
+        La cuenta está en proceso de verificación.<br><br>
+        <strong>Mientras tanto, contáctanos por Discord</strong><br>
+        y te enviamos el link de pago directamente.</p>
+      </div>
+
+      <!-- ESTO SE ACTIVA cuando tengas los links — borra el placeholder de arriba y descomenta esto:
+      <div class="tropipay-btns" id="tropipay-links">
+        <a class="tropipay-link" href="TU_LINK_TROPIPAY_5" target="_blank">
+          <span class="tropipay-link-amt">$5</span>
+          <span class="tropipay-link-label">Pagar ahora →</span>
+        </a>
+        <a class="tropipay-link" href="TU_LINK_TROPIPAY_10" target="_blank">
+          <span class="tropipay-link-amt">$10</span>
+          <span class="tropipay-link-label">Pagar ahora →</span>
+        </a>
+        <a class="tropipay-link" href="TU_LINK_TROPIPAY_20" target="_blank">
+          <span class="tropipay-link-amt">$20</span>
+          <span class="tropipay-link-label">Pagar ahora →</span>
+        </a>
+        <a class="tropipay-link" href="TU_LINK_TROPIPAY_35" target="_blank">
+          <span class="tropipay-link-amt">$35</span>
+          <span class="tropipay-link-label">Pagar ahora →</span>
+        </a>
+        <a class="tropipay-link" href="TU_LINK_TROPIPAY_50" target="_blank">
+          <span class="tropipay-link-amt">$50</span>
+          <span class="tropipay-link-label">Pagar ahora →</span>
+        </a>
+        <a class="tropipay-link" href="TU_LINK_TROPIPAY_100" target="_blank">
+          <span class="tropipay-link-amt">$100</span>
+          <span class="tropipay-link-label">Pagar ahora →</span>
+        </a>
+      </div>
+      -->
+
+      <ul class="pasos">
+        <li><span class="paso-num">1</span>Haz clic en el botón de monto que deseas pagar</li>
+        <li><span class="paso-num">2</span>Ingresa los datos de tu tarjeta Visa o Mastercard (no necesitas cuenta Tropipay)</li>
+        <li><span class="paso-num">3</span>Completa el pago y guarda el comprobante o número de transacción</li>
+        <li><span class="paso-num">4</span>Escribe el número de transacción abajo y envía tu solicitud</li>
+      </ul>
+
+      <div class="comprobante-box">
+        <label class="comprobante-label">Número de transacción / Comprobante</label>
+        <textarea class="comprobante-input" id="comprobante-tropipay"
+          placeholder="Ej: TRP-2024-XXXXXXX o captura del comprobante de pago..."></textarea>
+        <button class="btn-enviar" onclick="enviarSolicitud('tropipay')" id="btn-enviar-tropipay">
+          ⚡ ENVIAR SOLICITUD DE RECARGA
+        </button>
+        <div class="msg-box" id="msg-tropipay"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTRUCCIONES BINANCE -->
+  <div id="instrucciones-binance">
+    <div class="instruccion-box">
+      <div class="inst-title">🔶 Pagar con Binance Pay</div>
+
+      <div style="background:var(--c2);border:1px solid rgba(255,200,0,.15);border-radius:8px;
+        padding:20px 22px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+        <div style="text-align:center;flex-shrink:0">
+          <!-- QR placeholder — reemplaza con tu QR real de Binance -->
+          <div style="width:100px;height:100px;background:rgba(255,200,0,.05);
+            border:2px dashed rgba(255,200,0,.2);border-radius:8px;
+            display:flex;align-items:center;justify-content:center;
+            font-size:2rem;">🔶</div>
+          <div style="font-family:'Orbitron',sans-serif;font-size:.5rem;
+            color:rgba(255,200,0,.5);margin-top:6px;letter-spacing:1px">QR PRÓXIMAMENTE</div>
+        </div>
+        <div style="flex:1">
+          <div style="font-family:'Orbitron',sans-serif;font-size:.62rem;letter-spacing:2px;
+            color:rgba(255,200,0,.8);text-transform:uppercase;margin-bottom:8px">ID de Binance Pay</div>
+          <div id="binance-id" style="font-family:'Orbitron',sans-serif;font-size:1.1rem;
+            font-weight:900;color:#ffc800;text-shadow:0 0 10px rgba(255,200,0,.4);
+            letter-spacing:2px;margin-bottom:8px">TU_BINANCE_ID_AQUI</div>
+          <div style="font-family:'Exo 2',sans-serif;font-size:.8rem;color:var(--tm);line-height:1.6">
+            Envía el pago exacto en <strong style="color:#ffc800">USDT</strong> a este ID.<br>
+            También puedes escanear el QR desde la app de Binance.
+          </div>
+        </div>
+      </div>
+
+      <ul class="pasos">
+        <li><span class="paso-num">1</span>Abre tu app de Binance → "Pagar" → "Enviar"</li>
+        <li><span class="paso-num">2</span>Busca el ID de Binance Pay o escanea el QR</li>
+        <li><span class="paso-num">3</span>Envía el monto exacto en USDT</li>
+        <li><span class="paso-num">4</span>Copia el ID de transacción y pégalo abajo</li>
+      </ul>
+
+      <div class="comprobante-box">
+        <label class="comprobante-label">ID de transacción de Binance</label>
+        <textarea class="comprobante-input" id="comprobante-binance"
+          placeholder="Ej: 123456789012345678 (lo encuentras en el historial de pagos de Binance)"></textarea>
+        <button class="btn-enviar" onclick="enviarSolicitud('binance')" id="btn-enviar-binance">
+          ⚡ ENVIAR SOLICITUD DE RECARGA
+        </button>
+        <div class="msg-box" id="msg-binance"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTRUCCIONES BANCO -->
+  <div id="instrucciones-banco">
+    <div class="instruccion-box">
+      <div class="inst-title">🏦 Transferencia Bancaria RD</div>
+
+      <div style="background:var(--c2);border:1px solid rgba(255,255,255,.06);border-radius:8px;
+        padding:20px 22px;margin-bottom:20px;">
+        <div style="font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:2px;
+          color:var(--tm);text-transform:uppercase;margin-bottom:16px">Datos para la transferencia</div>
+        <div style="display:grid;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
+            padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)">
+            <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:var(--tm)">Banco</span>
+            <span style="font-family:'Orbitron',sans-serif;font-size:.72rem;color:#fff;letter-spacing:1px" id="banco-nombre">BANCO_AQUI</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
+            padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)">
+            <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:var(--tm)">Nombre</span>
+            <span style="font-family:'Orbitron',sans-serif;font-size:.72rem;color:#fff;letter-spacing:1px" id="banco-titular">TU_NOMBRE_AQUI</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
+            padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)">
+            <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:var(--tm)">Cuenta</span>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-family:'Orbitron',sans-serif;font-size:.72rem;color:var(--o);
+                text-shadow:0 0 6px rgba(122,31,238,.4);letter-spacing:1px" id="banco-cuenta">NUMERO_CUENTA_AQUI</span>
+              <button onclick="copiarCuenta()" style="background:rgba(122,31,238,.1);border:1px solid rgba(122,31,238,.25);
+                color:var(--o);padding:4px 10px;border-radius:3px;font-family:'Orbitron',sans-serif;
+                font-size:.45rem;letter-spacing:1px;cursor:pointer!important;transition:all .2s"
+                onmouseover="this.style.background='rgba(122,31,238,.2)'"
+                onmouseout="this.style.background='rgba(122,31,238,.1)'">📋 COPIAR</button>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 0">
+            <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:var(--tm)">Concepto</span>
+            <span style="font-family:'Orbitron',sans-serif;font-size:.65rem;color:var(--green);
+              text-shadow:var(--gg);letter-spacing:1px" id="banco-concepto">RECARGA YULIAN STORE</span>
+          </div>
+        </div>
+      </div>
+
+      <ul class="pasos">
+        <li><span class="paso-num">1</span>Transfiere el monto exacto a la cuenta indicada</li>
+        <li><span class="paso-num">2</span>Anota el número de confirmación de la transferencia</li>
+        <li><span class="paso-num">3</span>Escribe tu nombre completo y número de confirmación abajo</li>
+        <li><span class="paso-num">4</span>Envía la solicitud — procesamos en menos de 24 horas</li>
+      </ul>
+
+      <div class="comprobante-box">
+        <label class="comprobante-label">Número de confirmación de transferencia</label>
+        <textarea class="comprobante-input" id="comprobante-banco"
+          placeholder="Ej: Transferencia #123456 - Nombre: Juan Pérez - Banco Popular"></textarea>
+        <button class="btn-enviar" onclick="enviarSolicitud('banco')" id="btn-enviar-banco">
+          ⚡ ENVIAR SOLICITUD DE RECARGA
+        </button>
+        <div class="msg-box" id="msg-banco"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCORD -->
+  <div class="discord-box">
+    <div class="discord-info">
+      <div class="discord-title">🎮 ¿Necesitas ayuda?</div>
+      <div class="discord-desc">Si tienes algún problema con tu recarga o quieres confirmar tu pago directamente, contáctanos por Discord y te atendemos al momento.</div>
+    </div>
+    <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" class="btn-discord">
+      💬 ABRIR DISCORD
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="flogo"><span>YULIAN</span> STORE</div>
+  <p>© 2025 Yulian Store. Todos los derechos reservados.</p>
+  <a href="index.html">← Volver a la tienda</a>
+</footer>
+
+<!-- BAN SCREEN -->
+<div id="ban-screen" style="display:none;position:fixed;inset:0;z-index:999999;
+  background:#06040f;align-items:center;justify-content:center;padding:20px;flex-direction:column;">
+  <div style="background:#0d0a1a;border:2px solid rgba(255,68,68,0.4);border-radius:16px;
+    padding:48px 40px;max-width:480px;width:100%;text-align:center;
+    box-shadow:0 0 60px rgba(255,68,68,0.12);animation:popInBan .5s cubic-bezier(.34,1.56,.64,1) forwards;">
+    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
+    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;letter-spacing:3px;
+      color:#ff4444;text-transform:uppercase;margin-bottom:16px;text-shadow:0 0 20px rgba(255,68,68,0.5);">
+      Cuenta Suspendida</h2>
+    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:24px;">
+      Tu cuenta ha sido suspendida. Abre un ticket en Discord para apelar.</p>
+    <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="display:inline-flex;align-items:center;gap:8px;
+      background:#7A1FEE;color:#000;text-decoration:none;font-family:'Orbitron',sans-serif;font-weight:700;
+      font-size:.65rem;letter-spacing:2px;padding:13px 28px;border-radius:6px;text-transform:uppercase;">
+      🎮 Abrir Discord</a>
+  </div>
+</div>
+<style>@keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}</style>
+
+<script type="module">
+  import { initializeApp }                             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged }               from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc,
+           addDoc, collection, serverTimestamp }        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const cfg = {
+    apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",
+    authDomain:"yulian-store.firebaseapp.com",
+    projectId:"yulian-store",
+    storageBucket:"yulian-store.firebasestorage.app",
+    messagingSenderId:"372613089099",
+    appId:"1:372613089099:web:b70fae80818c73628f8ace"
+  };
+
+  const app  = initializeApp(cfg);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  let currentUser = null;
+  let currentUID  = null;
+
+  // ── AUTH STATE ──
+  onAuthStateChanged(auth, async (user) => {
+    currentUser = user;
+    if (user) {
+      currentUID = user.uid;
+      // Show user info in nav
+      const nombre = user.displayName || user.email.split('@')[0].toUpperCase();
+      document.getElementById('nav-nombre').textContent  = nombre;
+      document.getElementById('nav-nombre').style.display = 'inline';
+      document.getElementById('btn-perfil').style.display = 'inline-block';
+      document.getElementById('btn-acceder').style.display = 'none';
+
+      // Load saldo
+      try {
+        const snap = await getDoc(doc(db,'users',user.uid));
+        if (snap.exists()) {
+          const saldo = snap.data().saldo ?? 0;
+          document.getElementById('nav-saldo').textContent  = `$${saldo.toFixed(2)}`;
+          document.getElementById('nav-saldo').style.display = 'inline';
+          document.getElementById('saldo-display').textContent = `$${saldo.toFixed(2)}`;
+          document.getElementById('saldo-box').style.display   = 'flex';
+        }
+      } catch(e) { console.warn(e); }
+
+      // Ban check
+      const snapU = await getDoc(doc(db,'users',user.uid));
+      if (snapU.exists() && snapU.data().banned) {
+        const screen = document.getElementById('ban-screen');
+        if (screen) screen.style.display = 'flex';
+      }
+    }
+  });
+
+  // ── ENVIAR SOLICITUD ──
+  window.enviarSolicitud = async function(metodo) {
+    const monto = parseFloat(document.getElementById('monto-custom-input').value) || montoSeleccionado;
+    const comprobante = document.getElementById(`comprobante-${metodo}`).value.trim();
+    const btn = document.getElementById(`btn-enviar-${metodo}`);
+    const msg = document.getElementById(`msg-${metodo}`);
+
+    msg.className = 'msg-box';
+
+    if (!monto || monto <= 0) {
+      msg.className = 'msg-box error';
+      msg.textContent = '⚠️ Selecciona o ingresa el monto que deseas recargar.';
+      return;
+    }
+    if (!comprobante) {
+      msg.className = 'msg-box error';
+      msg.textContent = '⚠️ Por favor ingresa el número de transacción o comprobante.';
+      return;
+    }
+    if (!currentUser) {
+      msg.className = 'msg-box error';
+      msg.textContent = '⚠️ Debes iniciar sesión para enviar una solicitud de recarga.';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>ENVIANDO...';
+
+    try {
+      // Guardar solicitud en Firestore colección /recargas
+      await addDoc(collection(db, 'recargas'), {
+        uid:         currentUID,
+        nombre:      currentUser.displayName || '—',
+        email:       currentUser.email,
+        monto:       monto,
+        metodo:      metodo,
+        comprobante: comprobante,
+        estado:      'pendiente',
+        fecha:       serverTimestamp()
+      });
+
+      msg.className = 'msg-box success';
+      msg.textContent = `✅ ¡Solicitud enviada! Recibirás tu saldo de $${monto.toFixed(2)} en menos de 24 horas. Si tienes dudas contáctanos por Discord.`;
+      btn.textContent = '✓ SOLICITUD ENVIADA';
+      document.getElementById(`comprobante-${metodo}`).value = '';
+
+    } catch(e) {
+      msg.className = 'msg-box error';
+      msg.textContent = 'Error al enviar la solicitud. Intenta de nuevo o contáctanos por Discord.';
+      btn.disabled = false;
+      btn.textContent = '⚡ ENVIAR SOLICITUD DE RECARGA';
+      console.error(e);
+    }
+  };
+
+  // ── COPIAR CUENTA BANCO ──
+  window.copiarCuenta = function() {
+    const cuenta = document.getElementById('banco-cuenta').textContent;
+    navigator.clipboard.writeText(cuenta).then(() => {
+      const toast = document.createElement('div');
+      toast.textContent = '✓ Número copiado';
+      toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);' +
+        'background:#7A1FEE;color:#000;font-family:Orbitron,sans-serif;font-size:.6rem;' +
+        'letter-spacing:2px;padding:10px 20px;border-radius:6px;z-index:9999;' +
+        'box-shadow:0 4px 18px rgba(122,31,238,.4);animation:fadeInUp .3s ease';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2000);
+    });
+  };
+</script>
+
+<script>
+  // ── LÓGICA DE SELECCIÓN ──
+  let montoSeleccionado = 0;
+  let metodoSeleccionado = null;
+
+  function seleccionarMonto(monto, el) {
+    montoSeleccionado = monto;
+    document.querySelectorAll('.monto-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('monto-custom-input').value = monto;
+  }
+
+  function seleccionarMontoCustom(val) {
+    montoSeleccionado = parseFloat(val) || 0;
+    document.querySelectorAll('.monto-btn').forEach(b => b.classList.remove('selected'));
+  }
+
+  function seleccionarMetodo(metodo) {
+    metodoSeleccionado = metodo;
+
+    // Reset cards
+    document.querySelectorAll('.metodo-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById(`card-${metodo}`).classList.add('selected');
+
+    // Hide all instructions
+    document.getElementById('instrucciones-tropipay').style.display = 'none';
+    document.getElementById('instrucciones-binance').style.display  = 'none';
+    document.getElementById('instrucciones-banco').style.display    = 'none';
+
+    // Show selected
+    document.getElementById(`instrucciones-${metodo}`).style.display = 'block';
+
+    // Scroll to instructions
+    setTimeout(() => {
+      document.getElementById(`instrucciones-${metodo}`)
+        .scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+
+  // ── CURSOR ──
+  const dot  = document.getElementById('cdot');
+  const ring = document.getElementById('cring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; dot.style.left=mx+'px'; dot.style.top=my+'px'; });
+  (function loop(){ rx+=(mx-rx)*.1; ry+=(my-ry)*.1; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+  document.querySelectorAll('a,button,.monto-btn,.metodo-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { ring.style.width='52px'; ring.style.height='52px'; ring.style.borderColor='rgba(139,47,255,1)'; });
+    el.addEventListener('mouseleave', () => { ring.style.width='38px'; ring.style.height='38px'; ring.style.borderColor='rgba(139,47,255,.8)'; });
+  });
+
+  // Fade in up animation for toast
+  const s = document.createElement('style');
+  s.textContent = '@keyframes fadeInUp{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}';
+  document.head.appendChild(s);
+</script>
+
+</body>
+</html>
