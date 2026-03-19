@@ -1330,6 +1330,8 @@ let allHistorial = [];
     _avisoRapidoUID = uid;
     const el = document.getElementById('aviso-r-nombre');
     if (el) el.textContent = nombre;
+    const av = document.getElementById('aviso-r-avatar');
+    if (av) av.textContent = (nombre||'?')[0].toUpperCase();
     ['aviso-r-titulo','aviso-r-mensaje'].forEach(id => {
       const inp = document.getElementById(id);
       if (inp) inp.value = '';
@@ -1384,11 +1386,9 @@ let allHistorial = [];
   }
   function _showRMsg(el, type, txt) {
     if (!el) return;
-    el.style.display = 'block';
-    el.style.background = type==='ok' ? 'rgba(77,255,145,.08)' : 'rgba(255,80,80,.08)';
-    el.style.border     = type==='ok' ? '1px solid rgba(77,255,145,.25)' : '1px solid rgba(255,80,80,.25)';
-    el.style.color      = type==='ok' ? '#4dff91' : '#ff6868';
+    el.className = 'mar-msg ' + type;
     el.textContent = txt;
+    setTimeout(() => { if(el) el.className='mar-msg'; }, 5000);
   }
 
 
@@ -1630,47 +1630,127 @@ window.showPanel = (name, el) => {
 </script>
 
 <!-- ══ MODAL: AVISO RÁPIDO ══ -->
+<style>
+  #modal-aviso .mar-box{
+    background:linear-gradient(160deg,#0d0d1f 0%,#110d22 100%);
+    border:1px solid rgba(122,31,238,.35);
+    border-radius:18px;
+    width:100%;max-width:500px;
+    position:relative;overflow:hidden;
+    animation:marIn .35s cubic-bezier(.34,1.4,.64,1) forwards;
+    box-shadow:0 0 60px rgba(122,31,238,.18),0 24px 60px rgba(0,0,0,.6);
+  }
+  @keyframes marIn{from{opacity:0;transform:scale(.88) translateY(24px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  #modal-aviso .mar-glow{position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(122,31,238,.18) 0%,transparent 70%);pointer-events:none}
+  #modal-aviso .mar-glow2{position:absolute;bottom:-80px;left:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(168,85,247,.08) 0%,transparent 70%);pointer-events:none}
+  #modal-aviso .mar-stripe{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#7A1FEE,#a855f7,#7A1FEE,transparent)}
+  #modal-aviso .mar-head{padding:26px 28px 20px;border-bottom:1px solid rgba(122,31,238,.15);display:flex;align-items:center;gap:14px}
+  #modal-aviso .mar-icon{width:42px;height:42px;background:rgba(122,31,238,.15);border:1px solid rgba(122,31,238,.4);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;box-shadow:0 0 16px rgba(122,31,238,.2)}
+  #modal-aviso .mar-title{font-family:var(--font-d);font-size:.75rem;font-weight:900;letter-spacing:3px;color:#a855f7;text-transform:uppercase}
+  #modal-aviso .mar-subtitle{font-family:var(--font-b);font-size:.78rem;color:rgba(255,255,255,.35);margin-top:2px}
+  #modal-aviso .mar-close{position:absolute;top:18px;right:18px;width:30px;height:30px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;color:rgba(255,255,255,.4);font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .2s;cursor:pointer}
+  #modal-aviso .mar-close:hover{background:rgba(255,80,80,.1);border-color:rgba(255,80,80,.3);color:#ff6868}
+  #modal-aviso .mar-body{padding:22px 28px;display:flex;flex-direction:column;gap:16px}
+  #modal-aviso .mar-dest{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(122,31,238,.07);border:1px solid rgba(122,31,238,.2);border-radius:10px}
+  #modal-aviso .mar-dest-avatar{width:34px;height:34px;background:linear-gradient(135deg,#7A1FEE,#a855f7);border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-weight:900;font-size:.85rem;color:#fff;flex-shrink:0}
+  #modal-aviso .mar-dest-label{font-family:var(--font-d);font-size:.47rem;letter-spacing:2px;color:rgba(168,85,247,.6);text-transform:uppercase}
+  #modal-aviso .mar-dest-name{font-family:var(--font-b);font-size:.9rem;color:#fff;font-weight:700;margin-top:1px}
+  #modal-aviso .mar-field{display:flex;flex-direction:column;gap:7px}
+  #modal-aviso .mar-label{font-family:var(--font-d);font-size:.48rem;letter-spacing:2.5px;color:rgba(168,85,247,.65);text-transform:uppercase;display:flex;align-items:center;gap:6px}
+  #modal-aviso .mar-label::before{content:'';width:3px;height:3px;background:#7A1FEE;border-radius:50%;display:inline-block}
+  #modal-aviso .mar-input,#modal-aviso .mar-textarea{background:rgba(255,255,255,.03);border:1.5px solid rgba(122,31,238,.18);border-radius:9px;padding:11px 14px;color:#fff;font-family:var(--font-b);font-size:.88rem;outline:none;transition:all .25s;width:100%}
+  #modal-aviso .mar-input:focus,#modal-aviso .mar-textarea:focus{border-color:#7A1FEE;box-shadow:0 0 0 3px rgba(122,31,238,.1),0 0 14px rgba(122,31,238,.08);background:rgba(122,31,238,.04)}
+  #modal-aviso .mar-input::placeholder,#modal-aviso .mar-textarea::placeholder{color:rgba(255,255,255,.18)}
+  #modal-aviso .mar-textarea{resize:vertical;min-height:95px;line-height:1.6}
+  #modal-aviso .mar-btns-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  #modal-aviso .mar-btn-preview{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:7px;font-family:var(--font-b);font-size:.78rem;margin-top:4px}
+  #modal-aviso .mar-btn-preview.ok{background:rgba(77,255,145,.07);border:1px solid rgba(77,255,145,.2);color:#4dff91}
+  #modal-aviso .mar-btn-preview.no{background:rgba(255,80,80,.07);border:1px solid rgba(255,80,80,.2);color:#ff6868}
+  #modal-aviso .mar-footer{padding:0 28px 24px;display:flex;gap:12px}
+  #modal-aviso .mar-cancel{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.5);padding:12px;border-radius:9px;font-family:var(--font-d);font-size:.55rem;letter-spacing:2px;text-transform:uppercase;transition:all .2s;cursor:pointer}
+  #modal-aviso .mar-cancel:hover{background:rgba(255,255,255,.07);color:#fff;border-color:rgba(255,255,255,.15)}
+  #modal-aviso .mar-send{flex:2;background:linear-gradient(135deg,#5b12b8,#7A1FEE,#a855f7);border:none;color:#fff;padding:12px 20px;border-radius:9px;font-family:var(--font-d);font-weight:700;font-size:.58rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .25s;box-shadow:0 4px 20px rgba(122,31,238,.35);display:flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+  #modal-aviso .mar-send::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.12),transparent);opacity:0;transition:opacity .2s}
+  #modal-aviso .mar-send:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(122,31,238,.5)}
+  #modal-aviso .mar-send:hover::before{opacity:1}
+  #modal-aviso .mar-send:disabled{opacity:.4;transform:none;cursor:not-allowed}
+  #modal-aviso .mar-msg{margin:0 28px 16px;padding:10px 14px;border-radius:8px;font-family:var(--font-b);font-size:.82rem;display:none;align-items:center;gap:8px}
+  #modal-aviso .mar-msg.ok{background:rgba(77,255,145,.07);border:1px solid rgba(77,255,145,.2);color:#4dff91;display:flex}
+  #modal-aviso .mar-msg.err{background:rgba(255,80,80,.07);border:1px solid rgba(255,80,80,.2);color:#ff6868;display:flex}
+  #modal-aviso .mar-divider{height:1px;background:rgba(122,31,238,.12);margin:0 28px}
+</style>
+
 <div class="modal-overlay" id="modal-aviso">
-  <div class="modal-box" style="max-width:480px">
-    <button class="modal-close" onclick="closeModal('modal-aviso')">✕</button>
-    <div class="modal-title" style="color:#FFB800">⚠️ Enviar Aviso</div>
-    <div class="modal-body">
-      <div style="font-family:var(--font-b);font-size:.84rem;color:var(--text-muted);margin-bottom:18px;padding:10px 14px;background:rgba(255,184,0,.05);border:1px solid rgba(255,184,0,.15);border-radius:7px">
-        Enviando aviso a: <strong id="aviso-r-nombre" style="color:#fff">—</strong>
+  <div class="mar-box">
+    <div class="mar-glow"></div>
+    <div class="mar-glow2"></div>
+    <div class="mar-stripe"></div>
+
+    <!-- Header -->
+    <div class="mar-head">
+      <div class="mar-icon">⚠️</div>
+      <div>
+        <div class="mar-title">Enviar Aviso</div>
+        <div class="mar-subtitle">El usuario lo verá en tiempo real</div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:12px;">
-        <div>
-          <div class="modal-label">Título del aviso</div>
-          <input type="text" id="aviso-r-titulo" class="modal-input"
-            placeholder="Ej: Nombre de usuario inapropiado" maxlength="80"
-            style="width:100%;background:var(--card);border:1.5px solid rgba(255,255,255,.07);border-radius:7px;padding:10px 14px;color:#fff;font-family:var(--font-b);font-size:.88rem;outline:none;transition:border-color .2s">
-        </div>
-        <div>
-          <div class="modal-label">Mensaje</div>
-          <textarea id="aviso-r-mensaje" class="modal-input"
-            placeholder="Escribe el mensaje para el usuario..."
-            style="width:100%;background:var(--card);border:1.5px solid rgba(255,255,255,.07);border-radius:7px;padding:10px 14px;color:#fff;font-family:var(--font-b);font-size:.88rem;outline:none;resize:vertical;min-height:90px;transition:border-color .2s"></textarea>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div>
-            <div class="modal-label">Botón Aceptar</div>
-            <input type="text" id="aviso-r-ok" value="✅ Entendido, lo corregiré"
-              style="width:100%;background:var(--card);border:1.5px solid rgba(255,255,255,.07);border-radius:7px;padding:9px 12px;color:#fff;font-family:var(--font-b);font-size:.82rem;outline:none">
-          </div>
-          <div>
-            <div class="modal-label">Botón Rechazar</div>
-            <input type="text" id="aviso-r-no" value="✖ No lo haré"
-              style="width:100%;background:var(--card);border:1.5px solid rgba(255,255,255,.07);border-radius:7px;padding:9px 12px;color:#fff;font-family:var(--font-b);font-size:.82rem;outline:none">
-          </div>
-        </div>
-      </div>
-      <div id="aviso-r-msg" style="font-family:var(--font-b);font-size:.8rem;padding:8px 12px;border-radius:6px;margin-top:12px;display:none"></div>
+      <button class="mar-close" onclick="closeModal('modal-aviso')">✕</button>
     </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-aviso')">Cancelar</button>
-      <button class="btn btn-sm" id="btn-aviso-r-send"
-        style="flex:1;background:linear-gradient(135deg,#b8860b,#FFB800);color:#000;border:none;font-family:var(--font-d);font-weight:700;font-size:.6rem;letter-spacing:2px;padding:10px;"
-        onclick="enviarAvisoRapido()">📤 ENVIAR AVISO</button>
+
+    <!-- Body -->
+    <div class="mar-body">
+
+      <!-- Destinatario -->
+      <div class="mar-dest">
+        <div class="mar-dest-avatar" id="aviso-r-avatar">?</div>
+        <div>
+          <div class="mar-dest-label">Destinatario</div>
+          <div class="mar-dest-name" id="aviso-r-nombre">—</div>
+        </div>
+      </div>
+
+      <!-- Título -->
+      <div class="mar-field">
+        <div class="mar-label">Título del aviso</div>
+        <input type="text" id="aviso-r-titulo" class="mar-input"
+          placeholder="Ej: Nombre de usuario inapropiado" maxlength="80">
+      </div>
+
+      <!-- Mensaje -->
+      <div class="mar-field">
+        <div class="mar-label">Mensaje</div>
+        <textarea id="aviso-r-mensaje" class="mar-textarea"
+          placeholder="Escribe el mensaje completo para el usuario..."></textarea>
+      </div>
+
+      <!-- Botones -->
+      <div class="mar-btns-grid">
+        <div class="mar-field">
+          <div class="mar-label">Botón Aceptar</div>
+          <input type="text" id="aviso-r-ok" class="mar-input" value="✅ Entendido, lo corregiré" maxlength="50"
+            oninput="document.getElementById('aviso-r-prev-ok').textContent=this.value||'✅ Aceptar'">
+          <div class="mar-btn-preview ok" id="aviso-r-prev-ok">✅ Entendido, lo corregiré</div>
+        </div>
+        <div class="mar-field">
+          <div class="mar-label">Botón Rechazar</div>
+          <input type="text" id="aviso-r-no" class="mar-input" value="✖ No lo haré" maxlength="50"
+            oninput="document.getElementById('aviso-r-prev-no').textContent=this.value||'✖ Rechazar'">
+          <div class="mar-btn-preview no" id="aviso-r-prev-no">✖ No lo haré</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensaje feedback -->
+    <div class="mar-msg" id="aviso-r-msg"></div>
+
+    <div class="mar-divider"></div>
+
+    <!-- Footer -->
+    <div class="mar-footer">
+      <button class="mar-cancel" onclick="closeModal('modal-aviso')">Cancelar</button>
+      <button class="mar-send" id="btn-aviso-r-send" onclick="enviarAvisoRapido()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        ENVIAR AVISO
+      </button>
     </div>
   </div>
 </div>
