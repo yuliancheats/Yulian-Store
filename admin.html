@@ -829,14 +829,16 @@ window.confirmBan = async () => {
     });
     const u = allUsuarios.find(x=>x.id===banningUserId);
     if (u) { u.banned=true; u.banReason=reason||'Baneado por un administrador.'; }
-    // Move from usuarios to baneados
     allUsuarios = allUsuarios.filter(x=>x.id!==banningUserId);
     renderUsuarios(allUsuarios);
     document.getElementById('badge-usuarios').textContent = allUsuarios.length;
     await loadBaneados();
     closeModal('modal-ban');
-    showToast('🚫 Usuario baneado','success');
-  } catch(e) { showToast('Error al banear','error'); }
+    showToast('🚫 Usuario baneado correctamente','success');
+  } catch(e) {
+    console.error('Error al banear:', e);
+    showToast('Error al banear: ' + (e.code || e.message), 'error');
+  }
   btn.disabled=false; btn.innerHTML='🚫 BANEAR';
 };
 window.unbanUser = async (uid) => {
