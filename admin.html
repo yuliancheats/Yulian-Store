@@ -180,27 +180,47 @@
     @media (max-width:768px) { .sidebar { display:none; } .main { margin-left:0;padding:20px; } }
 
     /* ══ AVISOS PANEL CSS ══ */
-    .aviso-form-card{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:24px;position:relative;overflow:hidden}
-    .aviso-form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#FFB800,transparent)}
-    .aviso-form-title{font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:3px;color:#FFB800;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:8px}
-    .aviso-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
-    .aviso-form-group{display:flex;flex-direction:column;gap:6px}
+    #panel-avisos .section-title{color:#a855f7}
+    .aviso-form-card{background:linear-gradient(135deg,rgba(122,31,238,.06),rgba(10,10,20,.95));border:1px solid rgba(122,31,238,.25);border-radius:16px;padding:32px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:0 4px 32px rgba(122,31,238,.08)}
+    .aviso-form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#7A1FEE,#a855f7,transparent)}
+    .aviso-form-card::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at top left,rgba(122,31,238,.04),transparent 60%);pointer-events:none}
+    .aviso-form-title{font-family:var(--font-d);font-size:.65rem;font-weight:700;letter-spacing:3px;color:#a855f7;text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:10px}
+    .aviso-form-title-icon{width:28px;height:28px;background:rgba(122,31,238,.2);border:1px solid rgba(122,31,238,.4);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+    .aviso-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+    .aviso-form-group{display:flex;flex-direction:column;gap:7px}
     .aviso-form-full{grid-column:1/-1}
-    .aviso-form-label{font-family:var(--font-d);font-size:.52rem;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
-    .aviso-form-input,.aviso-form-select,.aviso-form-textarea{background:var(--card);border:1.5px solid rgba(255,255,255,.07);border-radius:7px;padding:10px 14px;color:#fff;font-family:var(--font-b);font-size:.88rem;outline:none;transition:border-color .2s,box-shadow .2s;width:100%}
-    .aviso-form-input:focus,.aviso-form-select:focus,.aviso-form-textarea:focus{border-color:#FFB800;box-shadow:0 0 8px rgba(255,184,0,.15)}
-    .aviso-form-select option{background:#111}
-    .aviso-form-textarea{resize:vertical;min-height:80px}
-    .btn-send-aviso{background:linear-gradient(135deg,#b8860b,#FFB800);color:#000;border:none;padding:12px 28px;border-radius:7px;font-family:var(--font-d);font-weight:700;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s;box-shadow:0 4px 16px rgba(255,184,0,.25);display:flex;align-items:center;gap:8px}
-    .btn-send-aviso:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,184,0,.4)}
-    .btn-send-aviso:disabled{opacity:.4;transform:none}
-    .aviso-send-msg{font-family:var(--font-b);font-size:.8rem;padding:8px 14px;border-radius:6px;margin-top:10px;display:none}
-    .aviso-send-msg.ok{background:rgba(77,255,145,.08);border:1px solid rgba(77,255,145,.2);color:#4dff91;display:block}
-    .aviso-send-msg.err{background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.2);color:#ff6868;display:block}
-    .resp-badge{font-family:var(--font-d);font-size:.48rem;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;font-weight:700;display:inline-block}
+    .aviso-form-label{font-family:var(--font-d);font-size:.5rem;letter-spacing:2.5px;color:rgba(168,85,247,.7);text-transform:uppercase;display:flex;align-items:center;gap:6px}
+    .aviso-form-label::before{content:'';display:inline-block;width:3px;height:3px;background:#7A1FEE;border-radius:50%}
+    .aviso-form-input,.aviso-form-select,.aviso-form-textarea{background:rgba(255,255,255,.03);border:1.5px solid rgba(122,31,238,.2);border-radius:8px;padding:11px 15px;color:#fff;font-family:var(--font-b);font-size:.88rem;outline:none;transition:all .2s;width:100%}
+    .aviso-form-input:focus,.aviso-form-select:focus,.aviso-form-textarea:focus{border-color:#7A1FEE;box-shadow:0 0 0 3px rgba(122,31,238,.12),0 0 12px rgba(122,31,238,.1);background:rgba(122,31,238,.04)}
+    .aviso-form-input::placeholder,.aviso-form-textarea::placeholder{color:rgba(255,255,255,.2)}
+    .aviso-form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237A1FEE' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+    .aviso-form-select option{background:#0e0e1a;color:#fff}
+    .aviso-form-select option:checked{background:#7A1FEE}
+    .aviso-form-textarea{resize:vertical;min-height:100px;line-height:1.6}
+    .aviso-btn-row{display:flex;align-items:center;gap:14px;margin-top:8px;flex-wrap:wrap}
+    .btn-send-aviso{background:linear-gradient(135deg,#5b12b8,#7A1FEE,#a855f7);color:#fff;border:none;padding:13px 30px;border-radius:8px;font-family:var(--font-d);font-weight:700;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s;box-shadow:0 4px 20px rgba(122,31,238,.35);display:flex;align-items:center;gap:9px;cursor:pointer;position:relative;overflow:hidden}
+    .btn-send-aviso::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);opacity:0;transition:opacity .2s}
+    .btn-send-aviso:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(122,31,238,.5)}
+    .btn-send-aviso:hover::before{opacity:1}
+    .btn-send-aviso:disabled{opacity:.4;transform:none;cursor:not-allowed}
+    .aviso-send-msg{font-family:var(--font-b);font-size:.82rem;padding:10px 16px;border-radius:8px;margin-top:4px;display:none;align-items:center;gap:8px}
+    .aviso-send-msg.ok{background:rgba(77,255,145,.07);border:1px solid rgba(77,255,145,.2);color:#4dff91;display:flex}
+    .aviso-send-msg.err{background:rgba(255,80,80,.07);border:1px solid rgba(255,80,80,.2);color:#ff6868;display:flex}
+    /* Preview card para los botones */
+    .aviso-preview{background:rgba(122,31,238,.04);border:1px solid rgba(122,31,238,.15);border-radius:10px;padding:14px 18px;margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .aviso-preview-label{font-family:var(--font-d);font-size:.48rem;letter-spacing:2px;color:rgba(168,85,247,.5);text-transform:uppercase;width:100%;margin-bottom:4px}
+    .aviso-preview-btn-ok{background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.3);color:#4dff91;padding:6px 14px;border-radius:6px;font-family:var(--font-b);font-size:.8rem}
+    .aviso-preview-btn-no{background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.3);color:#ff8080;padding:6px 14px;border-radius:6px;font-family:var(--font-b);font-size:.8rem}
+    /* Historial table */
+    .avisos-hist-card{background:linear-gradient(135deg,rgba(122,31,238,.04),rgba(10,10,20,.95));border:1px solid rgba(122,31,238,.18);border-radius:16px;overflow:hidden;box-shadow:0 2px 24px rgba(122,31,238,.06)}
+    .avisos-hist-header{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(122,31,238,.15);background:rgba(122,31,238,.04)}
+    .avisos-hist-title{font-family:var(--font-d);font-size:.62rem;font-weight:700;letter-spacing:3px;color:#a855f7;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+    .avisos-count-badge{background:rgba(122,31,238,.2);border:1px solid rgba(122,31,238,.4);color:#a855f7;font-size:.5rem;letter-spacing:1px;padding:2px 10px;border-radius:20px}
+    .resp-badge{font-family:var(--font-d);font-size:.47rem;letter-spacing:1.5px;padding:4px 11px;border-radius:20px;text-transform:uppercase;font-weight:700;display:inline-block;white-space:nowrap}
     .resp-badge.accept{background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.25);color:#4dff91}
     .resp-badge.reject{background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.25);color:#ff6868}
-    .resp-badge.pendiente{background:rgba(255,184,0,.08);border:1px solid rgba(255,184,0,.2);color:#FFB800}
+    .resp-badge.pendiente{background:rgba(122,31,238,.1);border:1px solid rgba(122,31,238,.3);color:#a855f7}
 
   </style>
 </head>
@@ -362,12 +382,15 @@
           <div class="page-title">AVI<span>SOS</span></div>
           <div class="page-sub">Envía advertencias a usuarios en tiempo real</div>
         </div>
-        <button class="btn btn-ghost btn-sm" onclick="loadAvisos()">🔄 Actualizar</button>
+        <button class="btn btn-ghost btn-sm" onclick="window.populateUserSelect();window.loadAvisos();">🔄 Actualizar</button>
       </div>
 
       <!-- FORM: Enviar aviso -->
       <div class="aviso-form-card">
-        <div class="aviso-form-title">⚠️ Enviar Nuevo Aviso</div>
+        <div class="aviso-form-title">
+          <div class="aviso-form-title-icon">⚠️</div>
+          Enviar Nuevo Aviso
+        </div>
         <div class="aviso-form-grid">
           <div class="aviso-form-group aviso-form-full">
             <div class="aviso-form-label">Destinatario</div>
@@ -391,15 +414,32 @@
             <div class="aviso-form-label">Texto botón — Rechazar</div>
             <input type="text" class="aviso-form-input" id="aviso-btn-no" value="✖ No lo haré" maxlength="50">
           </div>
+          <div class="aviso-form-group aviso-form-full">
+            <div class="aviso-form-label">Vista previa de botones</div>
+            <div class="aviso-preview">
+              <div class="aviso-preview-label">Así verá el usuario los botones →</div>
+              <span class="aviso-preview-btn-ok" id="aviso-preview-ok">✅ Entendido, lo corregiré</span>
+              <span class="aviso-preview-btn-no" id="aviso-preview-no">✖ No lo haré</span>
+            </div>
+          </div>
         </div>
-        <button class="btn-send-aviso" onclick="enviarAviso()">📤 ENVIAR AVISO AL USUARIO</button>
+        <div class="aviso-btn-row">
+          <button class="btn-send-aviso" onclick="enviarAviso()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            ENVIAR AVISO AL USUARIO
+          </button>
+        </div>
         <div class="aviso-send-msg" id="aviso-send-msg"></div>
       </div>
 
       <!-- TABLA: Historial de respuestas -->
-      <div class="table-card">
-        <div class="table-header">
-          <div class="table-title">📋 Historial de Respuestas</div>
+      <div class="avisos-hist-card">
+        <div class="avisos-hist-header">
+          <div class="avisos-hist-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Historial de Respuestas
+            <span class="avisos-count-badge" id="avisos-count-display">0 avisos</span>
+          </div>
         </div>
         <table>
           <thead>
@@ -1162,6 +1202,14 @@ let allHistorial = [];
 
 
   // ══════════════════════════════════════════
+  // Live preview de botones de aviso
+  const okInp = document.getElementById('aviso-btn-ok');
+  const noInp = document.getElementById('aviso-btn-no');
+  const preOk = document.getElementById('aviso-preview-ok');
+  const preNo = document.getElementById('aviso-preview-no');
+  if(okInp && preOk) okInp.addEventListener('input', ()=>{ preOk.textContent = okInp.value || '✅ Entendido, lo corregiré'; });
+  if(noInp && preNo) noInp.addEventListener('input', ()=>{ preNo.textContent = noInp.value || '✖ No lo haré'; });
+
   //  AVISOS — funciones completas
   // ══════════════════════════════════════════
 
@@ -1191,7 +1239,9 @@ let allHistorial = [];
     try {
       const snap = await getDocs(query(collection(db,'avisos'), orderBy('enviadoEn','desc')));
       const badge = document.getElementById('badge-avisos');
+      const countDisplay = document.getElementById('avisos-count-display');
       if (badge) badge.textContent = snap.size;
+      if (countDisplay) countDisplay.textContent = snap.size + ' aviso' + (snap.size !== 1 ? 's' : '');
       if (snap.empty) {
         tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:40px">Sin avisos enviados aún.</td></tr>';
         return;
@@ -1555,6 +1605,10 @@ window.showPanel = (name, el) => {
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById(`panel-${name}`).classList.add('active');
   if(el) el.classList.add('active');
+  if(name === 'avisos') {
+    window.populateUserSelect();
+    window.loadAvisos();
+  }
 };
 (function(){
   const dot=document.getElementById('cdot'), ring=document.getElementById('cring');
