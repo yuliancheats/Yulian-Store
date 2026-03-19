@@ -188,6 +188,32 @@
     .proc-step.done .step-check { opacity: 1 !important; }
     .proc-step.done .step-check::before { content: "✅"; }
 
+
+    /* ── TROPIPAY PAYMENT BLOCK ── */
+    .pay-divider{display:flex;align-items:center;gap:12px;margin:14px 0}
+    .pay-divider span{font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:2px;color:#444;white-space:nowrap}
+    .pay-divider::before,.pay-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.07)}
+    .tropipay-block{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:16px 16px 14px;margin-bottom:10px}
+    .tropipay-block-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+    .tropipay-block-title{font-family:'Orbitron',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2px;color:#ccc;text-transform:uppercase}
+    .tropipay-trust{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .trust-badge{display:flex;align-items:center;gap:4px;font-family:'Exo 2',sans-serif;font-size:.68rem;color:#666;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:3px 8px;border-radius:4px}
+    .card-icons{display:flex;align-items:center;gap:6px;margin-bottom:12px}
+    .card-icon{height:22px;background:#fff;border-radius:3px;padding:2px 6px;display:flex;align-items:center;justify-content:center}
+    .card-icon.visa{color:#1a1f71;font-family:serif;font-size:.8rem;font-weight:900;font-style:italic;min-width:36px}
+    .card-icon.mc{background:transparent;border:1px solid rgba(255,255,255,.1);padding:2px 4px;min-width:32px}
+    .mc-circles{display:flex}
+    .mc-circle{width:16px;height:16px;border-radius:50%}
+    .mc-circle:first-child{background:#EB001B;margin-right:-6px;z-index:1}
+    .mc-circle:last-child{background:#F79E1B}
+    .card-icon.amex{background:#2E77BC;color:#fff;font-size:.55rem;font-weight:900;min-width:34px;font-family:'Exo 2',sans-serif}
+    .tropipay-notice{background:rgba(122,31,238,.05);border:1px solid rgba(122,31,238,.15);border-radius:6px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:flex-start;gap:8px}
+    .tropipay-notice-icon{font-size:.85rem;flex-shrink:0;margin-top:1px}
+    .tropipay-notice-text{font-family:'Exo 2',sans-serif;font-size:.78rem;color:#888;line-height:1.6}
+    .tropipay-notice-text strong{color:#aa88ff}
+    .btn-tropipay{width:100%;background:linear-gradient(135deg,#6B3FA0,#8B2FFF);color:#fff;border:none;padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 18px rgba(122,31,238,.25);transition:all .25s;cursor:pointer}
+    .btn-tropipay:hover{background:linear-gradient(135deg,#7B4FB0,#9B3FFF);box-shadow:0 6px 24px rgba(122,31,238,.4);transform:translateY(-1px)}
+    .tropipay-secure{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;font-family:'Exo 2',sans-serif;font-size:.68rem;color:#444}
   </style>
 </head>
 <body>
@@ -356,6 +382,36 @@
       <div class="sal-row" id="sr" style="display:none;">Tu saldo: <span class="sal-val" id="sv">$0.00</span></div>
       <div id="ba"><button class="btn-log" onclick="window.location.href='login.html'">INICIA SESIÓN PARA COMPRAR</button></div>
       <div class="msg" id="msg"></div>
+
+      <!-- ═══ TROPIPAY PAYMENT BLOCK ═══ -->
+      <div class="pay-divider"><span>O PAGA CON TARJETA</span></div>
+      <div class="tropipay-block">
+        <div class="tropipay-block-header">
+          <span class="tropipay-block-title">💳 Tarjeta de Crédito / Débito</span>
+          <div class="tropipay-trust">
+            <span class="trust-badge"><span>🔒</span> SSL</span>
+            <span class="trust-badge"><span>✓</span> Seguro</span>
+          </div>
+        </div>
+        <div class="card-icons">
+          <div class="card-icon visa">VISA</div>
+          <div class="card-icon mc"><div class="mc-circles"><div class="mc-circle"></div><div class="mc-circle"></div></div></div>
+          <div class="card-icon amex">AMEX</div>
+          <span style="font-family:'Exo 2',sans-serif;font-size:.72rem;color:#555;margin-left:2px">y más</span>
+        </div>
+        <div class="tropipay-notice">
+          <span class="tropipay-notice-icon">ℹ️</span>
+          <div class="tropipay-notice-text">
+            Serás redirigido a <strong>Tropipay</strong>, plataforma de pago segura. El acceso se activará manualmente en menos de <strong>24 horas</strong> tras confirmar el pago.
+          </div>
+        </div>
+        <button class="btn-tropipay" id="btn-tpp" onclick="pagarConTropipay()">
+          💳 PAGAR CON TARJETA — <span id="tpp-amt">$0.00</span>
+        </button>
+        <div class="tropipay-secure">
+          <span>🔒</span> Pago procesado por Tropipay · Encriptación SSL 256-bit
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -397,6 +453,7 @@
     document.getElementById('bp').textContent=`$${sv.price.toFixed(2)}`;
     document.getElementById('qv').textContent=qty;
     document.getElementById('ta').textContent=`$${t.toFixed(2)}`;
+    const tppEl=document.getElementById('tpp-amt');if(tppEl)tppEl.textContent=`$${t.toFixed(2)}`;
   }
   window.cQty=function(d){qty=Math.max(1,Math.min(10,qty+d));upTot();updateUI();};
   function updateUI(){
