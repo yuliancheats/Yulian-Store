@@ -688,34 +688,75 @@
 </style>
 
 <script type="module">
-/* ── REAL-TIME BAN LISTENER ── */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+/* ── REAL-TIME BAN + AVISOS LISTENER (perfil) ── */
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, onSnapshot, collection, query, where, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 (function(){
   const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
-  const app2 = initializeApp(cfg, 'ban-listener');
-  const auth2 = getAuth(app2);
-  const db2   = getFirestore(app2);
-  let unsub = null;
-  onAuthStateChanged(auth2, user => {
-    if (unsub) unsub();
-    if (!user) return;
-    unsub = onSnapshot(doc(db2,'users',user.uid), snap => {
-      if (!snap.exists()) return;
-      const data = snap.data();
-      if (data.banned) {
-        const screen = document.getElementById('ban-screen');
-        if (screen) {
-          screen.style.display = 'flex';
-          if (data.banReason) {
-            const el = document.getElementById('ban-reason-rt');
-            if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
+  const appP  = getApps().find(a=>a.name==='kl-perfil') || initializeApp(cfg,'kl-perfil');
+  const authP = getAuth(appP);
+  const dbP   = getFirestore(appP);
+  let unsubBan=null, unsubAv=null, _avId=null;
+
+  onAuthStateChanged(authP, user => {
+    if(unsubBan){unsubBan();unsubBan=null;}
+    if(unsubAv){unsubAv();unsubAv=null;}
+    if(!user) return;
+
+    // BAN
+    unsubBan = onSnapshot(
+      doc(dbP,'users',user.uid),
+      snap => {
+        if(!snap.exists()) return;
+        const data = snap.data();
+        if(data.banned){
+          const screen = document.getElementById('ban-screen');
+          if(screen){
+            screen.style.display = 'flex';
+            if(data.banReason){
+              const el = document.getElementById('ban-reason-rt');
+              if(el){ el.textContent='📋 Razón: '+data.banReason; el.style.display='block'; }
+            }
           }
         }
-      }
-    });
+      },
+      err => console.error('❌ ban listener:', err.code, err.message)
+    );
+
+    // AVISOS — usando esta misma app autenticada
+    const qAv = query(collection(dbP,'avisos'), where('uid','==',user.uid), where('estado','==','pendiente'));
+    unsubAv = onSnapshot(qAv,
+      snap => {
+        snap.docChanges().forEach(ch => {
+          if(ch.type !== 'added') return;
+          _avId = ch.doc.id;
+          const d = ch.doc.data();
+          const tEl = document.getElementById('aviso-titulo');
+          const mEl = document.getElementById('aviso-mensaje');
+          const okEl = document.getElementById('aviso-btn-ok');
+          const noEl = document.getElementById('aviso-btn-no');
+          const ov   = document.getElementById('aviso-overlay');
+          if(tEl) tEl.textContent = d.titulo  || 'Advertencia';
+          if(mEl) mEl.textContent = d.mensaje || '—';
+          if(okEl && d.btnAceptar)  okEl.textContent = d.btnAceptar;
+          if(noEl && d.btnRechazar) noEl.textContent = d.btnRechazar;
+          if(ov) ov.classList.add('open');
+        });
+      },
+      err => console.error('❌ avisos listener:', err.code, err.message)
+    );
+
+    window._klPerfAvResp = async function(resp){
+      const ov = document.getElementById('aviso-overlay');
+      if(ov) ov.classList.remove('open');
+      if(!_avId) return;
+      try{ await updateDoc(doc(dbP,'avisos',_avId),{estado:'respondido',respuesta:resp,respondidoEn:serverTimestamp()}); }
+      catch(e){ console.error('aviso resp:', e); }
+      _avId = null;
+      if(resp==='reject') setTimeout(()=>{ const c=document.getElementById('consec-overlay'); if(c) c.classList.add('open'); }, 350);
+    };
   });
 })();
 </script>
@@ -827,8 +868,8 @@ import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasej
     <div class="aviso-title-lbl" id="aviso-titulo">Advertencia</div>
     <div class="aviso-msg-box" id="aviso-mensaje">—</div>
     <div class="aviso-btns">
-      <button class="btn-aviso-ok"  id="aviso-btn-ok" onclick="responderAviso('accept')">✅ Entendido, lo corregiré</button>
-      <button class="btn-aviso-no"  id="aviso-btn-no" onclick="responderAviso('reject')">✖ No lo haré</button>
+      <button class="btn-aviso-ok"  id="aviso-btn-ok" onclick="window._klPerfAvResp ? window._klPerfAvResp('accept') : window.responderAviso('accept')">✅ Entendido, lo corregiré</button>
+      <button class="btn-aviso-no"  id="aviso-btn-no" onclick="window._klPerfAvResp ? window._klPerfAvResp('reject') : window.responderAviso('reject')">✖ No lo haré</button>
     </div>
   </div>
 </div>
@@ -920,20 +961,26 @@ window.guardarEmail = async function() {
 
 // ── AVISOS EN TIEMPO REAL ──
 function listenAvisos(uid) {
+  // Usar la misma instancia de db que ya tiene auth correcta
   const q = query(collection(_db,'avisos'), where('uid','==',uid), where('estado','==','pendiente'));
-  onSnapshot(q, snap => {
-    snap.docChanges().forEach(ch => {
-      if (ch.type === 'added') {
-        _avisoId = ch.doc.id;
-        const d = ch.doc.data();
-        document.getElementById('aviso-titulo').textContent  = d.titulo  || 'Advertencia';
-        document.getElementById('aviso-mensaje').textContent = d.mensaje || '—';
-        if (d.btnAceptar)  document.getElementById('aviso-btn-ok').textContent = d.btnAceptar;
-        if (d.btnRechazar) document.getElementById('aviso-btn-no').textContent = d.btnRechazar;
-        document.getElementById('aviso-overlay').classList.add('open');
-      }
-    });
-  });
+  onSnapshot(q,
+    snap => {
+      snap.docChanges().forEach(ch => {
+        if (ch.type === 'added') {
+          _avisoId = ch.doc.id;
+          const d = ch.doc.data();
+          document.getElementById('aviso-titulo').textContent  = d.titulo  || 'Advertencia';
+          document.getElementById('aviso-mensaje').textContent = d.mensaje || '—';
+          if (d.btnAceptar)  document.getElementById('aviso-btn-ok').textContent  = d.btnAceptar;
+          if (d.btnRechazar) document.getElementById('aviso-btn-no').textContent = d.btnRechazar;
+          document.getElementById('aviso-overlay').classList.add('open');
+        }
+      });
+    },
+    err => {
+      console.error('❌ listenAvisos error:', err.code, err.message);
+    }
+  );
 }
 
 window.responderAviso = async function(resp) {
