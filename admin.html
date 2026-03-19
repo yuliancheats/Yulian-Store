@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YULIAN STORE — Panel Admin</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -209,6 +208,9 @@
     <div class="nav-item" onclick="showPanel('historial',this)"><span class="nav-icon">📋</span> Historial Saldo<span class="nav-badge" id="badge-historial">—</span></div>
     <div class="sidebar-section">Licencias</div>
     <div class="nav-item" onclick="showPanel('claves',this)"><span class="nav-icon">🔑</span> Claves<span class="nav-badge" id="badge-claves">—</span></div>
+    <div class="sidebar-section">Moderación</div>
+    <div class="nav-item" onclick="showPanel('baneados',this)"><span class="nav-icon">🚫</span> Baneados<span class="nav-badge" id="badge-baneados">—</span></div>
+    <div class="nav-item" onclick="showPanel('resellers',this)"><span class="nav-icon">⭐</span> Resellers<span class="nav-badge" id="badge-resellers">—</span></div>
     <div class="sidebar-section">Sistema</div>
     <div class="nav-item" onclick="window.location.href='index.html'"><span class="nav-icon">🏠</span> Ir a la tienda</div>
   </aside>
@@ -324,6 +326,67 @@
         <table>
           <thead><tr><th>Clave</th><th>Producto</th><th>Plan</th><th>Timer</th><th>Estado</th><th>Creada por</th><th>Fecha</th><th>Acciones</th></tr></thead>
           <tbody id="claves-body"><tr class="loading-row"><td colspan="8"><span class="spinner"></span> Cargando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ PANEL: BANEADOS ═══ -->
+    <div class="panel" id="panel-baneados">
+      <div class="page-header">
+        <div><div class="page-title">BAN<span>EADOS</span></div><div class="page-sub">Usuarios con acceso suspendido</div></div>
+        <button class="btn btn-primary" onclick="loadBaneados()">🔄 Actualizar</button>
+      </div>
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">🚫 Usuarios Baneados</div>
+          <div class="table-actions">
+            <input class="search-box" id="search-baneados" placeholder="🔍 Buscar..." oninput="filterBaneados(this.value)" style="width:200px;">
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Razón del Ban</th>
+              <th>Fecha del Ban</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="baneados-body">
+            <tr class="loading-row"><td colspan="5"><span class="spinner"></span> Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ PANEL: RESELLERS ═══ -->
+    <div class="panel" id="panel-resellers">
+      <div class="page-header">
+        <div><div class="page-title">RESEL<span>LERS</span></div><div class="page-sub">Revendedores activos</div></div>
+        <button class="btn btn-primary" onclick="loadResellers()">🔄 Actualizar</button>
+      </div>
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">⭐ Lista de Resellers</div>
+          <div class="table-actions">
+            <input class="search-box" id="search-resellers" placeholder="🔍 Buscar..." oninput="filterResellers(this.value)" style="width:200px;">
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Saldo</th>
+              <th>Claves Generadas</th>
+              <th>Desde</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="resellers-body">
+            <tr class="loading-row"><td colspan="6"><span class="spinner"></span> Cargando...</td></tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -498,7 +561,7 @@ let generatedKey  = null;
 const keyTimers = {};
 
 /* ─── LOAD ALL ─── */
-window.loadAll = () => Promise.all([loadUsuarios(), loadCompras(), loadClaves(), loadHistorial()]);
+window.loadAll = () => Promise.all([loadUsuarios(), loadCompras(), loadClaves(), loadHistorial(), loadBaneados(), loadResellers()]);
 
 /* ══════════════════════════════
    USUARIOS
@@ -1050,6 +1113,151 @@ window.filterHistorial = q => {
     (h.email||''). toLowerCase().includes(f)
   ));
 };
+
+
+/* ══════════════════════════════
+   BANEADOS
+══════════════════════════════ */
+let allBaneados = [];
+
+window.loadBaneados = async () => {
+  const tbody = document.getElementById('baneados-body');
+  if (tbody) tbody.innerHTML = '<tr class="loading-row"><td colspan="5"><span class="spinner"></span> Cargando...</td></tr>';
+  try {
+    const snap = await getDocs(collection(db,'users'));
+    allBaneados = snap.docs
+      .map(d => ({id:d.id,...d.data()}))
+      .filter(u => u.banned === true);
+    const badge = document.getElementById('badge-baneados');
+    if (badge) badge.textContent = allBaneados.length;
+    renderBaneados(allBaneados);
+  } catch(e) {
+    const tbody = document.getElementById('baneados-body');
+    if (tbody) tbody.innerHTML = '<tr class="empty-row"><td colspan="5">❌ Error al cargar</td></tr>';
+  }
+};
+
+function renderBaneados(list) {
+  const tbody = document.getElementById('baneados-body');
+  if (!tbody) return;
+  if (!list.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="5" style="text-align:center;padding:40px;color:var(--green);">✅ No hay usuarios baneados</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map(u => {
+    const fechaBan = u.bannedAt?.toDate ? formatDate(u.bannedAt.toDate()) : '—';
+    const razon    = u.banReason || 'Sin razón especificada';
+    return `<tr>
+      <td><strong>${esc(u.name||'—')}</strong></td>
+      <td class="td-muted overflow-text" title="${esc(u.email)}">${esc(u.email||'—')}</td>
+      <td>
+        <span style="font-family:var(--font-alt);font-size:0.82rem;color:#ff8888;background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.15);padding:4px 10px;border-radius:4px;display:inline-block;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(razon)}">
+          ${esc(razon)}
+        </span>
+      </td>
+      <td class="td-muted">${fechaBan}</td>
+      <td>
+        <button class="btn btn-warn btn-sm" onclick="unbanUser('${u.id}')">🔓 Desbanear</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+window.filterBaneados = q => {
+  const f = q.toLowerCase();
+  renderBaneados(allBaneados.filter(u =>
+    (u.name||'').toLowerCase().includes(f) ||
+    (u.email||'').toLowerCase().includes(f)
+  ));
+};
+
+/* ══════════════════════════════
+   RESELLERS
+══════════════════════════════ */
+let allResellers = [];
+
+window.loadResellers = async () => {
+  const tbody = document.getElementById('resellers-body');
+  if (tbody) tbody.innerHTML = '<tr class="loading-row"><td colspan="6"><span class="spinner"></span> Cargando...</td></tr>';
+  try {
+    // Load users with reseller role
+    const snapUsers = await getDocs(collection(db,'users'));
+    const resellers = snapUsers.docs
+      .map(d => ({id:d.id,...d.data()}))
+      .filter(u => u.role === 'reseller');
+
+    // For each reseller, count their claves
+    const snapClaves = await getDocs(collection(db,'claves'));
+    const allClavesData = snapClaves.docs.map(d => ({id:d.id,...d.data()}));
+
+    allResellers = resellers.map(r => ({
+      ...r,
+      clavesCount: allClavesData.filter(k => k.creadoPor === r.id).length
+    }));
+
+    const badge = document.getElementById('badge-resellers');
+    if (badge) badge.textContent = allResellers.length;
+    renderResellers(allResellers);
+  } catch(e) {
+    const tbody = document.getElementById('resellers-body');
+    if (tbody) tbody.innerHTML = '<tr class="empty-row"><td colspan="6">❌ Error al cargar</td></tr>';
+  }
+};
+
+function renderResellers(list) {
+  const tbody = document.getElementById('resellers-body');
+  if (!tbody) return;
+  if (!list.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="6" style="text-align:center;padding:40px;color:var(--text-muted);">Sin resellers registrados</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map(r => {
+    const saldo    = Number(r.saldo ?? 0).toFixed(2);
+    const fecha    = r.createdAt?.toDate ? formatDate(r.createdAt.toDate()) : '—';
+    return `<tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="background:rgba(255,200,0,0.1);border:1px solid rgba(255,200,0,0.3);color:#ffc800;font-family:var(--font-display);font-size:0.5rem;letter-spacing:1px;padding:2px 8px;border-radius:2px;">⭐ RESELLER</span>
+          <strong>${esc(r.name||'—')}</strong>
+        </div>
+      </td>
+      <td class="td-muted overflow-text" title="${esc(r.email)}">${esc(r.email||'—')}</td>
+      <td><span style="color:var(--green);font-family:var(--font-display);font-size:.75rem;">$${saldo}</span></td>
+      <td>
+        <span style="font-family:var(--font-display);font-size:.7rem;color:var(--orange);">${r.clavesCount}</span>
+        <span class="td-muted" style="font-size:.75rem;"> claves</span>
+      </td>
+      <td class="td-muted">${fecha}</td>
+      <td style="display:flex;gap:5px;">
+        <button class="btn btn-success btn-sm" onclick="openSaldoModal('${r.id}','${esc(r.name||r.email)}',${saldo})">💰 Saldo</button>
+        <button class="btn btn-ghost btn-sm" onclick="removeReseller('${r.id}')">↩ Quitar rol</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+window.filterResellers = q => {
+  const f = q.toLowerCase();
+  renderResellers(allResellers.filter(r =>
+    (r.name||'').toLowerCase().includes(f) ||
+    (r.email||'').toLowerCase().includes(f)
+  ));
+};
+
+// Override unbanUser to also refresh baneados panel
+const _origUnban = window.unbanUser;
+window.unbanUser = async (uid) => {
+  await _origUnban(uid);
+  await loadBaneados();
+};
+
+// Override removeReseller to also refresh resellers panel
+const _origRemoveReseller = window.removeReseller;
+window.removeReseller = async (uid) => {
+  await _origRemoveReseller(uid);
+  await loadResellers();
+};
+
 
 /* ─── UTILS ─── */
 function formatDate(d) { return d.toLocaleDateString('es-DO',{day:'2-digit',month:'short',year:'numeric'}); }
