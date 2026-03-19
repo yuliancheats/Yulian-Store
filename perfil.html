@@ -703,14 +703,17 @@ import { getFirestore, doc, onSnapshot, collection, query, where, updateDoc, ser
   onAuthStateChanged(authP, user => {
     if(unsubBan){unsubBan();unsubBan=null;}
     if(unsubAv){unsubAv();unsubAv=null;}
-    if(!user) return;
+    if(!user){ _klLog('❌ No hay usuario autenticado'); return; }
+
+    _klLog('✅ Auth OK: ' + user.email + ' | uid: ' + user.uid.slice(0,8)+'...');
 
     // BAN
     unsubBan = onSnapshot(
       doc(dbP,'users',user.uid),
       snap => {
-        if(!snap.exists()) return;
+        if(!snap.exists()){ _klLog('⚠️ Doc usuario no existe'); return; }
         const data = snap.data();
+        _klLog('📄 Usuario doc leído | banned: ' + data.banned);
         if(data.banned){
           const screen = document.getElementById('ban-screen');
           if(screen){
@@ -719,17 +722,20 @@ import { getFirestore, doc, onSnapshot, collection, query, where, updateDoc, ser
               const el = document.getElementById('ban-reason-rt');
               if(el){ el.textContent='📋 Razón: '+data.banReason; el.style.display='block'; }
             }
-          }
+          } else { _klLog('❌ ban-screen element NOT FOUND'); }
         }
       },
-      err => console.error('❌ ban listener:', err.code, err.message)
+      err => { _klLog('❌ Ban error: ' + err.code + ' - ' + err.message); }
     );
 
-    // AVISOS — usando esta misma app autenticada
+    // AVISOS
+    _klLog('🔍 Escuchando avisos para uid: ' + user.uid.slice(0,8)+'...');
     const qAv = query(collection(dbP,'avisos'), where('uid','==',user.uid), where('estado','==','pendiente'));
     unsubAv = onSnapshot(qAv,
       snap => {
+        _klLog('📬 Avisos snap recibido | docs: ' + snap.size + ' | changes: ' + snap.docChanges().length);
         snap.docChanges().forEach(ch => {
+          _klLog('📩 Change type: ' + ch.type);
           if(ch.type !== 'added') return;
           _avId = ch.doc.id;
           const d = ch.doc.data();
@@ -743,10 +749,29 @@ import { getFirestore, doc, onSnapshot, collection, query, where, updateDoc, ser
           if(okEl && d.btnAceptar)  okEl.textContent = d.btnAceptar;
           if(noEl && d.btnRechazar) noEl.textContent = d.btnRechazar;
           if(ov) ov.classList.add('open');
+          else _klLog('❌ aviso-overlay NOT FOUND');
         });
       },
-      err => console.error('❌ avisos listener:', err.code, err.message)
+      err => { _klLog('❌ Avisos error: ' + err.code + ' - ' + err.message); }
     );
+
+    // DEBUG LOG PANEL
+    window._klLog = function(msg){
+      console.log('[KL Debug]', msg);
+      let panel = document.getElementById('_kl_debug');
+      if(!panel){
+        panel = document.createElement('div');
+        panel.id = '_kl_debug';
+        panel.style.cssText='position:fixed;bottom:10px;left:10px;z-index:999999;background:rgba(0,0,0,.92);border:1px solid #7A1FEE;border-radius:8px;padding:10px 14px;max-width:380px;max-height:200px;overflow-y:auto;font-family:monospace;font-size:11px;color:#4dff91;';
+        panel.innerHTML='<div style="color:#a855f7;font-size:10px;margin-bottom:6px;font-family:Orbitron,sans-serif;letter-spacing:1px;">KL DEBUG <button onclick="document.getElementById('_kl_debug').remove()" style="float:right;background:none;border:none;color:#ff6868;cursor:pointer;font-size:12px;">✕</button></div>';
+        document.body.appendChild(panel);
+      }
+      const line = document.createElement('div');
+      line.textContent = new Date().toLocaleTimeString() + ' ' + msg;
+      panel.appendChild(line);
+      panel.scrollTop = panel.scrollHeight;
+    };
+    window._klLog('🚀 Listener iniciado');
 
     window._klPerfAvResp = async function(resp){
       const ov = document.getElementById('aviso-overlay');
