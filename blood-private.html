@@ -160,6 +160,34 @@
       .feats{padding:50px 18px}
       footer{padding:20px 18px;flex-direction:column;text-align:center}
     }
+
+    /* ── PAYMENT ANIMATIONS ── */
+    @keyframes processingRing1 {
+      from { transform: rotate(0deg); border-top-color: var(--o); }
+      to   { transform: rotate(360deg); border-top-color: var(--o); }
+    }
+    @keyframes processingRing2 {
+      from { transform: rotate(0deg); border-right-color: rgba(122,31,238,0.4); }
+      to   { transform: rotate(360deg); border-right-color: rgba(122,31,238,0.4); }
+    }
+    @keyframes stepActivate {
+      from { opacity:0.3; transform:translateX(-4px); }
+      to   { opacity:1;   transform:translateX(0); }
+    }
+    .proc-step.active {
+      opacity: 1 !important;
+      background: rgba(122,31,238,0.08) !important;
+      border-color: rgba(122,31,238,0.25) !important;
+      animation: stepActivate 0.4s ease forwards;
+    }
+    .proc-step.done {
+      opacity: 1 !important;
+      background: rgba(68,255,136,0.05) !important;
+      border-color: rgba(68,255,136,0.2) !important;
+    }
+    .proc-step.done .step-check { opacity: 1 !important; }
+    .proc-step.done .step-check::before { content: "✅"; }
+
   </style>
 </head>
 <body>
@@ -176,6 +204,102 @@
     </div>
   </div>
 </nav>
+
+
+<!-- ═══ MODAL: RESUMEN DE ORDEN ═══ -->
+<div class="moverlay" id="modal-order">
+  <div class="msuccess" style="max-width:420px;text-align:left;padding:36px 32px;">
+    <div style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:900;letter-spacing:3px;color:var(--o);text-transform:uppercase;margin-bottom:20px;text-align:center;">
+      📋 Resumen de Orden
+    </div>
+    <div style="background:rgba(122,31,238,0.07);border:1px solid rgba(122,31,238,0.2);border-radius:8px;padding:16px;margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#888;">Producto</span>
+        <span id="ord-producto" style="font-family:'Orbitron',sans-serif;font-size:.62rem;color:#fff;letter-spacing:1px;">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#888;">Plan</span>
+        <span id="ord-plan" style="font-family:'Orbitron',sans-serif;font-size:.62rem;color:var(--o);letter-spacing:1px;">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#888;">Cantidad</span>
+        <span id="ord-qty" style="font-family:'Orbitron',sans-serif;font-size:.62rem;color:#fff;">—</span>
+      </div>
+      <div style="border-top:1px solid rgba(122,31,238,0.2);margin:10px 0;"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-family:'Exo 2',sans-serif;font-size:.88rem;color:#fff;font-weight:700;">Total</span>
+        <span id="ord-total" style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;color:var(--o);text-shadow:0 0 10px rgba(122,31,238,0.5);">—</span>
+      </div>
+    </div>
+    <div style="background:rgba(68,255,136,0.05);border:1px solid rgba(68,255,136,0.15);border-radius:6px;padding:10px 14px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-family:'Exo 2',sans-serif;font-size:.8rem;color:#888;">💰 Tu saldo</span>
+      <span id="ord-saldo" style="font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;color:#4dff91;">—</span>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="document.getElementById('modal-order').classList.remove('open')"
+        style="flex:1;background:transparent;color:#666;border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.55rem;letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
+        onmouseover="this.style.borderColor='rgba(122,31,238,0.4)';this.style.color='#aaa'"
+        onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.color='#666'">
+        CANCELAR
+      </button>
+      <button id="btn-confirm-pay"
+        onclick="confirmarPago()"
+        style="flex:1;background:var(--o);color:#000;border:none;padding:12px;border-radius:6px;font-family:'Orbitron',sans-serif;font-weight:900;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;transition:all .2s;box-shadow:0 4px 20px rgba(122,31,238,0.3);"
+        onmouseover="this.style.background='var(--ob)';this.style.boxShadow='var(--neon)'"
+        onmouseout="this.style.background='var(--o)';this.style.boxShadow='0 4px 20px rgba(122,31,238,0.3)'">
+        ⚡ CONFIRMAR PAGO
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: PROCESANDO PAGO ═══ -->
+<div class="moverlay" id="modal-processing">
+  <div class="msuccess" style="max-width:400px;padding:48px 36px;text-align:center;">
+    <!-- Logo animado -->
+    <div style="position:relative;width:80px;height:80px;margin:0 auto 28px;">
+      <div style="position:absolute;inset:0;border-radius:50%;border:2px solid rgba(122,31,238,0.2);animation:processingRing1 2s linear infinite;"></div>
+      <div style="position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(122,31,238,0.1);animation:processingRing2 2s linear infinite reverse;"></div>
+      <div style="position:absolute;inset:0;border-radius:50%;background:rgba(122,31,238,0.1);display:flex;align-items:center;justify-content:center;font-size:1.8rem;" id="proc-icon">⚡</div>
+    </div>
+
+    <div style="font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:900;letter-spacing:3px;color:var(--o);text-transform:uppercase;margin-bottom:8px;" id="proc-title">
+      Procesando Pago
+    </div>
+    <div style="font-family:'Exo 2',sans-serif;font-size:.85rem;color:#666;margin-bottom:32px;" id="proc-subtitle">
+      Por favor espera...
+    </div>
+
+    <!-- Pasos -->
+    <div style="text-align:left;display:flex;flex-direction:column;gap:12px;" id="proc-steps">
+      <div class="proc-step" id="step-1" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);opacity:0.3;transition:all 0.5s;">
+        <span class="step-icon" style="font-size:1rem;width:24px;text-align:center;">🔍</span>
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;">Verificando saldo disponible</span>
+        <span class="step-check" style="margin-left:auto;font-size:.9rem;opacity:0;transition:opacity 0.3s;"></span>
+      </div>
+      <div class="proc-step" id="step-2" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);opacity:0.3;transition:all 0.5s;">
+        <span class="step-icon" style="font-size:1rem;width:24px;text-align:center;">🛡️</span>
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;">Autenticando transacción</span>
+        <span class="step-check" style="margin-left:auto;font-size:.9rem;opacity:0;transition:opacity 0.3s;"></span>
+      </div>
+      <div class="proc-step" id="step-3" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);opacity:0.3;transition:all 0.5s;">
+        <span class="step-icon" style="font-size:1rem;width:24px;text-align:center;">💳</span>
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;">Procesando débito de saldo</span>
+        <span class="step-check" style="margin-left:auto;font-size:.9rem;opacity:0;transition:opacity 0.3s;"></span>
+      </div>
+      <div class="proc-step" id="step-4" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);opacity:0.3;transition:all 0.5s;">
+        <span class="step-icon" style="font-size:1rem;width:24px;text-align:center;">🔑</span>
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;">Generando clave de licencia</span>
+        <span class="step-check" style="margin-left:auto;font-size:.9rem;opacity:0;transition:opacity 0.3s;"></span>
+      </div>
+      <div class="proc-step" id="step-5" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);opacity:0.3;transition:all 0.5s;">
+        <span class="step-icon" style="font-size:1rem;width:24px;text-align:center;">📦</span>
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;">Registrando orden en sistema</span>
+        <span class="step-check" style="margin-left:auto;font-size:.9rem;opacity:0;transition:opacity 0.3s;"></span>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="moverlay" id="modal-ok">
   <div class="msuccess">
@@ -281,7 +405,7 @@
     document.getElementById('sr').style.display='flex';
     document.getElementById('sv').textContent=`$${saldo.toFixed(2)}`;
     const t=sv.price*qty;
-    if(saldo>=t){ba.innerHTML=`<button class="btn-buy" id="bc">🛒 COMPRAR — $${t.toFixed(2)}</button>`;document.getElementById('bc').addEventListener('click',comprar);}
+    if(saldo>=t){ba.innerHTML=`<button class="btn-buy" id="bc">🛒 COMPRAR — $${t.toFixed(2)}</button>`;document.getElementById('bc').addEventListener('click',abrirResumen);}
     else{ba.innerHTML=`<button class="btn-buy" disabled>🛒 COMPRAR — $${t.toFixed(2)}</button>`;showMsg('warn',`Saldo insuficiente. Necesitas $${t.toFixed(2)}, tienes $${saldo.toFixed(2)}. Contacta al admin para recargar.`);}
   }
   async function comprar(){
@@ -296,6 +420,112 @@
       document.getElementById('kbox').textContent=key;document.getElementById('modal-ok').classList.add('open');
     }catch(e){showMsg('err','Error al procesar. Intenta de nuevo.');btn.disabled=false;btn.innerHTML=`🛒 COMPRAR — $${(sv.price*qty).toFixed(2)}`;}
   }
+
+  // ── NUEVO SISTEMA DE PAGO ──
+  window.abrirResumen = function() {
+    const t = sv.price * qty;
+    document.getElementById('ord-producto').textContent = PNAME;
+    document.getElementById('ord-plan').textContent     = sv.name + ' — ' + sv.sub;
+    document.getElementById('ord-qty').textContent      = qty + (qty > 1 ? ' unidades' : ' unidad');
+    document.getElementById('ord-total').textContent    = '$' + t.toFixed(2);
+    document.getElementById('ord-saldo').textContent    = '$' + saldo.toFixed(2);
+    document.getElementById('modal-order').classList.add('open');
+  };
+
+  window.confirmarPago = async function() {
+    document.getElementById('modal-order').classList.remove('open');
+    document.getElementById('modal-processing').classList.add('open');
+    resetSteps();
+
+    const t = sv.price * qty;
+
+    try {
+      // Step 1 — Verificar saldo
+      await activateStep(1, 1200);
+      const snap = await getDoc(doc(db,'users',user.uid));
+      const sr   = snap.data().saldo ?? 0;
+      if (sr < t) {
+        closeProcessing();
+        showMsg('err', 'Saldo insuficiente.');
+        return;
+      }
+      completeStep(1);
+
+      // Step 2 — Autenticar
+      await activateStep(2, 1400);
+      await sleep(1000);
+      completeStep(2);
+
+      // Step 3 — Débito
+      await activateStep(3, 1000);
+      await updateDoc(doc(db,'users',user.uid),{
+        saldo: increment(-t),
+        purchases: arrayUnion(PID + ' — ' + sv.name + ' x' + qty)
+      });
+      completeStep(3);
+
+      // Step 4 — Generar clave
+      await activateStep(4, 1200);
+      const key = 'YS-' + PID + '-' + sv.id.toUpperCase() + '-' +
+                  Math.random().toString(36).slice(2,8).toUpperCase();
+      await sleep(800);
+      completeStep(4);
+
+      // Step 5 — Registrar orden
+      await activateStep(5, 1000);
+      await addDoc(collection(db,'compras'),{
+        uid: user.uid, nombre: user.displayName||'—',
+        email: user.email, producto: PNAME,
+        plan: sv.name, cantidad: qty,
+        precio: t, clave: key, fecha: serverTimestamp()
+      });
+      completeStep(5);
+
+      // Actualizar saldo
+      saldo = sr - t;
+      document.getElementById('ns').textContent = '$' + saldo.toFixed(2);
+      if (document.getElementById('sv'))
+        document.getElementById('sv').textContent = '$' + saldo.toFixed(2);
+
+      // Mostrar éxito
+      await sleep(700);
+      closeProcessing();
+      document.getElementById('kbox').textContent = key;
+      document.getElementById('modal-ok').classList.add('open');
+
+    } catch(e) {
+      closeProcessing();
+      showMsg('err', 'Error al procesar. Intenta de nuevo.');
+      updateUI();
+    }
+  };
+
+  function resetSteps() {
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById('step-' + i);
+      if (el) { el.className = 'proc-step'; el.querySelector('.step-check').textContent = ''; }
+    }
+  }
+  function activateStep(n, delay) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const el = document.getElementById('step-' + n);
+        if (el) el.classList.add('active');
+        resolve();
+      }, delay);
+    });
+  }
+  function completeStep(n) {
+    const el = document.getElementById('step-' + n);
+    if (!el) return;
+    el.classList.remove('active');
+    el.classList.add('done');
+  }
+  function closeProcessing() {
+    document.getElementById('modal-processing').classList.remove('open');
+  }
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
   function showMsg(t,txt){const el=document.getElementById('msg');el.className=`msg ${t}`;el.textContent=txt;}
   function clrMsg(){const el=document.getElementById('msg');el.className='msg';}
   window.updateUI=updateUI;
