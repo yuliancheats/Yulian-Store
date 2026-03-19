@@ -411,128 +411,126 @@
       <div class="msg" id="msg"></div>
 
       
-      <!-- ═══ SKRILL ═══ -->
-      <div class="pay-divider"><span>O PAGA CON SKRILL</span></div>
-      <div class="skrill-block">
-        <div class="skrill-header">
-          <div class="skrill-logo-wrap">
-            <!-- Skrill logo SVG -->
-            <svg class="skrill-logo-svg" viewBox="0 0 90 30" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="15" cy="15" r="13" fill="#862165"/>
-              <text x="15" y="20" font-family="Arial" font-weight="900" font-size="14" fill="#fff" text-anchor="middle">S</text>
-              <text x="52" y="21" font-family="Arial" font-weight="700" font-size="14" fill="#fff">krill</text>
-            </svg>
-          </div>
-          <div class="trust-badges">
-            <span class="trust-b">🔒 SSL</span>
-            <span class="trust-b">✓ Seguro</span>
-          </div>
-        </div>
-        <div class="card-icons">
-          <div class="card-icon visa">VISA</div>
-          <div class="card-icon mc"><div class="mc-circles"><div class="mc-circle"></div><div class="mc-circle"></div></div></div>
-          <span style="font-family:'Exo 2',sans-serif;font-size:.72rem;color:#555;margin-left:4px">y más</span>
-        </div>
-        <div class="pay-notice">
-          <span style="font-size:.85rem;flex-shrink:0;margin-top:1px">ℹ️</span>
-          <div class="pay-notice-text">
-            Paga de forma segura con <strong>Skrill</strong>. El acceso se activará en menos de <strong>24 horas</strong>. Envía tu comprobante por Discord tras pagar.
-          </div>
-        </div>
-        <button class="btn-skrill" onclick="pagarConSkrill()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.2)"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          PAGAR CON SKRILL — <span id="skrill-amt">$0.00</span>
-        </button>
-        <div class="pay-secure"><span>🔒</span> Pago procesado por Skrill · SSL 256-bit · ID: 373135134</div>
-      </div>
 
-      <!-- ═══ WESTERN UNION ═══ -->
-      <div class="pay-divider"><span>O PAGA CON WESTERN UNION</span></div>
-      <div class="wu-block">
-        <div class="wu-header">
-          <div class="wu-logo-wrap">
-            <div class="wu-logo-icon">
-              <svg width="28" height="20" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
-                <rect width="60" height="40" rx="4" fill="#FFDD00"/>
-                <text x="30" y="26" font-family="Arial" font-weight="900" font-size="11" fill="#000" text-anchor="middle">WU</text>
+      <!-- ═══ SELECTOR MÉTODO DE PAGO ═══ -->
+      <div class="pm-selector" id="pm-selector" style="display:none">
+        <div class="pm-selector-title">Método de Pago</div>
+        <div class="pm-methods-grid">
+
+          <div class="pm-method-card" id="pmc-saldo" onclick="selMetodo('saldo',this)">
+            <div class="pm-method-logo">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#4dff91" stroke-width="1.5"/><path d="M12 6v12M9 9h4.5a1.5 1.5 0 010 3H9m0 0h5a1.5 1.5 0 010 3H9" stroke="#4dff91" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <div class="pm-method-name" style="color:#4dff91">Saldo</div>
+            <div class="pm-method-sub" id="pm-saldo-disp">$0.00</div>
+          </div>
+
+          <div class="pm-method-card" id="pmc-skrill" onclick="selMetodo('skrill',this)">
+            <div class="pm-method-logo">
+              <svg width="54" height="22" viewBox="0 0 90 30" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="15" cy="15" r="13" fill="#862165"/>
+                <text x="15" y="20" font-family="Arial" font-weight="900" font-size="14" fill="#fff" text-anchor="middle">S</text>
+                <text x="52" y="21" font-family="Arial" font-weight="700" font-size="14" fill="#fff">krill</text>
               </svg>
             </div>
-            <div class="wu-logo-text-wrap">
-              <span class="wu-logo-main">WESTERN UNION</span>
-              <span class="wu-logo-sub">Transferencia Internacional</span>
+            <div class="pm-method-name">Skrill</div>
+            <div class="pm-method-sub">Visa · Mastercard</div>
+          </div>
+
+          <div class="pm-method-card" id="pmc-wu" onclick="selMetodo('wu',this)">
+            <div class="pm-method-logo">
+              <svg width="44" height="20" viewBox="0 0 80 32" xmlns="http://www.w3.org/2000/svg">
+                <rect width="80" height="32" rx="4" fill="#FFDD00"/>
+                <text x="40" y="22" font-family="Arial" font-weight="900" font-size="13" fill="#000" text-anchor="middle">WU</text>
+              </svg>
+            </div>
+            <div class="pm-method-name">Western Union</div>
+            <div class="pm-method-sub">Global</div>
+          </div>
+
+          <div class="pm-method-card" id="pmc-crypto" onclick="selMetodo('crypto',this)">
+            <div class="pm-method-logo" style="display:flex;gap:3px">
+              <div style="width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#f7931a,#f5a623);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:900;color:#fff">₿</div>
+              <div style="width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#26a17b,#1a8c6a);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:900;color:#fff">₮</div>
+              <div style="width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#627eea,#4a63c8);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:900;color:#fff">Ξ</div>
+            </div>
+            <div class="pm-method-name">Crypto</div>
+            <div class="pm-method-sub">BTC · USDT · ETH</div>
+          </div>
+
+        </div>
+
+        <!-- PANEL: SALDO -->
+        <div class="pm-panel" id="pmp-saldo">
+          <div style="font-family:'Exo 2',sans-serif;font-size:.84rem;color:#888;line-height:1.7;margin-bottom:12px;background:rgba(77,255,145,.04);border:1px solid rgba(77,255,145,.1);border-radius:6px;padding:10px 13px">
+            Se descontará <strong id="pmp-s-monto" style="color:#fff">$0.00</strong> de tu saldo de <strong id="pmp-s-disp" style="color:#4dff91">$0.00</strong>.
+          </div>
+          <button class="btn-proceed" id="btn-saldo-proceed" onclick="abrirResumen()">⚡ COMPRAR CON SALDO — <span id="pmp-s-total">$0.00</span></button>
+        </div>
+
+        <!-- PANEL: SKRILL -->
+        <div class="pm-panel" id="pmp-skrill">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+            <div style="display:flex;gap:4px">
+              <div style="height:20px;background:#fff;border-radius:3px;padding:2px 5px;color:#1a1f71;font-family:serif;font-size:.78rem;font-weight:900;font-style:italic;display:flex;align-items:center;min-width:32px">VISA</div>
+              <div style="height:20px;border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:2px 3px;display:flex;align-items:center"><div style="display:flex"><div style="width:13px;height:13px;border-radius:50%;background:#EB001B;margin-right:-4px;z-index:1"></div><div style="width:13px;height:13px;border-radius:50%;background:#F79E1B"></div></div></div>
+            </div>
+            <span style="font-family:'Exo 2',sans-serif;font-size:.74rem;color:#555">Tarjeta crédito / débito</span>
+            <span style="font-family:'Exo 2',sans-serif;font-size:.68rem;color:#444;margin-left:auto">🔒 SSL</span>
+          </div>
+          <div style="font-family:'Exo 2',sans-serif;font-size:.8rem;color:#666;line-height:1.7;margin-bottom:11px;background:rgba(122,31,238,.04);border:1px solid rgba(122,31,238,.12);border-radius:6px;padding:9px 12px">
+            Serás redirigido a <strong style="color:#c060a0">Skrill</strong> para pagar <strong id="pmp-sk-total" style="color:#fff">$0.00</strong>. Acceso activado en &lt;24h. Envía comprobante por Discord.
+          </div>
+          <button class="btn-proceed" style="background:linear-gradient(135deg,#6d1b54,#862165)" onclick="pagarConSkrill()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,.2)"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+            PAGAR CON SKRILL — <span id="pmp-sk-btn">$0.00</span>
+          </button>
+          <div style="text-align:center;margin-top:6px;font-family:'Exo 2',sans-serif;font-size:.65rem;color:#3a3a3a">🔒 Skrill · SSL 256-bit · ID: 373135134</div>
+        </div>
+
+        <!-- PANEL: WESTERN UNION -->
+        <div class="pm-panel" id="pmp-wu">
+          <div style="font-family:'Exo 2',sans-serif;font-size:.8rem;color:#666;margin-bottom:10px;background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.1);border-radius:6px;padding:9px 12px">
+            Envía <strong id="pmp-wu-total" style="color:#FFD700">$0.00</strong> con los datos de abajo. Comparte el número <strong style="color:#fff">MTCN</strong> en Discord y activamos en &lt;24h.
+          </div>
+          <div style="background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.05);border-radius:7px;padding:11px 13px;margin-bottom:10px;font-family:'Exo 2',sans-serif;font-size:.83rem">
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="color:#555">Nombre</span><span style="color:#FFD700;font-weight:700">Grecia Reinoso Mejia</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)"><span style="color:#555">País</span><span style="color:#fff">República Dominicana 🇩🇴</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0"><span style="color:#555">Ciudad</span><span style="color:#fff">La Vega</span></div>
+          </div>
+          <button class="btn-proceed" style="background:linear-gradient(135deg,#5865F2,#4752C4)" onclick="window.open('https://discord.gg/TU_LINK_AQUI','_blank')">
+            💬 ENVIAR COMPROBANTE (MTCN) POR DISCORD
+          </button>
+        </div>
+
+        <!-- PANEL: CRYPTO -->
+        <div class="pm-panel" id="pmp-crypto">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+            <button class="crypto-tab-btn" onclick="selCoin('usdt',this)"><div class="ctab-ico usdt">₮</div><span class="ctab-lbl">USDT</span></button>
+            <button class="crypto-tab-btn" onclick="selCoin('btc',this)"><div class="ctab-ico btc">₿</div><span class="ctab-lbl">BTC</span></button>
+            <button class="crypto-tab-btn" onclick="selCoin('eth',this)"><div class="ctab-ico eth">Ξ</div><span class="ctab-lbl">ETH</span></button>
+            <button class="crypto-tab-btn" onclick="selCoin('bnb',this)"><div class="ctab-ico bnb">⬡</div><span class="ctab-lbl">BNB</span></button>
+            <button class="crypto-tab-btn" onclick="selCoin('usdc',this)"><div class="ctab-ico usdc">$</div><span class="ctab-lbl">USDC</span></button>
+          </div>
+          <div id="coin-detail" style="display:none">
+            <div style="font-family:'Exo 2',sans-serif;font-size:.72rem;color:#666;margin-bottom:5px"><span id="coin-lbl">—</span> <span id="coin-net" style="background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.18);padding:2px 7px;border-radius:4px;color:#888;font-size:.68rem"></span></div>
+            <div style="display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:10px 12px">
+              <code id="coin-addr" style="font-size:.68rem;color:#7A1FEE;word-break:break-all;flex:1;line-height:1.5"></code>
+              <button id="coin-copy-btn" onclick="copiarCoin()" style="background:rgba(122,31,238,.1);border:1px solid rgba(122,31,238,.25);color:#7A1FEE;padding:5px 10px;border-radius:4px;font-family:'Orbitron',sans-serif;font-size:.48rem;letter-spacing:1px;white-space:nowrap;transition:all .2s;flex-shrink:0">📋 COPIAR</button>
+            </div>
+            <div style="font-family:'Exo 2',sans-serif;font-size:.75rem;color:#555;background:rgba(255,200,0,.04);border:1px solid rgba(255,200,0,.1);border-radius:6px;padding:8px 10px;margin-top:8px;line-height:1.6">
+              ⚠️ <strong style="color:#ffc800">Red incorrecta = fondos perdidos.</strong> Envía <strong id="coin-amt" style="color:#fff">$0.00</strong> y comparte el ID de tx en Discord.
             </div>
           </div>
-          <div class="trust-badges">
-            <span class="trust-b">🌍 Global</span>
-            <span class="trust-b">✓ Confiable</span>
+          <div style="font-family:'Exo 2',sans-serif;font-size:.74rem;color:#555;text-align:center;margin-top:10px;line-height:1.7">
+            Tras pagar → <a href="https://discord.gg/TU_LINK_AQUI" target="_blank" style="color:#7A1FEE;text-decoration:none">Discord</a> con ID de transacción → acceso en &lt;24h
           </div>
         </div>
 
-        <div class="wu-recipient">
-          <div class="wu-recipient-title">📋 Datos del destinatario</div>
-          <div class="wu-row">
-            <span class="wu-row-label">Nombre</span>
-            <span class="wu-row-val gold">Grecia Reinoso Mejia</span>
-          </div>
-          <div class="wu-row">
-            <span class="wu-row-label">País</span>
-            <span class="wu-row-val">República Dominicana 🇩🇴</span>
-          </div>
-          <div class="wu-row">
-            <span class="wu-row-label">Ciudad</span>
-            <span class="wu-row-val">La Vega</span>
-          </div>
-        </div>
-
-        <ul class="wu-steps">
-          <li class="wu-step"><span class="wu-step-n">1</span>Ve a westernunion.com o a una agencia WU cercana</li>
-          <li class="wu-step"><span class="wu-step-n">2</span>Ingresa los datos del destinatario y el monto exacto</li>
-          <li class="wu-step"><span class="wu-step-n">3</span>Completa el envío y guarda el número de rastreo (MTCN)</li>
-          <li class="wu-step"><span class="wu-step-n">4</span>Envíanos el MTCN por Discord y activamos tu acceso en menos de 24h</li>
-        </ul>
-
-        <button class="btn-wu-discord" onclick="window.open('https://discord.gg/TU_LINK_AQUI','_blank')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
-          ENVIAR COMPROBANTE POR DISCORD
-        </button>
-      </div>
-
-      <!-- ═══ CRYPTO ═══ -->
-      <div class="pay-divider"><span>O PAGA CON CRYPTO</span></div>
-      <div class="crypto-block">
-        <div class="crypto-header">
-          <span class="crypto-title">₿ Criptomonedas</span>
-          <div class="trust-badges">
-            <span class="trust-b">⚡ Instantáneo</span>
-            <span class="trust-b">0% Comisión</span>
-          </div>
-        </div>
-        <div class="crypto-coins">
-          <div class="coin-btn" onclick="mostrarCrypto('usdt',this)"><div class="coin-icon usdt">₮</div><span class="coin-name">USDT</span></div>
-          <div class="coin-btn" onclick="mostrarCrypto('btc',this)"><div class="coin-icon btc">₿</div><span class="coin-name">BTC</span></div>
-          <div class="coin-btn" onclick="mostrarCrypto('eth',this)"><div class="coin-icon eth">Ξ</div><span class="coin-name">ETH</span></div>
-          <div class="coin-btn" onclick="mostrarCrypto('bnb',this)"><div class="coin-icon bnb">⬡</div><span class="coin-name">BNB</span></div>
-          <div class="coin-btn" onclick="mostrarCrypto('usdc',this)"><div class="coin-icon usdc">$</div><span class="coin-name">USDC</span></div>
-        </div>
-        <div class="crypto-addr-box" id="crypto-addr-box">
-          <div class="crypto-addr-lbl" id="crypto-addr-lbl">Dirección</div>
-          <div class="crypto-addr-net" id="crypto-addr-net">Red: —</div>
-          <div class="crypto-addr" id="crypto-addr">—</div>
-          <button class="btn-copy-addr" id="btn-copy-addr" onclick="copiarAddr()">📋 COPIAR DIRECCIÓN</button>
-        </div>
-        <div class="crypto-warn">
-          <span style="font-size:.85rem;flex-shrink:0">⚠️</span>
-          <div class="crypto-warn-text">Envía el monto exacto en la red correcta. <strong>Red incorrecta = fondos perdidos.</strong> USDT/ETH/USDC/BNB → usa <strong>ERC-20 o BEP-20</strong>.</div>
-        </div>
-        <div class="crypto-discord-note">
-          Tras pagar, envía tu <strong style="color:#fff">ID de transacción</strong> por
-          <a href="https://discord.gg/TU_LINK_AQUI" target="_blank">Discord</a> y activamos tu acceso en &lt;24h.
-        </div>
       </div>
     </div>
   </div>
 </div>
-
 <div class="feats">
   <h2>CARACTERÍSTICAS DEL SOFTWARE</h2>
   <p class="sub">Todo lo que incluye tu acceso — Fortnite Mobile PRIVADO</p>
@@ -714,61 +712,32 @@
 
 
 
-  // ── PAYMENT METHOD SELECTOR ──
-  let metodoPago = null;
 
-  window.seleccionarMetodoPago = function(metodo, el) {
-    metodoPago = metodo;
-    // highlight card
-    document.querySelectorAll('.pm-method-card').forEach(c=>c.classList.remove('selected'));
-    el.classList.add('selected');
-    // hide all details
-    ['saldo','skrill','wu','crypto'].forEach(m=>{
-      const d = document.getElementById('pmd-'+m);
-      if(d) d.classList.remove('show');
-    });
-    // show selected detail
-    const detail = document.getElementById('pmd-'+metodo);
-    if(detail) detail.classList.add('show');
-    // update amounts in detail panels
+
+
+
+
+
+
+  // ── PAYMENT SELECTOR ──
+  window.selMetodo = function(m, el) {
+    document.querySelectorAll('.pm-method-card').forEach(c=>c.classList.remove('sel'));
+    el.classList.add('sel');
+    document.querySelectorAll('.pm-panel').forEach(p=>p.classList.remove('show'));
+    const panel = document.getElementById('pmp-'+m);
+    if(panel) panel.classList.add('show');
     const t = sv.price * qty;
-    const setTxt = (id,v)=>{ const e=document.getElementById(id); if(e) e.textContent=v; };
-    setTxt('pmd-saldo-monto',    `$${t.toFixed(2)}`);
-    setTxt('pmd-saldo-disponible',`$${saldo.toFixed(2)}`);
-    setTxt('pmd-saldo-total',    `$${t.toFixed(2)}`);
-    setTxt('pmd-skrill-total',   `$${t.toFixed(2)}`);
-    setTxt('pmd-skrill-btn-total',`$${t.toFixed(2)}`);
-    setTxt('pmd-wu-total',       `$${t.toFixed(2)}`);
-    setTxt('crypto-amt-txt',     `$${t.toFixed(2)}`);
-  };
-
-
-  // ── PAYMENT METHOD SELECTOR ──
-  let metodoPago = null;
-
-  window.seleccionarMetodoPago = function(metodo, el) {
-    metodoPago = metodo;
-    // highlight card
-    document.querySelectorAll('.pm-method-card').forEach(c=>c.classList.remove('selected'));
-    el.classList.add('selected');
-    // hide all details
-    ['saldo','skrill','wu','crypto'].forEach(m=>{
-      const d = document.getElementById('pmd-'+m);
-      if(d) d.classList.remove('show');
-    });
-    // show selected detail
-    const detail = document.getElementById('pmd-'+metodo);
-    if(detail) detail.classList.add('show');
-    // update amounts in detail panels
-    const t = sv.price * qty;
-    const setTxt = (id,v)=>{ const e=document.getElementById(id); if(e) e.textContent=v; };
-    setTxt('pmd-saldo-monto',    `$${t.toFixed(2)}`);
-    setTxt('pmd-saldo-disponible',`$${saldo.toFixed(2)}`);
-    setTxt('pmd-saldo-total',    `$${t.toFixed(2)}`);
-    setTxt('pmd-skrill-total',   `$${t.toFixed(2)}`);
-    setTxt('pmd-skrill-btn-total',`$${t.toFixed(2)}`);
-    setTxt('pmd-wu-total',       `$${t.toFixed(2)}`);
-    setTxt('crypto-amt-txt',     `$${t.toFixed(2)}`);
+    const s = (id,v)=>{ const e=document.getElementById(id); if(e) e.textContent=v; };
+    s('pmp-s-monto',   '$'+t.toFixed(2));
+    s('pmp-s-disp',    '$'+saldo.toFixed(2));
+    s('pmp-s-total',   '$'+t.toFixed(2));
+    s('pmp-sk-total',  '$'+t.toFixed(2));
+    s('pmp-sk-btn',    '$'+t.toFixed(2));
+    s('pmp-wu-total',  '$'+t.toFixed(2));
+    s('coin-amt',      '$'+t.toFixed(2));
+    // saldo btn state
+    const bsp = document.getElementById('btn-saldo-proceed');
+    if(bsp) bsp.disabled = saldo < t;
   };
 
   // ── SKRILL ──
@@ -786,49 +755,40 @@
   };
   window.pagarConSkrill = function() {
     const link = SKRILL_LINKS[sv.price];
-    if (!link || link.includes('AQUI')) {
-      if(confirm('El pago con Skrill estará listo muy pronto.
-¿Contactar por Discord ahora?'))
-        window.open('https://discord.gg/TU_LINK_AQUI','_blank');
-      return;
-    }
-    window.open(link,'_blank');
+    if (link) { window.open(link,'_blank'); return; }
+    if(confirm('Skrill no tiene link para ese precio.\n¿Contactar por Discord?'))
+      window.open('https://discord.gg/TU_LINK_AQUI','_blank');
   };
 
   // ── CRYPTO ──
-  const CRYPTO_ADDRS = {
-    usdt:{ addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', network:'ERC-20 / BEP-20', label:'USDT — Tether' },
-    btc: { addr:'bc1qa3m5w2h5663du2f857czehrcljty09cmfxqhqe', network:'Bitcoin (BTC)',    label:'Bitcoin' },
-    eth: { addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', network:'ERC-20',          label:'Ethereum (ETH)' },
-    bnb: { addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', network:'BEP-20 (BSC)',    label:'BNB' },
-    usdc:{ addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', network:'ERC-20 / BEP-20', label:'USDC' },
+  const CRYPTO_DATA = {
+    usdt:{ addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', net:'ERC-20 / BEP-20', lbl:'USDT — Tether' },
+    btc: { addr:'bc1qa3m5w2h5663du2f857czehrcljty09cmfxqhqe', net:'Bitcoin (BTC)',    lbl:'Bitcoin' },
+    eth: { addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', net:'ERC-20',          lbl:'Ethereum' },
+    bnb: { addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', net:'BEP-20 (BSC)',    lbl:'BNB' },
+    usdc:{ addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', net:'ERC-20 / BEP-20', lbl:'USDC' },
   };
-  window.selCrypto = function(coin, el) {
-    document.querySelectorAll('.crypto-tab').forEach(b=>b.classList.remove('active'));
+  window.selCoin = function(coin, el) {
+    document.querySelectorAll('.crypto-tab-btn').forEach(b=>b.classList.remove('active'));
     el.classList.add('active');
-    const c = CRYPTO_ADDRS[coin];
-    document.getElementById('crypto-net-txt').textContent      = 'Red: ' + c.network;
-    document.getElementById('crypto-coin-lbl').textContent     = c.label;
-    document.getElementById('crypto-addr-display').textContent = c.addr;
-    document.getElementById('crypto-detail-panel').style.display = 'block';
-    const btn = document.getElementById('crypto-copy-btn');
+    const c = CRYPTO_DATA[coin];
+    document.getElementById('coin-lbl').textContent  = c.lbl;
+    document.getElementById('coin-net').textContent  = 'Red: '+c.net;
+    document.getElementById('coin-addr').textContent = c.addr;
+    document.getElementById('coin-detail').style.display = 'block';
+    const btn = document.getElementById('coin-copy-btn');
     btn.textContent = '📋 COPIAR'; btn.classList.remove('copied');
   };
-  window.copiarCryptoAddr = function() {
-    const addr = document.getElementById('crypto-addr-display').textContent;
-    navigator.clipboard.writeText(addr).then(()=>{
-      const btn = document.getElementById('crypto-copy-btn');
+  window.copiarCoin = function() {
+    navigator.clipboard.writeText(document.getElementById('coin-addr').textContent).then(()=>{
+      const btn = document.getElementById('coin-copy-btn');
       btn.textContent = '✓ COPIADO'; btn.classList.add('copied');
       setTimeout(()=>{ btn.textContent='📋 COPIAR'; btn.classList.remove('copied'); }, 2500);
     });
   };
-  // Also keep old names for compatibility
-  window.mostrarCrypto = window.selCrypto;
-  window.copiarAddr    = window.copiarCryptoAddr;
-
-
-
-
+  // aliases
+  window.mostrarCrypto = window.selCoin;
+  window.copiarAddr    = window.copiarCoin;
 
   window.doLogout=async()=>{await signOut(auth);window.location.href='index.html';};
 </script>
