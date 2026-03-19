@@ -167,7 +167,6 @@
   <div class="topbar-right">
     <div class="reseller-info">Hola, <strong id="reseller-name">—</strong></div>
     <div class="saldo-pill">💰 <span id="reseller-saldo">$0.00</span></div>
-    <button class="btn-ghost btn" style="font-size:.6rem;padding:7px 14px;letter-spacing:1px;" onclick="doLogout()">🚪 Salir</button>
   </div>
 </div>
 
@@ -401,7 +400,14 @@ onAuthStateChanged(auth, async user => {
   loadResellersR();
 });
 
-window.doLogout = async () => { await signOut(auth); window.location.href='index.html'; };
+window.doLogout = () => {
+  const m = document.getElementById('logout-modal-r');
+  if (m) m.style.display = 'flex';
+};
+window.confirmarLogoutR = async () => {
+  await signOut(auth);
+  window.location.href = 'index.html';
+};
 
 /* ── USUARIOS (solo lectura) ── */
 window.loadUsuarios = async () => {
@@ -758,5 +764,23 @@ window.showPanel=(name,el)=>{
   });
 })();
 </script>
+
+<!-- MODAL CERRAR SESIÓN -->
+<div id="logout-modal-r" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#0d0a1a;border:1px solid rgba(122,31,238,0.25);border-radius:14px;padding:40px 36px;max-width:420px;width:100%;animation:popInL .4s cubic-bezier(.34,1.56,.64,1) forwards;">
+    <div style="text-align:center;margin-bottom:20px;font-size:2.8rem;">⚠️</div>
+    <h3 style="font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:900;letter-spacing:2px;color:#7A1FEE;text-align:center;margin-bottom:14px;text-transform:uppercase;">¿Cerrar Sesión?</h3>
+    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.88rem;line-height:1.75;text-align:center;margin-bottom:10px;">Recuerda que tu <strong style="color:#fff;">saldo y claves</strong> están guardados en tu cuenta.</p>
+    <p style="font-family:'Exo 2',sans-serif;color:#aa77ff;font-size:.82rem;line-height:1.7;text-align:center;margin-bottom:28px;background:rgba(122,31,238,0.09);border:1px solid rgba(122,31,238,0.2);border-radius:8px;padding:12px 16px;">
+      🔑 Si no recuerdas tu contraseña, <strong>no podrás recuperar el acceso</strong> a tu saldo ni a tus claves. Asegúrate de tenerla guardada.
+    </p>
+    <div style="display:flex;gap:12px;">
+      <button onclick="document.getElementById('logout-modal-r').style.display='none'" style="flex:1;background:transparent;color:#777;border:1px solid rgba(255,255,255,.12);padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;" onmouseover="this.style.borderColor='#7A1FEE';this.style.color='#7A1FEE'" onmouseout="this.style.borderColor='rgba(255,255,255,.12)';this.style.color='#777'">CANCELAR</button>
+      <button onclick="confirmarLogoutR()" style="flex:1;background:#7A1FEE;color:#000;border:none;padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;" onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">SÍ, CERRAR</button>
+    </div>
+  </div>
+</div>
+<style>@keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}</style>
+
 </body>
 </html>

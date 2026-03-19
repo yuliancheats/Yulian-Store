@@ -1,7 +1,6 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YULIAN STORE — Mi Perfil</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
@@ -179,7 +178,6 @@
   <a href="index.html" class="logo"><span>YULIAN</span> STORE</a>
   <div class="nav-r">
     <a href="index.html" class="nbtn nbtn-g" style="font-size:.54rem;">← Tienda</a>
-    <button class="nbtn" onclick="pedirLogout()" style="font-size:.56rem;">CERRAR SESIÓN</button>
   </div>
 </nav>
 
@@ -211,6 +209,19 @@
           <div class="pstat-lbl">Saldo</div>
         </div>
       </div>
+      <!-- LOGOUT BUTTON dentro del perfil -->
+      <button onclick="pedirLogout()" style="
+        background:transparent;color:#666;
+        border:1px solid rgba(255,255,255,0.08);
+        padding:8px 18px;border-radius:6px;
+        font-family:'Orbitron',sans-serif;font-size:.55rem;
+        font-weight:700;letter-spacing:2px;text-transform:uppercase;
+        transition:all .2s;margin-top:8px;
+      "
+      onmouseover="this.style.borderColor='rgba(255,68,68,0.4)';this.style.color='#ff6666'"
+      onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.color='#666'">
+        🚪 CERRAR SESIÓN
+      </button>
     </div>
 
     <!-- SALDO BOX -->
@@ -707,7 +718,6 @@ codm-public:
     <div id="nu" style="display:none;align-items:center;gap:10px;">
       <span class="nav-n" id="nn"></span>
       <span class="nav-s" id="ns">$0.00</span>
-      <button class="nbtn" onclick="pedirLogout()" style="font-size:.54rem;">CERRAR SESIÓN</button>
     </div>
   </div>
 </nav>
@@ -1186,7 +1196,6 @@ codm-private:
     <div id="nu" style="display:none;align-items:center;gap:10px;">
       <span class="nav-n" id="nn"></span>
       <span class="nav-s" id="ns">$0.00</span>
-      <button class="nbtn" onclick="pedirLogout()" style="font-size:.54rem;">CERRAR SESIÓN</button>
     </div>
   </div>
 </nav>
@@ -1665,7 +1674,6 @@ blood-public:
     <div id="nu" style="display:none;align-items:center;gap:10px;">
       <span class="nav-n" id="nn"></span>
       <span class="nav-s" id="ns">$0.00</span>
-      <button class="nbtn" onclick="pedirLogout()" style="font-size:.54rem;">CERRAR SESIÓN</button>
     </div>
   </div>
 </nav>
@@ -2144,7 +2152,6 @@ blood-private:
     <div id="nu" style="display:none;align-items:center;gap:10px;">
       <span class="nav-n" id="nn"></span>
       <span class="nav-s" id="ns">$0.00</span>
-      <button class="nbtn" onclick="pedirLogout()" style="font-size:.54rem;">CERRAR SESIÓN</button>
     </div>
   </div>
 </nav>

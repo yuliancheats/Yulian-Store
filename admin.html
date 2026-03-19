@@ -194,7 +194,6 @@
   </div>
   <div class="topbar-right">
     <div class="admin-name">Conectado como <strong id="admin-email">—</strong></div>
-    <button class="btn-logout btn" onclick="doLogout()">🚪 SALIR</button>
   </div>
 </div>
 
@@ -571,9 +570,12 @@ window.loadUsuarios = async () => {
     '<tr class="loading-row"><td colspan="7"><span class="spinner"></span> Cargando...</td></tr>';
   try {
     const snap = await getDocs(collection(db,'users'));
-    allUsuarios = snap.docs.map(d => ({id:d.id,...d.data()}));
-    document.getElementById('badge-usuarios').textContent = allUsuarios.length;
-    document.getElementById('stat-usuarios').textContent  = allUsuarios.length;
+    const todos = snap.docs.map(d => ({id:d.id,...d.data()}));
+    // Solo usuarios activos (no baneados) en esta sección
+    allUsuarios = todos.filter(u => !u.banned);
+    const totalActivos = allUsuarios.length;
+    document.getElementById('badge-usuarios').textContent = totalActivos;
+    document.getElementById('stat-usuarios').textContent  = todos.length;
     renderUsuarios(allUsuarios);
   } catch(e) {
     document.getElementById('usuarios-body').innerHTML =
@@ -699,7 +701,11 @@ window.confirmBan = async () => {
     });
     const u = allUsuarios.find(x=>x.id===banningUserId);
     if (u) { u.banned=true; u.banReason=reason||'Baneado por un administrador.'; }
+    // Move from usuarios to baneados
+    allUsuarios = allUsuarios.filter(x=>x.id!==banningUserId);
     renderUsuarios(allUsuarios);
+    document.getElementById('badge-usuarios').textContent = allUsuarios.length;
+    await loadBaneados();
     closeModal('modal-ban');
     showToast('🚫 Usuario baneado','success');
   } catch(e) { showToast('Error al banear','error'); }
@@ -708,10 +714,9 @@ window.confirmBan = async () => {
 window.unbanUser = async (uid) => {
   try {
     await updateDoc(doc(db,'users',uid),{banned:false, banReason:'', bannedAt:null});
-    const u = allUsuarios.find(x=>x.id===uid);
-    if (u) u.banned=false;
-    renderUsuarios(allUsuarios);
-    showToast('🔓 Ban levantado','success');
+    // Reload both sections
+    await Promise.all([loadUsuarios(), loadBaneados()]);
+    showToast('🔓 Ban levantado — usuario restaurado','success');
   } catch(e) { showToast('Error','error'); }
 };
 
