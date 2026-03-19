@@ -65,6 +65,7 @@
     .profile-name{font-family:var(--fd);font-size:1.3rem;font-weight:900;letter-spacing:2px;color:#fff;margin-bottom:6px}
     .profile-email{font-family:var(--fb);font-size:.88rem;color:var(--tm);margin-bottom:10px}
     .profile-badge-reseller{background:rgba(255,200,0,0.1)!important;border-color:rgba(255,200,0,0.35)!important;color:#ffc800!important;}
+    .profile-badge-cliente{background:rgba(255,200,0,0.08)!important;border-color:rgba(255,200,0,0.3)!important;color:#ffc800!important;}
     .profile-badge{display:inline-block;font-family:var(--fd);font-size:.5rem;letter-spacing:2px;
       padding:4px 12px;border-radius:20px;text-transform:uppercase;font-weight:700;
       background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.3);color:var(--green)}
@@ -462,9 +463,14 @@
 
         // Role badge
         const rb = document.getElementById('profile-role-badge');
-        if (rb && data.role === 'reseller') {
-          rb.textContent = '⭐ Reseller Activo';
-          rb.classList.add('profile-badge-reseller');
+        if (rb) {
+          if (data.role === 'reseller') {
+            rb.textContent = '⭐ Reseller';
+            rb.classList.add('profile-badge-reseller');
+          } else if (data.role === 'cliente' || (purchases && purchases.length > 0)) {
+            rb.textContent = '🛒 Cliente';
+            rb.classList.add('profile-badge-cliente');
+          }
         }
       }
     } catch(e) { console.warn(e); }
@@ -495,6 +501,12 @@
             <a href="index.html">Visita la tienda</a> para obtener acceso a nuestros productos.</p>
           </div>`;
         return;
+      }
+      // Si tiene compras, actualizar badge a cliente
+      const rb = document.getElementById('profile-role-badge');
+      if (rb && !rb.classList.contains('profile-badge-reseller')) {
+        rb.textContent = '🛒 Cliente';
+        rb.classList.add('profile-badge-cliente');
       }
 
       const grid = document.createElement('div');
