@@ -1595,6 +1595,7 @@ window.showToast = (msg,type='info') => {
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>t.classList.remove('show'),3200);
 };
+window.openModal  = id => document.getElementById(id).classList.add('open');
 window.closeModal = id => document.getElementById(id).classList.remove('open');
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open')); });
 </script>
