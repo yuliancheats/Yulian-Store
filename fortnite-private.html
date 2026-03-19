@@ -189,47 +189,63 @@
     .proc-step.done .step-check::before { content: "✅"; }
 
 
-    /* ── TROPIPAY PAYMENT BLOCK ── */
+    
+    /* ── PAYMENT METHODS ── */
     .pay-divider{display:flex;align-items:center;gap:12px;margin:14px 0}
     .pay-divider span{font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:2px;color:#444;white-space:nowrap}
     .pay-divider::before,.pay-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.07)}
-    .tropipay-block{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:16px 16px 14px;margin-bottom:10px}
-    .tropipay-block-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-    .tropipay-block-title{font-family:'Orbitron',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2px;color:#ccc;text-transform:uppercase}
-    .tropipay-trust{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-    .trust-badge{display:flex;align-items:center;gap:4px;font-family:'Exo 2',sans-serif;font-size:.68rem;color:#666;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:3px 8px;border-radius:4px}
+
+    /* SKRILL */
+    .skrill-block{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:16px 16px 14px;margin-bottom:10px}
+    .skrill-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+    .skrill-logo-wrap{display:flex;align-items:center;gap:8px}
+    /* Skrill SVG logo colors */
+    .skrill-logo-svg{width:72px;height:24px;flex-shrink:0}
+    .trust-badges{display:flex;gap:6px;flex-wrap:wrap}
+    .trust-b{display:flex;align-items:center;gap:4px;font-family:'Exo 2',sans-serif;font-size:.67rem;color:#666;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:3px 8px;border-radius:4px}
     .card-icons{display:flex;align-items:center;gap:6px;margin-bottom:12px}
     .card-icon{height:22px;background:#fff;border-radius:3px;padding:2px 6px;display:flex;align-items:center;justify-content:center}
     .card-icon.visa{color:#1a1f71;font-family:serif;font-size:.8rem;font-weight:900;font-style:italic;min-width:36px}
     .card-icon.mc{background:transparent;border:1px solid rgba(255,255,255,.1);padding:2px 4px;min-width:32px}
-    .mc-circles{display:flex}
-    .mc-circle{width:16px;height:16px;border-radius:50%}
+    .mc-circles{display:flex}.mc-circle{width:16px;height:16px;border-radius:50%}
     .mc-circle:first-child{background:#EB001B;margin-right:-6px;z-index:1}
     .mc-circle:last-child{background:#F79E1B}
-    .card-icon.amex{background:#2E77BC;color:#fff;font-size:.55rem;font-weight:900;min-width:34px;font-family:'Exo 2',sans-serif}
-    .tropipay-notice{background:rgba(122,31,238,.05);border:1px solid rgba(122,31,238,.15);border-radius:6px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:flex-start;gap:8px}
-    .tropipay-notice-icon{font-size:.85rem;flex-shrink:0;margin-top:1px}
-    .tropipay-notice-text{font-family:'Exo 2',sans-serif;font-size:.78rem;color:#888;line-height:1.6}
-    .tropipay-notice-text strong{color:#aa88ff}
-    .btn-tropipay{width:100%;background:linear-gradient(135deg,#6B3FA0,#8B2FFF);color:#fff;border:none;padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 18px rgba(122,31,238,.25);transition:all .25s;cursor:pointer}
-    .btn-tropipay:hover{background:linear-gradient(135deg,#7B4FB0,#9B3FFF);box-shadow:0 6px 24px rgba(122,31,238,.4);transform:translateY(-1px)}
-    .tropipay-secure{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;font-family:'Exo 2',sans-serif;font-size:.68rem;color:#444}
+    .pay-notice{background:rgba(122,31,238,.05);border:1px solid rgba(122,31,238,.15);border-radius:6px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:flex-start;gap:8px}
+    .pay-notice-text{font-family:'Exo 2',sans-serif;font-size:.78rem;color:#888;line-height:1.6}
+    .pay-notice-text strong{color:#aa88ff}
+    .btn-skrill{width:100%;border:none;padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .25s;cursor:pointer;
+      background:linear-gradient(135deg,#6d1b54,#862165);color:#fff;box-shadow:0 4px 18px rgba(134,33,101,.3)}
+    .btn-skrill:hover{background:linear-gradient(135deg,#7d2b64,#962275);box-shadow:0 6px 24px rgba(134,33,101,.5);transform:translateY(-1px)}
+    .pay-secure{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;font-family:'Exo 2',sans-serif;font-size:.68rem;color:#444}
 
-    /* ── SKRILL BLOCK ── */
-    .skrill-block{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:16px 16px 14px;margin-bottom:10px}
-    .skrill-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-    .skrill-logo{display:flex;align-items:center;gap:8px}
-    .skrill-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,#862165,#a0277a);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.7rem;color:#fff;font-family:'Exo 2',sans-serif;letter-spacing:.5px}
-    .skrill-logo-text{font-family:'Orbitron',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:2px;color:#c060a0;text-transform:uppercase}
-    .btn-skrill{width:100%;background:linear-gradient(135deg,#6d1b54,#8B2270);color:#fff;border:none;padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 18px rgba(139,34,112,.25);transition:all .25s;cursor:pointer}
-    .btn-skrill:hover{background:linear-gradient(135deg,#7d2b64,#9B3280);box-shadow:0 6px 24px rgba(139,34,112,.4);transform:translateY(-1px)}
+    /* WESTERN UNION */
+    .wu-block{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:16px 16px 14px;margin-bottom:10px}
+    .wu-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+    .wu-logo-wrap{display:flex;align-items:center;gap:10px}
+    .wu-logo-icon{background:linear-gradient(135deg,#FFDD00,#FFB800);border-radius:6px;padding:4px 10px;display:flex;align-items:center;justify-content:center}
+    .wu-logo-text-wrap{display:flex;flex-direction:column}
+    .wu-logo-main{font-family:'Orbitron',sans-serif;font-size:.62rem;font-weight:900;letter-spacing:2px;color:#FFD700;text-shadow:0 0 8px rgba(255,215,0,.3)}
+    .wu-logo-sub{font-family:'Exo 2',sans-serif;font-size:.62rem;color:#666;margin-top:1px}
+    .wu-recipient{background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.12);border-radius:8px;padding:14px 16px;margin-bottom:12px}
+    .wu-recipient-title{font-family:'Orbitron',sans-serif;font-size:.55rem;letter-spacing:2px;color:#888;text-transform:uppercase;margin-bottom:10px}
+    .wu-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);flex-wrap:wrap;gap:6px}
+    .wu-row:last-child{border-bottom:none}
+    .wu-row-label{font-family:'Exo 2',sans-serif;font-size:.8rem;color:#666}
+    .wu-row-val{font-family:'Orbitron',sans-serif;font-size:.68rem;color:#fff;letter-spacing:.5px;text-align:right}
+    .wu-row-val.gold{color:#FFD700;text-shadow:0 0 6px rgba(255,215,0,.3)}
+    .wu-steps{list-style:none;margin-bottom:12px}
+    .wu-step{display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-family:'Exo 2',sans-serif;font-size:.83rem;color:#777;line-height:1.5}
+    .wu-step:last-child{border-bottom:none}
+    .wu-step-n{width:22px;height:22px;border-radius:50%;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.2);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:.52rem;color:#FFD700;flex-shrink:0;margin-top:1px}
+    .btn-wu-discord{width:100%;background:linear-gradient(135deg,#5865F2,#4752C4);color:#fff;border:none;padding:12px;border-radius:6px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.63rem;letter-spacing:2px;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .25s;cursor:pointer;box-shadow:0 4px 16px rgba(88,101,242,.25)}
+    .btn-wu-discord:hover{background:linear-gradient(135deg,#6875FF,#5762D4);box-shadow:0 6px 22px rgba(88,101,242,.4);transform:translateY(-1px)}
 
-    /* ── CRYPTO BLOCK ── */
-    .crypto-block{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:16px 16px 14px;margin-bottom:10px}
+    /* CRYPTO */
+    .crypto-block{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:16px 16px 14px;margin-bottom:4px}
     .crypto-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
     .crypto-title{font-family:'Orbitron',sans-serif;font-size:.58rem;font-weight:700;letter-spacing:2px;color:#ccc;text-transform:uppercase}
     .crypto-coins{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-    .coin-btn{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:6px;border:1.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);transition:all .2s;cursor:pointer;flex:1;min-width:80px;justify-content:center}
+    .coin-btn{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:6px;border:1.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);transition:all .2s;cursor:pointer;flex:1;min-width:72px;justify-content:center}
     .coin-btn:hover,.coin-btn.active{border-color:var(--o);background:rgba(122,31,238,.07)}
     .coin-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:900;flex-shrink:0}
     .coin-icon.btc{background:linear-gradient(135deg,#f7931a,#f5a623);color:#fff}
@@ -238,21 +254,20 @@
     .coin-icon.usdc{background:linear-gradient(135deg,#2775ca,#1a5fa0);color:#fff}
     .coin-icon.bnb{background:linear-gradient(135deg,#f3ba2f,#e0a820);color:#000}
     .coin-name{font-family:'Orbitron',sans-serif;font-size:.5rem;letter-spacing:1px;color:#ccc;text-transform:uppercase}
-    .crypto-addr-box{display:none;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:14px 14px;margin-bottom:12px}
+    .crypto-addr-box{display:none;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:14px;margin-bottom:12px}
     .crypto-addr-box.show{display:block}
-    .crypto-addr-label{font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:2px;color:#666;text-transform:uppercase;margin-bottom:8px}
-    .crypto-addr-network{display:inline-block;font-family:'Exo 2',sans-serif;font-size:.7rem;color:#888;background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.2);padding:2px 8px;border-radius:4px;margin-bottom:10px}
+    .crypto-addr-lbl{font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:2px;color:#666;text-transform:uppercase;margin-bottom:6px}
+    .crypto-addr-net{display:inline-block;font-family:'Exo 2',sans-serif;font-size:.7rem;color:#888;background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.2);padding:2px 8px;border-radius:4px;margin-bottom:8px}
     .crypto-addr{font-family:'Courier New',monospace;font-size:.72rem;color:var(--o);word-break:break-all;line-height:1.6;text-shadow:0 0 6px rgba(122,31,238,.3)}
-    .btn-copy-addr{width:100%;background:rgba(122,31,238,.08);border:1px solid rgba(122,31,238,.2);color:var(--o);padding:9px;border-radius:5px;font-family:'Orbitron',sans-serif;font-size:.58rem;letter-spacing:2px;text-transform:uppercase;transition:all .2s;cursor:pointer;margin-top:10px}
+    .btn-copy-addr{width:100%;background:rgba(122,31,238,.08);border:1px solid rgba(122,31,238,.2);color:var(--o);padding:9px;border-radius:5px;font-family:'Orbitron',sans-serif;font-size:.58rem;letter-spacing:2px;text-transform:uppercase;transition:all .2s;cursor:pointer;margin-top:8px}
     .btn-copy-addr:hover{background:rgba(122,31,238,.15)}
-    .crypto-warning{background:rgba(255,200,0,.05);border:1px solid rgba(255,200,0,.15);border-radius:6px;padding:9px 12px;display:flex;align-items:flex-start;gap:7px;margin-bottom:12px}
-    .crypto-warning-text{font-family:'Exo 2',sans-serif;font-size:.75rem;color:#888;line-height:1.6}
-    .crypto-warning-text strong{color:#ffc800}
-    .crypto-discord-note{font-family:'Exo 2',sans-serif;font-size:.76rem;color:#666;text-align:center;line-height:1.6;padding:0 4px}
-    .crypto-discord-note a{color:var(--o);text-decoration:none}
-    .crypto-discord-note a:hover{text-decoration:underline}
     .addr-copied{color:#4dff91!important;border-color:rgba(77,255,145,.3)!important;background:rgba(77,255,145,.08)!important}
-  </style>
+    .crypto-warn{background:rgba(255,200,0,.05);border:1px solid rgba(255,200,0,.12);border-radius:6px;padding:9px 12px;display:flex;align-items:flex-start;gap:7px;margin-bottom:10px}
+    .crypto-warn-text{font-family:'Exo 2',sans-serif;font-size:.75rem;color:#888;line-height:1.6}
+    .crypto-warn-text strong{color:#ffc800}
+    .crypto-discord-note{font-family:'Exo 2',sans-serif;font-size:.76rem;color:#666;text-align:center;line-height:1.6}
+    .crypto-discord-note a{color:var(--o);text-decoration:none}
+</style>
 </head>
 <body>
 
@@ -421,118 +436,123 @@
       <div id="ba"><button class="btn-log" onclick="window.location.href='login.html'">INICIA SESIÓN PARA COMPRAR</button></div>
       <div class="msg" id="msg"></div>
 
-      <!-- ═══ TROPIPAY PAYMENT BLOCK ═══ -->
-      <div class="pay-divider"><span>O PAGA CON TARJETA</span></div>
-      <div class="tropipay-block">
-        <div class="tropipay-block-header">
-          <span class="tropipay-block-title">💳 Tarjeta de Crédito / Débito</span>
-          <div class="tropipay-trust">
-            <span class="trust-badge"><span>🔒</span> SSL</span>
-            <span class="trust-badge"><span>✓</span> Seguro</span>
-          </div>
-        </div>
-        <div class="card-icons">
-          <div class="card-icon visa">VISA</div>
-          <div class="card-icon mc"><div class="mc-circles"><div class="mc-circle"></div><div class="mc-circle"></div></div></div>
-          <div class="card-icon amex">AMEX</div>
-          <span style="font-family:'Exo 2',sans-serif;font-size:.72rem;color:#555;margin-left:2px">y más</span>
-        </div>
-        <div class="tropipay-notice">
-          <span class="tropipay-notice-icon">ℹ️</span>
-          <div class="tropipay-notice-text">
-            Serás redirigido a <strong>Tropipay</strong>, plataforma de pago segura. El acceso se activará manualmente en menos de <strong>24 horas</strong> tras confirmar el pago.
-          </div>
-        </div>
-        <button class="btn-tropipay" id="btn-tpp" onclick="pagarConTropipay()">
-          💳 PAGAR CON TARJETA — <span id="tpp-amt">$0.00</span>
-        </button>
-        <div class="tropipay-secure">
-          <span>🔒</span> Pago procesado por Tropipay · Encriptación SSL 256-bit
-        </div>
-      </div>
-      <!-- ═══ SKRILL BLOCK ═══ -->
+      
+      <!-- ═══ SKRILL ═══ -->
       <div class="pay-divider"><span>O PAGA CON SKRILL</span></div>
       <div class="skrill-block">
         <div class="skrill-header">
-          <div class="skrill-logo">
-            <div class="skrill-logo-icon">S</div>
-            <span class="skrill-logo-text">Skrill</span>
+          <div class="skrill-logo-wrap">
+            <!-- Skrill logo SVG -->
+            <svg class="skrill-logo-svg" viewBox="0 0 90 30" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="15" cy="15" r="13" fill="#862165"/>
+              <text x="15" y="20" font-family="Arial" font-weight="900" font-size="14" fill="#fff" text-anchor="middle">S</text>
+              <text x="52" y="21" font-family="Arial" font-weight="700" font-size="14" fill="#fff">krill</text>
+            </svg>
           </div>
-          <div class="tropipay-trust">
-            <span class="trust-badge"><span>🔒</span> SSL</span>
-            <span class="trust-badge"><span>✓</span> Seguro</span>
+          <div class="trust-badges">
+            <span class="trust-b">🔒 SSL</span>
+            <span class="trust-b">✓ Seguro</span>
           </div>
         </div>
         <div class="card-icons">
           <div class="card-icon visa">VISA</div>
           <div class="card-icon mc"><div class="mc-circles"><div class="mc-circle"></div><div class="mc-circle"></div></div></div>
-          <span style="font-family:'Exo 2',sans-serif;font-size:.72rem;color:#555;margin-left:2px">y más</span>
+          <span style="font-family:'Exo 2',sans-serif;font-size:.72rem;color:#555;margin-left:4px">y más</span>
         </div>
-        <div class="tropipay-notice">
-          <span class="tropipay-notice-icon">ℹ️</span>
-          <div class="tropipay-notice-text">
-            Paga de forma segura con <strong>Skrill</strong>. El acceso se activará en menos de <strong>24 horas</strong> tras confirmar el pago. Contacta por Discord con tu comprobante.
+        <div class="pay-notice">
+          <span style="font-size:.85rem;flex-shrink:0;margin-top:1px">ℹ️</span>
+          <div class="pay-notice-text">
+            Paga de forma segura con <strong>Skrill</strong>. El acceso se activará en menos de <strong>24 horas</strong>. Envía tu comprobante por Discord tras pagar.
           </div>
         </div>
         <button class="btn-skrill" onclick="pagarConSkrill()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.15)"/><path d="M8 12h8M12 8v8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.2)"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           PAGAR CON SKRILL — <span id="skrill-amt">$0.00</span>
         </button>
-        <div class="tropipay-secure">
-          <span>🔒</span> Pago procesado por Skrill · Encriptación SSL 256-bit
-        </div>
+        <div class="pay-secure"><span>🔒</span> Pago procesado por Skrill · SSL 256-bit · ID: 373135134</div>
       </div>
 
-      <!-- ═══ CRYPTO BLOCK ═══ -->
+      <!-- ═══ WESTERN UNION ═══ -->
+      <div class="pay-divider"><span>O PAGA CON WESTERN UNION</span></div>
+      <div class="wu-block">
+        <div class="wu-header">
+          <div class="wu-logo-wrap">
+            <div class="wu-logo-icon">
+              <svg width="28" height="20" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+                <rect width="60" height="40" rx="4" fill="#FFDD00"/>
+                <text x="30" y="26" font-family="Arial" font-weight="900" font-size="11" fill="#000" text-anchor="middle">WU</text>
+              </svg>
+            </div>
+            <div class="wu-logo-text-wrap">
+              <span class="wu-logo-main">WESTERN UNION</span>
+              <span class="wu-logo-sub">Transferencia Internacional</span>
+            </div>
+          </div>
+          <div class="trust-badges">
+            <span class="trust-b">🌍 Global</span>
+            <span class="trust-b">✓ Confiable</span>
+          </div>
+        </div>
+
+        <div class="wu-recipient">
+          <div class="wu-recipient-title">📋 Datos del destinatario</div>
+          <div class="wu-row">
+            <span class="wu-row-label">Nombre</span>
+            <span class="wu-row-val gold">Grecia Reinoso Mejia</span>
+          </div>
+          <div class="wu-row">
+            <span class="wu-row-label">País</span>
+            <span class="wu-row-val">República Dominicana 🇩🇴</span>
+          </div>
+          <div class="wu-row">
+            <span class="wu-row-label">Ciudad</span>
+            <span class="wu-row-val">La Vega</span>
+          </div>
+        </div>
+
+        <ul class="wu-steps">
+          <li class="wu-step"><span class="wu-step-n">1</span>Ve a westernunion.com o a una agencia WU cercana</li>
+          <li class="wu-step"><span class="wu-step-n">2</span>Ingresa los datos del destinatario y el monto exacto</li>
+          <li class="wu-step"><span class="wu-step-n">3</span>Completa el envío y guarda el número de rastreo (MTCN)</li>
+          <li class="wu-step"><span class="wu-step-n">4</span>Envíanos el MTCN por Discord y activamos tu acceso en menos de 24h</li>
+        </ul>
+
+        <button class="btn-wu-discord" onclick="window.open('https://discord.gg/GEbWADVD','_blank')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
+          ENVIAR COMPROBANTE POR DISCORD
+        </button>
+      </div>
+
+      <!-- ═══ CRYPTO ═══ -->
       <div class="pay-divider"><span>O PAGA CON CRYPTO</span></div>
       <div class="crypto-block">
         <div class="crypto-header">
           <span class="crypto-title">₿ Criptomonedas</span>
-          <div class="tropipay-trust">
-            <span class="trust-badge"><span>⚡</span> Instantáneo</span>
-            <span class="trust-badge"><span>0%</span> Comisión</span>
+          <div class="trust-badges">
+            <span class="trust-b">⚡ Instantáneo</span>
+            <span class="trust-b">0% Comisión</span>
           </div>
         </div>
         <div class="crypto-coins">
-          <div class="coin-btn" onclick="mostrarCrypto('usdt',this)">
-            <div class="coin-icon usdt">₮</div>
-            <span class="coin-name">USDT</span>
-          </div>
-          <div class="coin-btn" onclick="mostrarCrypto('btc',this)">
-            <div class="coin-icon btc">₿</div>
-            <span class="coin-name">BTC</span>
-          </div>
-          <div class="coin-btn" onclick="mostrarCrypto('eth',this)">
-            <div class="coin-icon eth">Ξ</div>
-            <span class="coin-name">ETH</span>
-          </div>
-          <div class="coin-btn" onclick="mostrarCrypto('bnb',this)">
-            <div class="coin-icon bnb">⬡</div>
-            <span class="coin-name">BNB</span>
-          </div>
-          <div class="coin-btn" onclick="mostrarCrypto('usdc',this)">
-            <div class="coin-icon usdc">$</div>
-            <span class="coin-name">USDC</span>
-          </div>
+          <div class="coin-btn" onclick="mostrarCrypto('usdt',this)"><div class="coin-icon usdt">₮</div><span class="coin-name">USDT</span></div>
+          <div class="coin-btn" onclick="mostrarCrypto('btc',this)"><div class="coin-icon btc">₿</div><span class="coin-name">BTC</span></div>
+          <div class="coin-btn" onclick="mostrarCrypto('eth',this)"><div class="coin-icon eth">Ξ</div><span class="coin-name">ETH</span></div>
+          <div class="coin-btn" onclick="mostrarCrypto('bnb',this)"><div class="coin-icon bnb">⬡</div><span class="coin-name">BNB</span></div>
+          <div class="coin-btn" onclick="mostrarCrypto('usdc',this)"><div class="coin-icon usdc">$</div><span class="coin-name">USDC</span></div>
         </div>
         <div class="crypto-addr-box" id="crypto-addr-box">
-          <div class="crypto-addr-label" id="crypto-addr-label">Dirección</div>
-          <div class="crypto-addr-network" id="crypto-addr-network">Red: —</div>
+          <div class="crypto-addr-lbl" id="crypto-addr-lbl">Dirección</div>
+          <div class="crypto-addr-net" id="crypto-addr-net">Red: —</div>
           <div class="crypto-addr" id="crypto-addr">—</div>
-          <button class="btn-copy-addr" id="btn-copy-addr" onclick="copiarAddr()">
-            📋 COPIAR DIRECCIÓN
-          </button>
+          <button class="btn-copy-addr" id="btn-copy-addr" onclick="copiarAddr()">📋 COPIAR DIRECCIÓN</button>
         </div>
-        <div class="crypto-warning">
+        <div class="crypto-warn">
           <span style="font-size:.85rem;flex-shrink:0">⚠️</span>
-          <div class="crypto-warning-text">
-            Envía el monto exacto en la red correcta. <strong>Envíos por red incorrecta se pierden.</strong> Para USDT, ETH, USDC y BNB usa red <strong>ERC-20 o BEP-20</strong>.
-          </div>
+          <div class="crypto-warn-text">Envía el monto exacto en la red correcta. <strong>Red incorrecta = fondos perdidos.</strong> USDT/ETH/USDC/BNB → usa <strong>ERC-20 o BEP-20</strong>.</div>
         </div>
         <div class="crypto-discord-note">
-          Después de pagar, envíanos el <strong style="color:#fff">ID de transacción</strong> por
-          <a href="https://discord.gg/GEbWADVD" target="_blank">Discord</a>
-          y activamos tu acceso en menos de 24 horas.
+          Tras pagar, envía tu <strong style="color:#fff">ID de transacción</strong> por
+          <a href="https://discord.gg/GEbWADVD" target="_blank">Discord</a> y activamos tu acceso en &lt;24h.
         </div>
       </div>
     </div>
@@ -576,7 +596,6 @@
     document.getElementById('bp').textContent=`$${sv.price.toFixed(2)}`;
     document.getElementById('qv').textContent=qty;
     document.getElementById('ta').textContent=`$${t.toFixed(2)}`;
-    const tppEl=document.getElementById('tpp-amt');if(tppEl)tppEl.textContent=`$${t.toFixed(2)}`;
     const skrillEl=document.getElementById('skrill-amt');if(skrillEl)skrillEl.textContent=`$${t.toFixed(2)}`;
   }
   window.cQty=function(d){qty=Math.max(1,Math.min(10,qty+d));upTot();updateUI();};
@@ -712,51 +731,7 @@
   window.updateUI=updateUI;
   onAuthStateChanged(auth,async u=>{user=u;if(u){document.getElementById('ng').style.display='none';document.getElementById('nu').style.display='flex';document.getElementById('nn').textContent=u.displayName||u.email.split('@')[0].toUpperCase();try{const s=await getDoc(doc(db,'users',u.uid));if(s.exists()){saldo=s.data().saldo??0;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;}}catch(e){}}rVars();upTot();updateUI();});
 
-  // ── SKRILL ──
-  window.pagarConSkrill = function() {
-    const t = sv.price * qty;
-    const SKRILL_EMAIL = 'TU_EMAIL_SKRILL_AQUI';
-    if (SKRILL_EMAIL === 'TU_EMAIL_SKRILL_AQUI') {
-      if(confirm('El pago con Skrill estará disponible muy pronto.\n\n¿Quieres contactarnos por Discord para completar tu compra?')) {
-        window.open('https://discord.gg/TU_LINK_AQUI','_blank');
-      }
-      return;
-    }
-    const url = `https://pay.skrill.com/?pay_to_email=${encodeURIComponent(SKRILL_EMAIL)}&amount=${t}&currency=USD&detail1_description=Yulian+Store&detail1_text=${encodeURIComponent(sv.name)}`;
-    window.open(url, '_blank');
-  };
 
-  // ── CRYPTO ADDRESSES ──
-  const CRYPTO_ADDRS = {
-    usdt: { addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', network:'ERC-20 / BEP-20', label:'USDT — Tether' },
-    btc:  { addr:'bc1qa3m5w2h5663du2f857czehrcljty09cmfxqhqe',  network:'Bitcoin (BTC)',    label:'Bitcoin' },
-    eth:  { addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', network:'ERC-20',          label:'Ethereum (ETH)' },
-    bnb:  { addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', network:'BEP-20 (BSC)',    label:'BNB' },
-    usdc: { addr:'0x77F67739cfDAe44D2b24d9c4E36DD28c9b25F44e', network:'ERC-20 / BEP-20', label:'USDC' },
-  };
-
-  window.mostrarCrypto = function(coin, el) {
-    document.querySelectorAll('.coin-btn').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
-    const c = CRYPTO_ADDRS[coin];
-    document.getElementById('crypto-addr-label').textContent  = c.label;
-    document.getElementById('crypto-addr-network').textContent = 'Red: ' + c.network;
-    document.getElementById('crypto-addr').textContent         = c.addr;
-    document.getElementById('crypto-addr-box').classList.add('show');
-    const copyBtn = document.getElementById('btn-copy-addr');
-    copyBtn.textContent = '📋 COPIAR DIRECCIÓN';
-    copyBtn.classList.remove('addr-copied');
-  };
-
-  window.copiarAddr = function() {
-    const addr = document.getElementById('crypto-addr').textContent;
-    navigator.clipboard.writeText(addr).then(() => {
-      const btn = document.getElementById('btn-copy-addr');
-      btn.textContent = '✓ ¡DIRECCIÓN COPIADA!';
-      btn.classList.add('addr-copied');
-      setTimeout(() => { btn.textContent = '📋 COPIAR DIRECCIÓN'; btn.classList.remove('addr-copied'); }, 2500);
-    });
-  };
 
   window.doLogout=async()=>{await signOut(auth);window.location.href='index.html';};
 </script>
