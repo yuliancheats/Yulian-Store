@@ -1160,7 +1160,189 @@ function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
 ══════════════════════════════ */
 let allHistorial = [];
 
-window.loadHistorial = async () => {
+
+  // ══════════════════════════════════════════
+  //  AVISOS — funciones completas
+  // ══════════════════════════════════════════
+
+  // Popula el select de usuarios en el panel Avisos
+  window.populateUserSelect = async function() {
+    const sel = document.getElementById('aviso-uid-sel');
+    if (!sel) return;
+    try {
+      const snap = await getDocs(collection(db,'users'));
+      sel.innerHTML = '<option value="">— Selecciona un usuario —</option>';
+      snap.forEach(ds => {
+        const u = ds.data();
+        if (u.email === ADMIN_EMAIL) return;
+        const opt = document.createElement('option');
+        opt.value = ds.id;
+        opt.textContent = (u.name || '—') + ' · ' + (u.email || '');
+        sel.appendChild(opt);
+      });
+    } catch(e) { console.error('populateUserSelect:', e); }
+  };
+
+  // Carga historial de avisos enviados
+  window.loadAvisos = async function() {
+    const tbody = document.getElementById('avisos-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '<tr class="loading-row"><td colspan="7"><span class="spinner"></span> Cargando...</td></tr>';
+    try {
+      const snap = await getDocs(query(collection(db,'avisos'), orderBy('enviadoEn','desc')));
+      const badge = document.getElementById('badge-avisos');
+      if (badge) badge.textContent = snap.size;
+      if (snap.empty) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:40px">Sin avisos enviados aún.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = '';
+      let i = 1;
+      snap.forEach(ds => {
+        const a = ds.data();
+        const fecha = a.enviadoEn?.toDate
+          ? a.enviadoEn.toDate().toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})
+          : '—';
+        const respTxt   = a.respuesta==='accept' ? '✅ Aceptó' : a.respuesta==='reject' ? '✖ Rechazó' : '⏳ Pendiente';
+        const respCls   = a.respuesta==='accept' ? 'accept'   : a.respuesta==='reject' ? 'reject'   : 'pendiente';
+        const estadoCls = a.estado==='respondido' ? (a.respuesta==='accept'?'accept':'reject') : 'pendiente';
+        const estadoTxt = a.estado==='respondido' ? 'Respondido' : 'Pendiente';
+        // Get user name from already-loaded list if possible
+        const usuarioInfo = (allUsuarios||[]).find(u=>u.id===a.uid);
+        const usuarioNombre = usuarioInfo ? (usuarioInfo.name||usuarioInfo.email||a.uid.slice(0,8)+'…') : (a.uid||'—').slice(0,10)+'…';
+
+        tbody.innerHTML += `
+          <tr>
+            <td>${i++}</td>
+            <td class="cell-name">${usuarioNombre}</td>
+            <td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#ccc">${a.titulo||'—'}</td>
+            <td><span class="resp-badge ${respCls}">${respTxt}</span></td>
+            <td><span class="resp-badge ${estadoCls}">${estadoTxt}</span></td>
+            <td class="cell-date">${fecha}</td>
+            <td><button class="btn btn-danger btn-sm" onclick="eliminarAviso('${ds.id}')">🗑</button></td>
+          </tr>`;
+      });
+    } catch(e) {
+      tbody.innerHTML = `<tr><td colspan="7" style="color:#ff6868;padding:20px;text-align:center">Error: ${e.message}<br><small>Verifica que la colección /avisos existe y las reglas de Firestore permiten lectura al admin.</small></td></tr>`;
+      console.error('loadAvisos:', e);
+    }
+  };
+
+  // Enviar aviso desde el panel Avisos (formulario largo)
+  window.enviarAviso = async function() {
+    const uid     = document.getElementById('aviso-uid-sel').value;
+    const titulo  = document.getElementById('aviso-titulo-inp').value.trim();
+    const mensaje = document.getElementById('aviso-mensaje-inp').value.trim();
+    const btnOk   = document.getElementById('aviso-btn-ok').value.trim();
+    const btnNo   = document.getElementById('aviso-btn-no').value.trim();
+    const msg     = document.getElementById('aviso-send-msg');
+    const btn     = document.querySelector('.btn-send-aviso');
+
+    if (!uid)     { _showAMsg(msg,'err','Selecciona un usuario.'); return; }
+    if (!titulo)  { _showAMsg(msg,'err','Escribe un título.'); return; }
+    if (!mensaje) { _showAMsg(msg,'err','Escribe el mensaje.'); return; }
+
+    btn.disabled = true; btn.textContent = 'Enviando...';
+    try {
+      await addDoc(collection(db,'avisos'), {
+        uid, titulo, mensaje,
+        btnAceptar:  btnOk  || '✅ Entendido, lo corregiré',
+        btnRechazar: btnNo  || '✖ No lo haré',
+        estado:      'pendiente',
+        enviadoEn:   serverTimestamp(),
+        enviadoPor:  ADMIN_EMAIL,
+        respuesta:   null,
+      });
+      _showAMsg(msg,'ok','✅ Aviso enviado. El usuario lo verá en tiempo real.');
+      document.getElementById('aviso-uid-sel').value     = '';
+      document.getElementById('aviso-titulo-inp').value  = '';
+      document.getElementById('aviso-mensaje-inp').value = '';
+      window.loadAvisos();
+    } catch(e) {
+      _showAMsg(msg,'err','Error al enviar: ' + e.message);
+      console.error('enviarAviso:', e);
+    }
+    btn.disabled = false; btn.textContent = '📤 ENVIAR AVISO AL USUARIO';
+  };
+
+  // Eliminar aviso del historial
+  window.eliminarAviso = async function(id) {
+    if (!confirm('¿Eliminar este aviso del historial?')) return;
+    try {
+      await deleteDoc(doc(db,'avisos',id));
+      window.loadAvisos();
+    } catch(e) { alert('Error: ' + e.message); }
+  };
+
+  // Modal rápido de aviso desde la tabla de usuarios
+  let _avisoRapidoUID = null;
+  window.openAvisoRapido = function(uid, nombre) {
+    _avisoRapidoUID = uid;
+    const el = document.getElementById('aviso-r-nombre');
+    if (el) el.textContent = nombre;
+    ['aviso-r-titulo','aviso-r-mensaje'].forEach(id => {
+      const inp = document.getElementById(id);
+      if (inp) inp.value = '';
+    });
+    const ok  = document.getElementById('aviso-r-ok');
+    const no  = document.getElementById('aviso-r-no');
+    if (ok) ok.value  = '✅ Entendido, lo corregiré';
+    if (no) no.value  = '✖ No lo haré';
+    const rmsg = document.getElementById('aviso-r-msg');
+    if (rmsg) { rmsg.style.display='none'; rmsg.textContent=''; }
+    openModal('modal-aviso');
+  };
+
+  window.enviarAvisoRapido = async function() {
+    const uid     = _avisoRapidoUID;
+    const titulo  = document.getElementById('aviso-r-titulo')?.value.trim();
+    const mensaje = document.getElementById('aviso-r-mensaje')?.value.trim();
+    const btnOk   = document.getElementById('aviso-r-ok')?.value.trim();
+    const btnNo   = document.getElementById('aviso-r-no')?.value.trim();
+    const msg     = document.getElementById('aviso-r-msg');
+    const btn     = document.getElementById('btn-aviso-r-send');
+
+    if (!titulo)  { _showRMsg(msg,'err','Escribe un título.'); return; }
+    if (!mensaje) { _showRMsg(msg,'err','Escribe el mensaje.'); return; }
+
+    btn.disabled = true; btn.textContent = 'Enviando...';
+    try {
+      await addDoc(collection(db,'avisos'), {
+        uid, titulo, mensaje,
+        btnAceptar:  btnOk  || '✅ Entendido, lo corregiré',
+        btnRechazar: btnNo  || '✖ No lo haré',
+        estado:      'pendiente',
+        enviadoEn:   serverTimestamp(),
+        enviadoPor:  ADMIN_EMAIL,
+        respuesta:   null,
+      });
+      _showRMsg(msg,'ok','✅ Aviso enviado con éxito.');
+      setTimeout(() => closeModal('modal-aviso'), 1500);
+    } catch(e) {
+      _showRMsg(msg,'err','Error: ' + e.message);
+      console.error('enviarAvisoRapido:', e);
+    }
+    btn.disabled = false; btn.textContent = '📤 ENVIAR AVISO';
+  };
+
+  // Helpers internos
+  function _showAMsg(el, type, txt) {
+    if (!el) return;
+    el.className = 'aviso-send-msg ' + type;
+    el.textContent = txt;
+    setTimeout(() => { if(el) el.className='aviso-send-msg'; }, 5000);
+  }
+  function _showRMsg(el, type, txt) {
+    if (!el) return;
+    el.style.display = 'block';
+    el.style.background = type==='ok' ? 'rgba(77,255,145,.08)' : 'rgba(255,80,80,.08)';
+    el.style.border     = type==='ok' ? '1px solid rgba(77,255,145,.25)' : '1px solid rgba(255,80,80,.25)';
+    el.style.color      = type==='ok' ? '#4dff91' : '#ff6868';
+    el.textContent = txt;
+  }
+
+
+  window.loadHistorial = async () => {
   document.getElementById('historial-body').innerHTML =
     '<tr class="loading-row"><td colspan="7"><span class="spinner"></span> Cargando...</td></tr>';
   try {
