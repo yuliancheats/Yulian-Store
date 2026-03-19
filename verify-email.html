@@ -349,8 +349,15 @@
     ::-webkit-scrollbar-track { background: var(--dark); }
     ::-webkit-scrollbar-thumb { background: var(--purple-dim); border-radius: 2px; }
   </style>
+<style>
+@media(hover:none),(pointer:coarse){#hex-canvas{display:none!important}#cdot,#cring{display:none!important}}
+#discord-float{position:fixed;bottom:28px;right:28px;width:54px;height:54px;background:#fff;border:2px solid #7A1FEE;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(122,31,238,.4);z-index:9000;text-decoration:none;animation:dPulse 2.5s ease-in-out infinite;transition:transform .2s}
+#discord-float:hover{transform:scale(1.1);border-color:#a855f7}
+@keyframes dPulse{0%,100%{box-shadow:0 4px 20px rgba(122,31,238,.4),0 0 0 0 rgba(122,31,238,.3)}50%{box-shadow:0 4px 20px rgba(122,31,238,.4),0 0 0 10px rgba(122,31,238,0)}}
+</style>
 </head>
 <body>
+<canvas id="hex-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.7;"></canvas>
 
 <div class="bg"></div>
 <div class="bg-grid"></div>
@@ -556,5 +563,22 @@ handleVerification();
 })();
 </script>
 
+<script>
+(function(){
+  if(window.matchMedia("(hover:none),(pointer:coarse)").matches)return;
+  const c=document.getElementById("hex-canvas");
+  if(!c)return;
+  const ctx=c.getContext("2d");
+  let W,H,m={x:-999,y:-999},hexes=[];
+  const R=38,H2=R*Math.sqrt(3);
+  function corners(cx,cy){const p=[];for(let i=0;i<6;i++){const a=Math.PI/180*(60*i-30);p.push([cx+R*Math.cos(a),cy+R*Math.sin(a)]);}return p;}
+  function build(){hexes=[];const cols=Math.ceil(W/(R*1.5))+2,rows=Math.ceil(H/H2)+2;for(let r=0;r<rows;r++)for(let cc=0;cc<cols;cc++)hexes.push({x:cc*R*1.5-R,y:r*H2+(cc%2?H2/2:0)-H2/2,g:0});}
+  function resize(){W=c.width=innerWidth;H=c.height=innerHeight;build();}
+  function draw(){ctx.clearRect(0,0,W,H);hexes.forEach(h=>{const d=Math.hypot(h.x-m.x,h.y-m.y);h.g+=((d<R*7?1-d/(R*7):0)-h.g)*.1;if(h.g<.01)return;const p=corners(h.x,h.y);ctx.beginPath();ctx.moveTo(p[0][0],p[0][1]);p.forEach(q=>ctx.lineTo(q[0],q[1]));ctx.closePath();ctx.strokeStyle=`rgba(122,31,238,${h.g*.8})`;ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle=`rgba(122,31,238,${h.g*.12})`;ctx.fill();});requestAnimationFrame(draw);}
+  window.addEventListener("mousemove",e=>{m.x=e.clientX;m.y=e.clientY;});
+  window.addEventListener("resize",resize);
+  resize();draw();
+})();
+</script>
 </body>
 </html>
