@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YULIAN STORE — Fortnite Mobile Privado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--o:#7A1FEE;--ob:#8B2FFF;--od:#5a0fcc;--dark:#080808;--d2:#0e0e0e;--card:#111;--c2:#161616;
+      --t:#fff;--tm:#777;--border:rgba(122,31,238,.15);
+      --neon:0 0 8px #7A1FEE,0 0 20px #7A1FEE,0 0 40px rgba(122,31,238,.4);
+      --green:#4dff91;--fd:'Orbitron',sans-serif;--fb:'Exo 2',sans-serif;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--dark);color:var(--t);font-family:var(--fb);overflow-x:hidden}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--d2)}
+    ::-webkit-scrollbar-thumb{background:var(--od);border-radius:3px}
+    *{cursor:none!important}
+    #cdot{position:fixed;top:0;left:0;width:10px;height:10px;background:#0d0a1a;border-radius:50%;
+      pointer-events:none;z-index:99999;transform:translate(-50%,-50%);
+      box-shadow:0 0 0 2.5px rgba(122,31,238,0.95),0 0 14px rgba(122,31,238,0.5);}
+    #cring{position:fixed;top:0;left:0;width:38px;height:38px;
+      border:2.5px solid rgba(122,31,238,0.8);border-radius:50%;pointer-events:none;z-index:99998;
+      transform:translate(-50%,-50%);box-shadow:0 0 14px rgba(122,31,238,0.3);
+      transition:width .18s,height .18s,border-color .18s;}
+    .tilt-wrap{perspective:900px;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
+    .tilt-box{transform-style:preserve-3d;will-change:transform;border-radius:14px;position:relative;
+      transition:transform 0.1s ease-out;filter:drop-shadow(0 24px 50px rgba(0,0,0,0.85));}
+    .tilt-shine{position:absolute;inset:0;border-radius:14px;
+      background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.12) 0%,transparent 55%);
+      pointer-events:none;opacity:0;transition:opacity 0.3s;}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+      padding:14px 48px;background:rgba(8,8,8,.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+    .logo{font-family:var(--fd);font-size:1.1rem;font-weight:900;letter-spacing:3px;text-decoration:none;color:var(--t);text-shadow:var(--neon)}
+    .logo span{color:var(--o)}
+    .nav-r{display:flex;align-items:center;gap:12px}
+    .nbtn{background:transparent;color:var(--o);border:1.5px solid var(--o);padding:7px 16px;border-radius:3px;
+      font-family:var(--fd);font-size:.58rem;letter-spacing:2px;text-decoration:none;
+      display:inline-block;text-transform:uppercase;transition:all .2s}
+    .nbtn:hover{background:var(--o);color:#000}
+    .nbtn-g{border-color:rgba(255,255,255,.12);color:var(--tm)}
+    .nbtn-g:hover{border-color:var(--o);color:var(--o);background:transparent}
+    .nav-s{font-family:var(--fd);font-size:.62rem;color:var(--green);background:rgba(77,255,145,.08);border:1px solid rgba(77,255,145,.2);padding:7px 13px;border-radius:3px}
+    .nav-n{font-family:var(--fd);font-size:.62rem;color:var(--o);text-shadow:var(--neon)}
+    .page-wrap{display:grid;grid-template-columns:1.1fr 1fr;min-height:calc(100vh - 57px)}
+    .img-col{position:relative;background:linear-gradient(135deg,#0a0818,#0e0b1c);
+      display:flex;align-items:center;justify-content:center;padding:40px;overflow:hidden}
+    .img-col::before{content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 50% 60%,rgba(122,31,238,.12) 0%,transparent 65%);}
+    .hex-bg{position:absolute;inset:0;opacity:.035;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='52'%3E%3Cpolygon points='30,2 58,17 58,47 30,62 2,47 2,17' fill='none' stroke='%237A1FEE' stroke-width='1'/%3E%3C/svg%3E");
+      background-size:60px 52px}
+    .box-img{width:100%;max-width:380px;height:auto;border-radius:14px;display:block;position:relative;z-index:1;}
+    .status-pill{position:absolute;top:20px;left:20px;z-index:5;
+      display:flex;align-items:center;gap:7px;background:rgba(5,5,5,.8);
+      border:1px solid rgba(77,255,145,.3);backdrop-filter:blur(8px);padding:7px 13px;border-radius:30px}
+    .sdot{width:7px;height:7px;background:var(--green);border-radius:50%;
+      box-shadow:0 0 8px var(--green);animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+    .stxt{font-family:var(--fd);font-size:.52rem;letter-spacing:2px;color:var(--green);text-transform:uppercase}
+    .ver-pill{position:absolute;bottom:20px;right:20px;z-index:5;
+      background:rgba(122,31,238,.15);border:1px solid rgba(122,31,238,.4);
+      padding:5px 13px;border-radius:20px;font-family:var(--fd);font-size:.5rem;
+      letter-spacing:2px;color:var(--o);text-transform:uppercase;font-weight:700}
+    .info-col{background:var(--d2);padding:48px;display:flex;flex-direction:column;border-left:1px solid var(--border);overflow-y:auto}
+    .breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+    .breadcrumb a{font-family:var(--fd);font-size:.52rem;letter-spacing:1.5px;color:var(--tm);text-decoration:none;text-transform:uppercase;transition:color .2s}
+    .breadcrumb a:hover{color:var(--o)}
+    .breadcrumb span{color:rgba(255,255,255,.15);font-size:.8rem}
+    .ptags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+    .ptag{font-family:var(--fd);font-size:.46rem;letter-spacing:1.5px;padding:4px 11px;border-radius:20px;font-weight:700;text-transform:uppercase;border:1px solid}
+    .ptag-g{color:var(--green);border-color:rgba(77,255,145,.3);background:rgba(77,255,145,.07)}
+    .ptag-b{color:#60b4ff;border-color:rgba(96,180,255,.3);background:rgba(96,180,255,.07)}
+    .ptag-o{color:var(--o);border-color:rgba(122,31,238,.3);background:rgba(122,31,238,.07)}
+    .ptitle{font-family:var(--fd);font-size:clamp(1.4rem,2.3vw,2rem);font-weight:900;letter-spacing:2px;color:#fff;margin-bottom:11px;line-height:1.2}
+    .pdesc{font-family:var(--fb);color:var(--tm);font-size:.93rem;line-height:1.75;margin-bottom:20px}
+    .meta-box{background:rgba(122,31,238,.04);border:1px solid rgba(122,31,238,.1);border-radius:8px;padding:15px 18px;margin-bottom:20px;display:flex;flex-direction:column;gap:9px}
+    .meta-row{display:flex;align-items:center;gap:10px;font-family:var(--fb);font-size:.88rem;color:var(--tm)}
+    .meta-row .mi{font-size:.95rem;width:22px;text-align:center}
+    .meta-row strong{color:#ddd;font-weight:600}
+    .stars-row{display:flex;align-items:center;gap:8px;margin-bottom:18px}
+    .stars{color:#bb77ff;font-size:.9rem;text-shadow:0 0 6px rgba(255,184,0,.4)}
+    .stars-txt{font-family:var(--fb);font-size:.83rem;color:var(--tm)}
+    .price-box{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:15px 18px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+    .pb-l{display:flex;flex-direction:column;gap:3px}
+    .pb-lbl{font-family:var(--fd);font-size:.55rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase}
+    .pb-price{font-family:var(--fd);font-size:1.9rem;font-weight:900;color:var(--o);text-shadow:0 0 10px rgba(122,31,238,.4)}
+    .pb-r{display:flex;flex-direction:column;gap:3px;align-items:flex-end}
+    .qty-lbl{font-family:var(--fd);font-size:.52rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase;margin-bottom:4px}
+    .qty-w{display:flex;align-items:center}
+    .qb{background:var(--c2);border:1px solid rgba(255,255,255,.08);color:#fff;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;transition:all .2s;user-select:none}
+    .qb:first-child{border-radius:4px 0 0 4px}.qb:last-child{border-radius:0 4px 4px 0}
+    .qb:hover{background:var(--o);color:#000}
+    .qv{background:var(--c2);border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);color:#fff;width:40px;height:32px;text-align:center;font-family:var(--fd);font-size:.78rem;display:flex;align-items:center;justify-content:center}
+    .vtitle{font-family:var(--fd);font-size:.6rem;letter-spacing:3px;color:var(--tm);text-transform:uppercase;margin-bottom:11px}
+    .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px}
+    .vc{background:var(--c2);border:1.5px solid rgba(255,255,255,.07);border-radius:8px;padding:13px 15px;transition:all .25s;position:relative;overflow:hidden}
+    .vc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--o),transparent);opacity:0;transition:opacity .3s}
+    .vc:hover{border-color:rgba(122,31,238,.35);background:rgba(122,31,238,.04)}
+    .vc:hover::before{opacity:1}
+    .vc.sel{border-color:var(--o);background:rgba(122,31,238,.07);box-shadow:0 0 16px rgba(122,31,238,.08)}
+    .vc.sel::before{opacity:1}
+    .vc-n{font-family:var(--fd);font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:#fff;text-transform:uppercase;margin-bottom:3px}
+    .vc-s{font-family:var(--fb);font-size:.74rem;color:var(--tm);margin-bottom:7px}
+    .vc-p{font-family:var(--fd);font-size:.95rem;font-weight:900;color:var(--o)}
+    .tot-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:17px 18px;margin-bottom:12px}
+    .tot-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
+    .tot-lbl{font-family:var(--fd);font-size:.58rem;letter-spacing:2px;color:var(--tm);text-transform:uppercase}
+    .tot-amt{font-family:var(--fd);font-size:1.55rem;font-weight:900;color:var(--o);text-shadow:var(--neon)}
+    .sal-row{display:flex;align-items:center;gap:8px;margin-bottom:13px;font-family:var(--fb);font-size:.83rem;color:var(--tm)}
+    .sal-val{color:var(--green);font-family:var(--fd);font-size:.72rem;font-weight:700}
+    .btn-buy{width:100%;background:var(--o);color:#000;border:none;padding:15px;border-radius:6px;
+      font-family:var(--fd);font-weight:700;font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      box-shadow:0 4px 20px rgba(122,31,238,.3);transition:all .25s}
+    .btn-buy:hover{background:var(--ob);transform:translateY(-2px);box-shadow:var(--neon),0 8px 30px rgba(122,31,238,.4)}
+    .btn-buy:disabled{opacity:.4;transform:none;box-shadow:none}
+    .btn-log{width:100%;background:transparent;color:var(--o);border:1.5px solid var(--o);padding:15px;border-radius:6px;
+      font-family:var(--fd);font-weight:700;font-size:.68rem;letter-spacing:2px;text-transform:uppercase;transition:all .25s}
+    .btn-log:hover{background:rgba(122,31,238,.1)}
+    .msg{padding:11px 15px;border-radius:5px;font-size:.83rem;margin-top:10px;display:none;font-family:var(--fb)}
+    .msg.err{background:rgba(255,50,50,.1);border:1px solid rgba(255,50,50,.3);color:#ff6666;display:block}
+    .msg.ok{background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.3);color:var(--green);display:block}
+    .msg.warn{background:rgba(255,184,0,.1);border:1px solid rgba(255,184,0,.3);color:#bb77ff;display:block}
+    .spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.3);border-top-color:#000;border-radius:50%;animation:sp .7s linear infinite}
+    @keyframes sp{to{transform:rotate(360deg)}}
+    .feats{padding:70px 48px;max-width:1400px;margin:0 auto}
+    .feats h2{font-family:var(--fd);font-size:1.3rem;font-weight:900;letter-spacing:3px;color:#fff;margin-bottom:8px}
+    .feats .sub{font-family:var(--fb);color:var(--tm);font-size:.93rem;margin-bottom:42px;line-height:1.7}
+    .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:13px}
+    .fc{background:var(--c2);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:24px 22px;transition:border-color .25s,box-shadow .25s;position:relative;overflow:hidden}
+    .fc::after{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,var(--o),transparent);opacity:0;transition:opacity .3s}
+    .fc:hover{border-color:rgba(122,31,238,.22);box-shadow:0 4px 28px rgba(122,31,238,.05)}
+    .fc:hover::after{opacity:1}
+    .fc-title{font-family:var(--fd);font-size:.64rem;letter-spacing:2px;color:var(--o);text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:7px;font-weight:700}
+    .fc ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+    .fc ul li{font-family:var(--fb);color:var(--tm);font-size:.86rem;display:flex;align-items:flex-start;gap:9px;line-height:1.4}
+    .fc ul li::before{content:'✓';color:var(--o);font-weight:900;font-size:.75rem;flex-shrink:0;margin-top:1px}
+    .moverlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center}
+    .moverlay.open{display:flex}
+    .msuccess{background:var(--card);border:1px solid rgba(77,255,145,.25);border-radius:12px;padding:42px 34px;max-width:400px;width:90%;text-align:center;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) forwards}
+    @keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+    .micon{font-size:3rem;margin-bottom:16px}
+    .msuccess h3{font-family:var(--fd);font-size:.88rem;font-weight:900;letter-spacing:2px;color:var(--green);margin-bottom:10px;text-transform:uppercase}
+    .msuccess p{font-family:var(--fb);color:var(--tm);font-size:.88rem;line-height:1.7;margin-bottom:16px}
+    .kbox{background:var(--c2);border:1px solid rgba(77,255,145,.18);border-radius:6px;padding:12px 16px;font-family:var(--fd);font-size:.7rem;color:var(--green);letter-spacing:2px;margin-bottom:20px;word-break:break-all;text-align:left}
+    .btn-cl{background:var(--o);color:#000;border:none;padding:12px 26px;border-radius:5px;font-family:var(--fd);font-weight:700;font-size:.62rem;letter-spacing:2px;transition:all .2s}
+    .btn-cl:hover{background:var(--ob)}
+    footer{background:var(--d2);border-top:1px solid var(--border);padding:26px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+    .flogo{font-family:var(--fd);font-size:.9rem;font-weight:900;letter-spacing:3px}
+    .flogo span{color:var(--o)}
+    footer p{font-family:var(--fb);color:var(--tm);font-size:.78rem}
+    @media(max-width:900px){
+      .page-wrap{grid-template-columns:1fr;min-height:auto}
+      .img-col{height:auto;padding:30px 24px;min-height:300px}
+      .info-col{padding:28px 18px}
+      .vgrid{grid-template-columns:1fr}
+      nav{padding:12px 20px}
+      .feats{padding:50px 18px}
+      footer{padding:20px 18px;flex-direction:column;text-align:center}
+    }
+
+    /* ── PAYMENT ANIMATIONS ── */
+    @keyframes processingRing1 {
+      from { transform: rotate(0deg); border-top-color: var(--o); }
+      to   { transform: rotate(360deg); border-top-color: var(--o); }
+    }
+    @keyframes processingRing2 {
+      from { transform: rotate(0deg); border-right-color: rgba(122,31,238,0.4); }
+      to   { transform: rotate(360deg); border-right-color: rgba(122,31,238,0.4); }
+    }
+    @keyframes stepActivate {
+      from { opacity:0.3; transform:translateX(-4px); }
+      to   { opacity:1;   transform:translateX(0); }
+    }
+    .proc-step.active {
+      opacity: 1 !important;
+      background: rgba(122,31,238,0.08) !important;
+      border-color: rgba(122,31,238,0.25) !important;
+      animation: stepActivate 0.4s ease forwards;
+    }
+    .proc-step.done {
+      opacity: 1 !important;
+      background: rgba(68,255,136,0.05) !important;
+      border-color: rgba(68,255,136,0.2) !important;
+    }
+    .proc-step.done .step-check { opacity: 1 !important; }
+    .proc-step.done .step-check::before { content: "✅"; }
+
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo"><span>YULIAN</span> STORE</a>
+  <div class="nav-r">
+    <a href="index.html" class="nbtn nbtn-g" style="font-size:.54rem;">← Tienda</a>
+    <div id="ng"><a href="login.html" class="nbtn">ACCEDER</a></div>
+    <div id="nu" style="display:none;align-items:center;gap:10px;">
+      <span class="nav-n" id="nn"></span>
+      <span class="nav-s" id="ns">$0.00</span>
+      <button class="nbtn" onclick="pedirLogout()" style="font-size:.54rem;">CERRAR SESIÓN</button>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ═══ MODAL: RESUMEN DE ORDEN ═══ -->
+<div class="moverlay" id="modal-order">
+  <div class="msuccess" style="max-width:420px;text-align:left;padding:36px 32px;">
+    <div style="font-family:'Orbitron',sans-serif;font-size:.7rem;font-weight:900;letter-spacing:3px;color:var(--o);text-transform:uppercase;margin-bottom:20px;text-align:center;">
+      📋 Resumen de Orden
+    </div>
+    <div style="background:rgba(122,31,238,0.07);border:1px solid rgba(122,31,238,0.2);border-radius:8px;padding:16px;margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#888;">Producto</span>
+        <span id="ord-producto" style="font-family:'Orbitron',sans-serif;font-size:.62rem;color:#fff;letter-spacing:1px;">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#888;">Plan</span>
+        <span id="ord-plan" style="font-family:'Orbitron',sans-serif;font-size:.62rem;color:var(--o);letter-spacing:1px;">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#888;">Cantidad</span>
+        <span id="ord-qty" style="font-family:'Orbitron',sans-serif;font-size:.62rem;color:#fff;">—</span>
+      </div>
+      <div style="border-top:1px solid rgba(122,31,238,0.2);margin:10px 0;"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-family:'Exo 2',sans-serif;font-size:.88rem;color:#fff;font-weight:700;">Total</span>
+        <span id="ord-total" style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;color:var(--o);text-shadow:0 0 10px rgba(122,31,238,0.5);">—</span>
+      </div>
+    </div>
+    <div style="background:rgba(68,255,136,0.05);border:1px solid rgba(68,255,136,0.15);border-radius:6px;padding:10px 14px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-family:'Exo 2',sans-serif;font-size:.8rem;color:#888;">💰 Tu saldo</span>
+      <span id="ord-saldo" style="font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;color:#4dff91;">—</span>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="document.getElementById('modal-order').classList.remove('open')"
+        style="flex:1;background:transparent;color:#666;border:1px solid rgba(255,255,255,0.08);padding:12px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.55rem;letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
+        onmouseover="this.style.borderColor='rgba(122,31,238,0.4)';this.style.color='#aaa'"
+        onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.color='#666'">
+        CANCELAR
+      </button>
+      <button id="btn-confirm-pay"
+        onclick="confirmarPago()"
+        style="flex:1;background:var(--o);color:#000;border:none;padding:12px;border-radius:6px;font-family:'Orbitron',sans-serif;font-weight:900;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;transition:all .2s;box-shadow:0 4px 20px rgba(122,31,238,0.3);"
+        onmouseover="this.style.background='var(--ob)';this.style.boxShadow='var(--neon)'"
+        onmouseout="this.style.background='var(--o)';this.style.boxShadow='0 4px 20px rgba(122,31,238,0.3)'">
+        ⚡ CONFIRMAR PAGO
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: PROCESANDO PAGO ═══ -->
+<div class="moverlay" id="modal-processing">
+  <div class="msuccess" style="max-width:400px;padding:48px 36px;text-align:center;">
+    <!-- Logo animado -->
+    <div style="position:relative;width:80px;height:80px;margin:0 auto 28px;">
+      <div style="position:absolute;inset:0;border-radius:50%;border:2px solid rgba(122,31,238,0.2);animation:processingRing1 2s linear infinite;"></div>
+      <div style="position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(122,31,238,0.1);animation:processingRing2 2s linear infinite reverse;"></div>
+      <div style="position:absolute;inset:0;border-radius:50%;background:rgba(122,31,238,0.1);display:flex;align-items:center;justify-content:center;font-size:1.8rem;" id="proc-icon">⚡</div>
+    </div>
+
+    <div style="font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:900;letter-spacing:3px;color:var(--o);text-transform:uppercase;margin-bottom:8px;" id="proc-title">
+      Procesando Pago
+    </div>
+    <div style="font-family:'Exo 2',sans-serif;font-size:.85rem;color:#666;margin-bottom:32px;" id="proc-subtitle">
+      Por favor espera...
+    </div>
+
+    <!-- Pasos -->
+    <div style="text-align:left;display:flex;flex-direction:column;gap:12px;" id="proc-steps">
+      <div class="proc-step" id="step-1" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);opacity:0.3;transition:all 0.5s;">
+        <span class="step-icon" style="font-size:1rem;width:24px;text-align:center;">🔍</span>
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;">Verificando saldo disponible</span>
+        <span class="step-check" style="margin-left:auto;font-size:.9rem;opacity:0;transition:opacity 0.3s;"></span>
+      </div>
+      <div class="proc-step" id="step-2" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);opacity:0.3;transition:all 0.5s;">
+        <span class="step-icon" style="font-size:1rem;width:24px;text-align:center;">🛡️</span>
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;">Autenticando transacción</span>
+        <span class="step-check" style="margin-left:auto;font-size:.9rem;opacity:0;transition:opacity 0.3s;"></span>
+      </div>
+      <div class="proc-step" id="step-3" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);opacity:0.3;transition:all 0.5s;">
+        <span class="step-icon" style="font-size:1rem;width:24px;text-align:center;">💳</span>
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;">Procesando débito de saldo</span>
+        <span class="step-check" style="margin-left:auto;font-size:.9rem;opacity:0;transition:opacity 0.3s;"></span>
+      </div>
+      <div class="proc-step" id="step-4" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);opacity:0.3;transition:all 0.5s;">
+        <span class="step-icon" style="font-size:1rem;width:24px;text-align:center;">🔑</span>
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;">Generando clave de licencia</span>
+        <span class="step-check" style="margin-left:auto;font-size:.9rem;opacity:0;transition:opacity 0.3s;"></span>
+      </div>
+      <div class="proc-step" id="step-5" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);opacity:0.3;transition:all 0.5s;">
+        <span class="step-icon" style="font-size:1rem;width:24px;text-align:center;">📦</span>
+        <span style="font-family:'Exo 2',sans-serif;font-size:.82rem;color:#aaa;">Registrando orden en sistema</span>
+        <span class="step-check" style="margin-left:auto;font-size:.9rem;opacity:0;transition:opacity 0.3s;"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="moverlay" id="modal-ok">
+  <div class="msuccess">
+    <div class="micon">🎮</div>
+    <h3>¡Acceso Desbloqueado!</h3>
+    <p>Compra exitosa. Guarda tu clave y únete al Discord para instrucciones.</p>
+    <div class="kbox" id="kbox">—</div>
+    <button class="btn-cl" onclick="document.getElementById('modal-ok').classList.remove('open');updateUI()">ENTENDIDO</button>
+  </div>
+</div>
+
+<div class="page-wrap">
+  <div class="img-col">
+    <div class="hex-bg"></div>
+    <div class="status-pill"><div class="sdot"></div><span class="stxt">Indetectable</span></div>
+    <div class="tilt-wrap">
+      <div class="tilt-box">
+        <div class="tilt-shine"></div>
+        <img src="fortnite_private_box.png" alt="Fortnite Mobile" class="box-img">
+      </div>
+    </div>
+    <div class="ver-pill">PRIVADO</div>
+  </div>
+
+  <div class="info-col">
+    <div class="breadcrumb">
+      <a href="index.html">Tienda</a><span>›</span>
+      <a href="javascript:history.back()">Fortnite Mobile</a><span>›</span>
+      <span style="color:var(--o);font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:1.5px;">PRIVADO</span>
+    </div>
+    <div class="ptags"><span class="ptag ptag-g">✓ Indetectable</span><span class="ptag ptag-b">🔒 Privado</span><span class="ptag ptag-o">👑 VIP</span></div>
+    <h1 class="ptitle">Fortnite Mobile<br><span style="color:var(--o);">— PRIVADO</span></h1>
+    <p class="pdesc">Versión exclusiva VIP con funciones avanzadas, soporte dedicado y máxima seguridad anti-detección.</p>
+    <div class="meta-box"><div class="meta-row"><span class="mi">📱</span> Compatible con <strong>Android e iOS</strong></div><div class="meta-row"><span class="mi">🛡️</span> <strong>Anti-ban activo</strong> y cifrado</div><div class="meta-row"><span class="mi">⚡</span> Actualizaciones <strong>post-parche automáticas</strong></div></div>
+    <div class="stars-row">
+      <span class="stars">★★★★☆</span>
+      <span class="stars-txt">4 (187 reseñas)</span>
+    </div>
+    <div class="price-box">
+      <div class="pb-l"><div class="pb-lbl">Precio base</div><div class="pb-price" id="bp">$0.00</div></div>
+      <div class="pb-r">
+        <div class="qty-lbl">Cantidad</div>
+        <div class="qty-w">
+          <div class="qb" onclick="cQty(-1)">−</div>
+          <div class="qv" id="qv">1</div>
+          <div class="qb" onclick="cQty(1)">+</div>
+        </div>
+      </div>
+    </div>
+    <div class="vtitle">VARIANTES</div>
+    <div class="vgrid" id="vg"></div>
+    <div class="tot-box">
+      <div class="tot-row"><span class="tot-lbl">Total</span><span class="tot-amt" id="ta">$0.00</span></div>
+      <div class="sal-row" id="sr" style="display:none;">Tu saldo: <span class="sal-val" id="sv">$0.00</span></div>
+      <div id="ba"><button class="btn-log" onclick="window.location.href='login.html'">INICIA SESIÓN PARA COMPRAR</button></div>
+      <div class="msg" id="msg"></div>
+    </div>
+  </div>
+</div>
+
+<div class="feats">
+  <h2>CARACTERÍSTICAS DEL SOFTWARE</h2>
+  <p class="sub">Todo lo que incluye tu acceso — Fortnite Mobile PRIVADO</p>
+  <div class="fgrid"><div class="fc"><div class="fc-title"><span>🎯</span> Aimbot</div><ul><li>Config. por tipo de arma</li><li>Suavidad ajustable</li><li>Predicción de movimiento</li><li>Visible Check</li><li>FOV Circle</li><li>Hitbox seleccionable</li><li>Keybind personalizable</li></ul></div><div class="fc"><div class="fc-title"><span>👁️</span> Visuals / ESP</div><ul><li>Box ESP (Outline/Corner)</li><li>Skeleton ESP</li><li>Nombre y distancia</li><li>Arma del enemigo</li><li>Snap Lines</li><li>Show Bots</li><li>Colores personalizables</li></ul></div><div class="fc"><div class="fc-title"><span>📡</span> Radar</div><ul><li>Radar en pantalla</li><li>Rango ajustable</li><li>Posición personalizable</li><li>Rank visible</li><li>Plataforma del jugador</li></ul></div><div class="fc"><div class="fc-title"><span>⚙️</span> Misc</div><ul><li>Config SAVE/LOAD</li><li>Overlay FPS</li><li>VSync</li><li>Menú in-game</li><li>Soporte Discord 24/7</li></ul></div><div class="fc"><div class="fc-title"><span>🔒</span> Seguridad</div><ul><li>100% indetectable</li><li>Anti-ban integrado</li><li>Actualizaciones automáticas</li><li>Sin necesidad de root</li><li>Cifrado de comunicación</li></ul></div><div class="fc"><div class="fc-title"><span>ℹ️</span> Información</div><ul><li>Compatible Android e iOS</li><li>Acceso instantáneo</li><li>Clave de licencia personal</li><li>Instrucciones en Discord</li><li>Reembolso si hay detección</li></ul></div></div>
+</div>
+
+<footer>
+  <div class="flogo"><span>YULIAN</span> STORE</div>
+  <p>© 2025 Yulian Store. Todos los derechos reservados.</p>
+  <a href="index.html" style="color:var(--o);font-family:'Orbitron',sans-serif;font-size:.6rem;letter-spacing:1.5px;text-decoration:none;">← Volver</a>
+</footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, updateDoc, arrayUnion, increment, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",
+    projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",
+    messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
+  const app=initializeApp(cfg),auth=getAuth(app),db=getFirestore(app);
+  const VARS=[{id:'1d',name:'DÍA',sub:'Acceso 24 horas',price:15},
+    {id:'3d',name:'3 DÍAS',sub:'Acceso 72 horas',price:30},
+    {id:'1s',name:'SEMANA',sub:'Acceso 7 días',price:50},
+    {id:'1m',name:'MES',sub:'Acceso 30 días',price:80},
+    {id:'lf',name:'LIFETIME',sub:'De por vida',price:150}];
+  const PID='FORTNITE-PRIVATE',PNAME='Fortnite Mobile (Privado)';
+  let sv=VARS[0],qty=1,user=null,saldo=0;
+  function rVars(){
+    const g=document.getElementById('vg');
+    g.innerHTML=VARS.map(v=>`<div class="vc${v.id===sv.id?' sel':''}" data-id="${v.id}"><div class="vc-n">${v.name}</div><div class="vc-s">${v.sub}</div><div class="vc-p">$${v.price.toFixed(2)}</div></div>`).join('');
+    g.querySelectorAll('.vc').forEach(el=>el.addEventListener('click',()=>{sv=VARS.find(v=>v.id===el.dataset.id);rVars();upTot();updateUI();}));
+  }
+  function upTot(){
+    const t=sv.price*qty;
+    document.getElementById('bp').textContent=`$${sv.price.toFixed(2)}`;
+    document.getElementById('qv').textContent=qty;
+    document.getElementById('ta').textContent=`$${t.toFixed(2)}`;
+  }
+  window.cQty=function(d){qty=Math.max(1,Math.min(10,qty+d));upTot();updateUI();};
+  function updateUI(){
+    const ba=document.getElementById('ba');clrMsg();
+    if(!user){ba.innerHTML='<button class="btn-log" onclick="window.location.href=\'login.html\'">INICIA SESIÓN PARA COMPRAR</button>';document.getElementById('sr').style.display='none';return;}
+    document.getElementById('sr').style.display='flex';
+    document.getElementById('sv').textContent=`$${saldo.toFixed(2)}`;
+    const t=sv.price*qty;
+    if(saldo>=t){ba.innerHTML=`<button class="btn-buy" id="bc">🛒 COMPRAR — $${t.toFixed(2)}</button>`;document.getElementById('bc').addEventListener('click',abrirResumen);}
+    else{ba.innerHTML=`<button class="btn-buy" disabled>🛒 COMPRAR — $${t.toFixed(2)}</button>`;showMsg('warn',`Saldo insuficiente. Necesitas $${t.toFixed(2)}, tienes $${saldo.toFixed(2)}. Contacta al admin para recargar.`);}
+  }
+  async function comprar(){
+    const btn=document.getElementById('bc');btn.disabled=true;btn.innerHTML='<span class="spin"></span> Procesando...';clrMsg();
+    try{
+      const snap=await getDoc(doc(db,'users',user.uid));const sr=snap.data().saldo??0;const t=sv.price*qty;
+      if(sr<t){showMsg('err','Saldo insuficiente.');btn.disabled=false;btn.textContent='🛒 COMPRAR';return;}
+      await updateDoc(doc(db,'users',user.uid),{saldo:increment(-t),purchases:arrayUnion(`${PID} — ${sv.name} x${qty}`)});
+      const key=`YS-${PID}-${sv.id.toUpperCase()}-${Math.random().toString(36).slice(2,8).toUpperCase()}`;
+      await addDoc(collection(db,'compras'),{uid:user.uid,nombre:user.displayName||'—',email:user.email,producto:PNAME,plan:sv.name,cantidad:qty,precio:t,clave:key,fecha:serverTimestamp()});
+      saldo=sr-t;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;document.getElementById('sv').textContent=`$${saldo.toFixed(2)}`;
+      document.getElementById('kbox').textContent=key;document.getElementById('modal-ok').classList.add('open');
+    }catch(e){showMsg('err','Error al procesar. Intenta de nuevo.');btn.disabled=false;btn.innerHTML=`🛒 COMPRAR — $${(sv.price*qty).toFixed(2)}`;}
+  }
+
+  // ── NUEVO SISTEMA DE PAGO ──
+  window.abrirResumen = function() {
+    const t = sv.price * qty;
+    document.getElementById('ord-producto').textContent = PNAME;
+    document.getElementById('ord-plan').textContent     = sv.name + ' — ' + sv.sub;
+    document.getElementById('ord-qty').textContent      = qty + (qty > 1 ? ' unidades' : ' unidad');
+    document.getElementById('ord-total').textContent    = '$' + t.toFixed(2);
+    document.getElementById('ord-saldo').textContent    = '$' + saldo.toFixed(2);
+    document.getElementById('modal-order').classList.add('open');
+  };
+
+  window.confirmarPago = async function() {
+    document.getElementById('modal-order').classList.remove('open');
+    document.getElementById('modal-processing').classList.add('open');
+    resetSteps();
+
+    const t = sv.price * qty;
+
+    try {
+      // Step 1 — Verificar saldo
+      await activateStep(1, 1200);
+      const snap = await getDoc(doc(db,'users',user.uid));
+      const sr   = snap.data().saldo ?? 0;
+      if (sr < t) {
+        closeProcessing();
+        showMsg('err', 'Saldo insuficiente.');
+        return;
+      }
+      completeStep(1);
+
+      // Step 2 — Autenticar
+      await activateStep(2, 1400);
+      await sleep(1000);
+      completeStep(2);
+
+      // Step 3 — Débito
+      await activateStep(3, 1000);
+      await updateDoc(doc(db,'users',user.uid),{
+        saldo: increment(-t),
+        purchases: arrayUnion(PID + ' — ' + sv.name + ' x' + qty)
+      });
+      completeStep(3);
+
+      // Step 4 — Generar clave
+      await activateStep(4, 1200);
+      const key = 'YS-' + PID + '-' + sv.id.toUpperCase() + '-' +
+                  Math.random().toString(36).slice(2,8).toUpperCase();
+      await sleep(800);
+      completeStep(4);
+
+      // Step 5 — Registrar orden
+      await activateStep(5, 1000);
+      await addDoc(collection(db,'compras'),{
+        uid: user.uid, nombre: user.displayName||'—',
+        email: user.email, producto: PNAME,
+        plan: sv.name, cantidad: qty,
+        precio: t, clave: key, fecha: serverTimestamp()
+      });
+      completeStep(5);
+
+      // Actualizar saldo
+      saldo = sr - t;
+      document.getElementById('ns').textContent = '$' + saldo.toFixed(2);
+      if (document.getElementById('sv'))
+        document.getElementById('sv').textContent = '$' + saldo.toFixed(2);
+
+      // Mostrar éxito
+      await sleep(700);
+      closeProcessing();
+      document.getElementById('kbox').textContent = key;
+      document.getElementById('modal-ok').classList.add('open');
+
+    } catch(e) {
+      closeProcessing();
+      showMsg('err', 'Error al procesar. Intenta de nuevo.');
+      updateUI();
+    }
+  };
+
+  function resetSteps() {
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById('step-' + i);
+      if (el) { el.className = 'proc-step'; el.querySelector('.step-check').textContent = ''; }
+    }
+  }
+  function activateStep(n, delay) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const el = document.getElementById('step-' + n);
+        if (el) el.classList.add('active');
+        resolve();
+      }, delay);
+    });
+  }
+  function completeStep(n) {
+    const el = document.getElementById('step-' + n);
+    if (!el) return;
+    el.classList.remove('active');
+    el.classList.add('done');
+  }
+  function closeProcessing() {
+    document.getElementById('modal-processing').classList.remove('open');
+  }
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function showMsg(t,txt){const el=document.getElementById('msg');el.className=`msg ${t}`;el.textContent=txt;}
+  function clrMsg(){const el=document.getElementById('msg');el.className='msg';}
+  window.updateUI=updateUI;
+  onAuthStateChanged(auth,async u=>{user=u;if(u){document.getElementById('ng').style.display='none';document.getElementById('nu').style.display='flex';document.getElementById('nn').textContent=u.displayName||u.email.split('@')[0].toUpperCase();try{const s=await getDoc(doc(db,'users',u.uid));if(s.exists()){saldo=s.data().saldo??0;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;}}catch(e){}}rVars();upTot();updateUI();});
+  window.doLogout=async()=>{await signOut(auth);window.location.href='index.html';};
+</script>
+
+<script>
+/* CURSOR */
+const cdot=document.createElement('div');cdot.id='cdot';
+const cring=document.createElement('div');cring.id='cring';
+document.body.appendChild(cdot);document.body.appendChild(cring);
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function animC(){
+  requestAnimationFrame(animC);
+  cdot.style.left=mx+'px';cdot.style.top=my+'px';
+  rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;
+  cring.style.left=rx+'px';cring.style.top=ry+'px';
+})();
+document.querySelectorAll('button,a,.vc,.qb').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cring.style.width='52px';cring.style.height='52px';cring.style.borderColor='rgba(122,31,238,1)';});
+  el.addEventListener('mouseleave',()=>{cring.style.width='38px';cring.style.height='38px';cring.style.borderColor='rgba(122,31,238,0.8)';});
+});
+
+/* 3D TILT */
+document.querySelectorAll('.tilt-box').forEach(box=>{
+  const wrap=box.closest('.tilt-wrap');
+  wrap.addEventListener('mousemove',e=>{
+    const r=box.getBoundingClientRect();
+    const dx=(e.clientX-(r.left+r.width/2))/(r.width/2);
+    const dy=(e.clientY-(r.top+r.height/2))/(r.height/2);
+    box.style.transform=`rotateX(${-dy*14}deg) rotateY(${dx*14}deg) scale3d(1.04,1.04,1.04)`;
+    const shine=box.querySelector('.tilt-shine');
+    if(shine){
+      shine.style.background=`radial-gradient(circle at ${((e.clientX-r.left)/r.width)*100}% ${((e.clientY-r.top)/r.height)*100}%,rgba(255,255,255,0.14) 0%,transparent 55%)`;
+      shine.style.opacity='1';
+    }
+  });
+  wrap.addEventListener('mouseleave',()=>{
+    box.style.transform='rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+    const shine=box.querySelector('.tilt-shine');
+    if(shine) shine.style.opacity='0';
+  });
+});
+</script>
+
+<!-- MODAL CERRAR SESIÓN -->
+<div id="logout-modal" style="
+  display:none;position:fixed;inset:0;z-index:99999;
+  background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:20px;
+">
+  <div style="
+    background:#0d0a1a;border:1px solid rgba(122,31,238,0.25);border-radius:14px;
+    padding:40px 36px;max-width:420px;width:100%;position:relative;
+    box-shadow:0 0 60px rgba(122,31,238,0.08);
+    animation:popInL .4s cubic-bezier(.34,1.56,.64,1) forwards;
+  ">
+    <div style="text-align:center;margin-bottom:20px;font-size:2.8rem;">⚠️</div>
+    <h3 style="font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:900;
+      letter-spacing:2px;color:#7A1FEE;text-align:center;margin-bottom:14px;text-transform:uppercase;">
+      ¿Cerrar Sesión?
+    </h3>
+    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.88rem;line-height:1.75;
+      text-align:center;margin-bottom:10px;">
+      Recuerda que tu <strong style="color:#fff;">saldo y compras</strong> están guardados en tu cuenta.
+    </p>
+    <p style="font-family:'Exo 2',sans-serif;color:#aa77ff;font-size:.82rem;line-height:1.7;
+      text-align:center;margin-bottom:28px;
+      background:rgba(122,31,238,0.07);border:1px solid rgba(122,31,238,0.2);
+      border-radius:8px;padding:12px 16px;">
+      🔑 Si no recuerdas tu contraseña, <strong>no podrás recuperar el acceso</strong> a tu saldo ni a tus claves de productos. Asegúrate de tenerla guardada antes de salir.
+    </p>
+    <div style="display:flex;gap:12px;">
+      <button onclick="document.getElementById('logout-modal').style.display='none'"
+        style="flex:1;background:transparent;color:#777;border:1px solid rgba(255,255,255,.12);
+        padding:13px;border-radius:6px;font-family:'Orbitron',sans-serif;font-size:.6rem;
+        letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
+        onmouseover="this.style.borderColor='#7A1FEE';this.style.color='#7A1FEE'"
+        onmouseout="this.style.borderColor='rgba(255,255,255,.12)';this.style.color='#777'">
+        CANCELAR
+      </button>
+      <button onclick="confirmarLogout()"
+        style="flex:1;background:#7A1FEE;color:#000;border:none;padding:13px;border-radius:6px;
+        font-family:'Orbitron',sans-serif;font-weight:700;font-size:.6rem;
+        letter-spacing:2px;text-transform:uppercase;transition:all .2s;"
+        onmouseover="this.style.background='#8B2FFF'" onmouseout="this.style.background='#7A1FEE'">
+        SÍ, CERRAR SESIÓN
+      </button>
+    </div>
+  </div>
+</div>
+<style>
+@keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
+</style>
+
+</body>
+</html>

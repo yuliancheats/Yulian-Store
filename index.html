@@ -1592,6 +1592,36 @@ const PRODUCTS_DATA = {
         page: 'blood-private.html'
       }
     ]
+  },
+  fortnite: {
+    name: 'Fortnite Mobile',
+    img: 'fortnite_public_box.png',
+    versions: [
+      {
+        id: 'public',
+        label: 'PÚBLICO',
+        img: 'fortnite_public_box.png',
+        tags: ['INDETECTABLE','ACTUALIZADO'],
+        tagNew: true,
+        desc: 'Aimbot de precisión, ESP y Wallhack completo para Fortnite Mobile. Sin detección y siempre actualizado.',
+        rating: 4.8,
+        reviews: 76,
+        fromPrice: 5,
+        page: 'fortnite-public.html'
+      },
+      {
+        id: 'private',
+        label: 'PRIVADO',
+        img: 'fortnite_private_box.png',
+        tags: ['INDETECTABLE','PRIVADO','VIP'],
+        tagNew: true,
+        desc: 'Versión VIP exclusiva con funciones avanzadas, soporte prioritario y actualizaciones anticipadas.',
+        rating: 5.0,
+        reviews: 12,
+        fromPrice: 15,
+        page: 'fortnite-private.html'
+      }
+    ]
   }
 };
 
@@ -1872,6 +1902,31 @@ window.addEventListener('load', function() {
           </ul>
           <button class="btn-get" onclick="abrirSelector('blood')">GET ACCESS</button>
           <div class="more-info" onclick="abrirSelector('blood')">Más información →</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- FORTNITE MOBILE -->
+    <div class="product-card reveal">
+      <span class="corner-tl"></span>
+      <span class="corner-br"></span>
+      <div class="free-badge pulse-glow" style="background:rgba(122,31,238,0.9);color:#fff;box-shadow:0 0 10px rgba(122,31,238,0.6);">NEW</div>
+      <div class="product-inner">
+        <div class="product-img-wrap">
+          <div class="product-status-badge" id="badge-fortnite"><div class="sdot online"></div><span class="sdot-txt online">Online</span></div>
+          <img src="fortnite_public_box.png" alt="Fortnite Mobile">
+          <div class="product-img-overlay"></div>
+        </div>
+        <div class="product-body">
+          <div class="product-name">Fortnite Mobile</div>
+          <ul class="product-features">
+            <li>Aimbot &amp; ESP completo</li>
+            <li>Wallhack &amp; Radar</li>
+            <li>100% Indetectable</li>
+          </ul>
+          <button class="btn-get" onclick="abrirSelector('fortnite')">GET ACCESS</button>
+          <div class="more-info" onclick="abrirSelector('fortnite')">Más información →</div>
         </div>
       </div>
     </div>
@@ -2381,7 +2436,7 @@ document.addEventListener('DOMContentLoaded', () => {
     offline:  { txt: 'Offline',       cls: 'offline'  },
   };
 
-  ['codm','blood','combat'].forEach(prodId => {
+  ['codm','blood','combat','fortnite'].forEach(prodId => {
     getDoc(doc(db, 'status', prodId)).then(snap => {
       const estado = snap.exists() ? (snap.data().estado || 'online') : 'online';
       updateStatusBadge(prodId, estado);
