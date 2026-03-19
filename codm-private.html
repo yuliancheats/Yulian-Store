@@ -450,6 +450,91 @@
           <span>🔒</span> Pago procesado por Tropipay · Encriptación SSL 256-bit
         </div>
       </div>
+      <!-- ═══ SKRILL BLOCK ═══ -->
+      <div class="pay-divider"><span>O PAGA CON SKRILL</span></div>
+      <div class="skrill-block">
+        <div class="skrill-header">
+          <div class="skrill-logo">
+            <div class="skrill-logo-icon">S</div>
+            <span class="skrill-logo-text">Skrill</span>
+          </div>
+          <div class="tropipay-trust">
+            <span class="trust-badge"><span>🔒</span> SSL</span>
+            <span class="trust-badge"><span>✓</span> Seguro</span>
+          </div>
+        </div>
+        <div class="card-icons">
+          <div class="card-icon visa">VISA</div>
+          <div class="card-icon mc"><div class="mc-circles"><div class="mc-circle"></div><div class="mc-circle"></div></div></div>
+          <span style="font-family:'Exo 2',sans-serif;font-size:.72rem;color:#555;margin-left:2px">y más</span>
+        </div>
+        <div class="tropipay-notice">
+          <span class="tropipay-notice-icon">ℹ️</span>
+          <div class="tropipay-notice-text">
+            Paga de forma segura con <strong>Skrill</strong>. El acceso se activará en menos de <strong>24 horas</strong> tras confirmar el pago. Contacta por Discord con tu comprobante.
+          </div>
+        </div>
+        <button class="btn-skrill" onclick="pagarConSkrill()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.15)"/><path d="M8 12h8M12 8v8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+          PAGAR CON SKRILL — <span id="skrill-amt">$0.00</span>
+        </button>
+        <div class="tropipay-secure">
+          <span>🔒</span> Pago procesado por Skrill · Encriptación SSL 256-bit
+        </div>
+      </div>
+
+      <!-- ═══ CRYPTO BLOCK ═══ -->
+      <div class="pay-divider"><span>O PAGA CON CRYPTO</span></div>
+      <div class="crypto-block">
+        <div class="crypto-header">
+          <span class="crypto-title">₿ Criptomonedas</span>
+          <div class="tropipay-trust">
+            <span class="trust-badge"><span>⚡</span> Instantáneo</span>
+            <span class="trust-badge"><span>0%</span> Comisión</span>
+          </div>
+        </div>
+        <div class="crypto-coins">
+          <div class="coin-btn" onclick="mostrarCrypto('usdt',this)">
+            <div class="coin-icon usdt">₮</div>
+            <span class="coin-name">USDT</span>
+          </div>
+          <div class="coin-btn" onclick="mostrarCrypto('btc',this)">
+            <div class="coin-icon btc">₿</div>
+            <span class="coin-name">BTC</span>
+          </div>
+          <div class="coin-btn" onclick="mostrarCrypto('eth',this)">
+            <div class="coin-icon eth">Ξ</div>
+            <span class="coin-name">ETH</span>
+          </div>
+          <div class="coin-btn" onclick="mostrarCrypto('bnb',this)">
+            <div class="coin-icon bnb">⬡</div>
+            <span class="coin-name">BNB</span>
+          </div>
+          <div class="coin-btn" onclick="mostrarCrypto('usdc',this)">
+            <div class="coin-icon usdc">$</div>
+            <span class="coin-name">USDC</span>
+          </div>
+        </div>
+        <div class="crypto-addr-box" id="crypto-addr-box">
+          <div class="crypto-addr-label" id="crypto-addr-label">Dirección</div>
+          <div class="crypto-addr-network" id="crypto-addr-network">Red: —</div>
+          <div class="crypto-addr" id="crypto-addr">—</div>
+          <button class="btn-copy-addr" id="btn-copy-addr" onclick="copiarAddr()">
+            📋 COPIAR DIRECCIÓN
+          </button>
+        </div>
+        <div class="crypto-warning">
+          <span style="font-size:.85rem;flex-shrink:0">⚠️</span>
+          <div class="crypto-warning-text">
+            Envía el monto exacto en la red correcta. <strong>Envíos por red incorrecta se pierden.</strong> Para USDT, ETH, USDC y BNB usa red <strong>ERC-20 o BEP-20</strong>.
+          </div>
+        </div>
+        <div class="crypto-discord-note">
+          Después de pagar, envíanos el <strong style="color:#fff">ID de transacción</strong> por
+          <a href="https://discord.gg/TU_LINK_AQUI" target="_blank">Discord</a>
+          y activamos tu acceso en menos de 24 horas.
+        </div>
+      </div>
     </div>
   </div>
 </div>
