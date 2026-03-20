@@ -844,10 +844,25 @@ window.confirmBan = async () => {
 window.unbanUser = async (uid) => {
   try {
     await updateDoc(doc(db,'users',uid),{banned:false, banReason:'', bannedAt:null});
+    // Mandar aviso automático al usuario
+    try {
+      await addDoc(collection(db,'avisos'), {
+        uid,
+        titulo: '✅ Cuenta Restaurada',
+        mensaje: 'Tu cuenta ha sido revisada y el ban ha sido levantado. Ya puedes acceder a todos los servicios de Kernel Level con normalidad. ¡Bienvenido de vuelta!',
+        btnAceptar: '🎮 Entendido, gracias',
+        btnRechazar: '',
+        estado: 'pendiente',
+        enviadoEn: serverTimestamp(),
+        enviadoPor: ADMIN_EMAIL,
+        respuesta: null,
+        tipo: 'unban'
+      });
+    } catch(e) { console.warn('No se pudo enviar aviso de desban:', e); }
     // Reload both sections
     await Promise.all([loadUsuarios(), loadBaneados()]);
     showToast('🔓 Ban levantado — usuario restaurado','success');
-  } catch(e) { showToast('Error','error'); }
+  } catch(e) { showToast('Error al desbanear: ' + (e.code || e.message),'error'); }
 };
 
 /* ── RESELLER ── */
@@ -1569,13 +1584,6 @@ window.filterResellers = q => {
     (r.name||'').toLowerCase().includes(f) ||
     (r.email||'').toLowerCase().includes(f)
   ));
-};
-
-// Override unbanUser to also refresh baneados panel
-const _origUnban = window.unbanUser;
-window.unbanUser = async (uid) => {
-  await _origUnban(uid);
-  await loadBaneados();
 };
 
 // Override removeReseller to also refresh resellers panel

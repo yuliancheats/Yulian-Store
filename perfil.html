@@ -301,20 +301,7 @@
   </style>
 </head>
 <body>
-<script>
-// TEST: Si ves este panel, JS básico funciona
-(function(){
-  var d=document.createElement('div');
-  d.style.cssText='position:fixed;top:10px;right:10px;z-index:999999;background:#111;border:2px solid #7A1FEE;border-radius:8px;padding:8px 14px;color:#4dff91;font-family:monospace;font-size:12px;';
-  d.textContent='✅ JS OK - cargando...';
-  d.id='_jstest';
-  document.addEventListener('DOMContentLoaded',function(){
-    var el=document.getElementById('_jstest');
-    if(el) el.textContent='✅ DOM listo';
-  });
-  document.body ? document.body.appendChild(d) : document.addEventListener('DOMContentLoaded',function(){document.body.appendChild(d);});
-})();
-</script>
+
 
 <div id="toast" class="toast">✓ Clave copiada</div>
 
@@ -708,19 +695,8 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 import { getFirestore, doc, onSnapshot, getDoc, collection, query, where, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ── DEBUG PANEL (borrar después de confirmar que funciona) ──
-function klLog(msg){
-  console.log('[KL]', msg);
-  let p = document.getElementById('_kldp');
-  if(!p){
-    p = document.createElement('div');
-    p.id='_kldp';
-    p.style.cssText='position:fixed;bottom:10px;left:10px;z-index:999999;background:rgba(0,0,0,.95);border:1px solid #7A1FEE;border-radius:8px;padding:10px 14px;width:340px;max-height:220px;overflow-y:auto;font-family:monospace;font-size:11px;color:#4dff91;line-height:1.5;';
-    p.innerHTML='<b style="color:#a855f7;font-size:10px;">KL DEBUG</b> <span onclick="this.parentNode.remove()" style="float:right;cursor:pointer;color:#ff6868;">✕</span><br>';
-    document.body.appendChild(p);
-  }
-  p.innerHTML += new Date().toLocaleTimeString('es')+' '+msg+'<br>';
-  p.scrollTop=p.scrollHeight;
-}
+// Debug desactivado en producción
+function klLog(msg){ console.log('[KL]', msg); }
 
 (function(){
   const cfg = {
