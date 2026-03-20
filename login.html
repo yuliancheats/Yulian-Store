@@ -167,7 +167,7 @@
       <div id="msg-register" class="msg"></div>
       <div class="form-group">
         <label>Nombre de Usuario</label>
-        <input type="text" id="reg-name" placeholder="Tu nombre o alias" maxlength="10">
+        <input type="text" id="reg-name" placeholder="Tu nombre o alias">
       </div>
       <div class="form-group">
         <label>Correo Electrónico</label>
@@ -317,10 +317,7 @@
     const msg   = document.getElementById('msg-register');
 
     if (!name || !email || !pass) { showMsg(msg, 'error', 'Por favor completa todos los campos.'); return; }
-    if (name.length < 2)           { showMsg(msg, 'error', 'El nombre debe tener al menos 2 caracteres.'); return; }
-    if (name.length > 10)          { showMsg(msg, 'error', 'El nombre no puede tener más de 10 caracteres.'); return; }
-    if (/\d/.test(name))           { showMsg(msg, 'error', 'El nombre no puede contener números.'); return; }
-    if (pass.length < 6)           { showMsg(msg, 'error', 'La contraseña debe tener al menos 6 caracteres.'); return; }
+    if (pass.length < 6)          { showMsg(msg, 'error', 'La contraseña debe tener al menos 6 caracteres.'); return; }
 
     manualFlow = true;
     btn.disabled = true;
@@ -480,6 +477,36 @@
   window.addEventListener("mousemove",e=>{m.x=e.clientX;m.y=e.clientY;});
   window.addEventListener("resize",resize);
   resize();draw();
+})();
+</script>
+
+<script type="module">
+/* ── BAN LISTENER EN TIEMPO REAL ── */
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+(function(){
+  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
+  const appName = 'ban-rt-' + Math.random().toString(36).slice(2,7);
+  const app  = initializeApp(cfg, appName);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+  let unsub = null;
+  onAuthStateChanged(auth, user => {
+    if (unsub) { unsub(); unsub = null; }
+    if (!user) return;
+    unsub = onSnapshot(doc(db,'users',user.uid), snap => {
+      if (!snap.exists()) return;
+      const d = snap.data();
+      if (d.banned) {
+        const screen = document.getElementById('ban-screen');
+        if (!screen) return;
+        screen.style.display = 'flex';
+        const el = document.getElementById('ban-reason-rt');
+        if (el && d.banReason) { el.textContent = '📋 Razón: ' + d.banReason; el.style.display = 'block'; }
+      }
+    });
+  });
 })();
 </script>
 </body>

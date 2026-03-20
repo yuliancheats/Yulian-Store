@@ -2583,9 +2583,9 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <script type="module">
-  import { initializeApp }                     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc }          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",
@@ -2596,7 +2596,7 @@ document.addEventListener('DOMContentLoaded', () => {
     appId: "1:372613089099:web:b70fae80818c73628f8ace"
   };
 
-  const app   = initializeApp(firebaseConfig);
+  const app   = getApps().find(a=>a.name==='[DEFAULT]') || initializeApp(firebaseConfig);
   const auth  = getAuth(app);
   const db    = getFirestore(app);
   const ADMIN = 'admin@yulianstore.com';
@@ -2623,16 +2623,6 @@ document.addEventListener('DOMContentLoaded', () => {
     badge.innerHTML = `<div class="sdot ${info.cls}"></div><span class="sdot-txt ${info.cls}">${info.txt}</span>`;
   }
 
-  // ── PRESENCE ──
-  async function setPresence(user, online) {
-    try {
-      await setDoc(doc(db,'presence',user.uid), {
-        online, uid: user.uid,
-        lastSeen: serverTimestamp()
-      }, {merge:true});
-    } catch(e) {}
-  }
-
   onAuthStateChanged(auth, async (user) => {
     const guest    = document.getElementById('nav-guest');
     const userDiv  = document.getElementById('nav-user');
@@ -2641,12 +2631,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminBtn = document.getElementById('btn-admin-panel');
 
     if (user) {
-      setPresence(user, true);
-      // Mark offline on tab close/hide
-      window.addEventListener('beforeunload', () => setPresence(user, false));
-      document.addEventListener('visibilitychange', () => {
-        setPresence(user, !document.hidden);
-      });
       // Mostrar nombre inmediatamente
       guest.style.display  = 'none';
       userDiv.style.display = 'flex';
@@ -2962,7 +2946,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ═══════════════════════════════════════════
    CARRITO — LÓGICA COMPLETA
 ═══════════════════════════════════════════ */
-import { initializeApp }    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, onAuthStateChanged }
                              from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, getDoc, updateDoc, addDoc,
@@ -2977,7 +2961,7 @@ const firebaseConfig = {
   messagingSenderId: "372613089099",
   appId: "1:372613089099:web:b70fae80818c73628f8ace"
 };
-const app  = initializeApp(firebaseConfig);
+const app  = getApps().find(a=>a.name==='[DEFAULT]') || initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
@@ -3341,6 +3325,23 @@ renderCart();
 </div>
 
 <!-- ═══ PANTALLA DE BAN EN TIEMPO REAL ═══ -->
+<!-- ═══ MODAL AVISO ADMIN ═══ -->
+<div id="aviso-overlay" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.9);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#0f0f0f;border:1px solid rgba(255,184,0,.25);border-radius:16px;padding:40px 36px;max-width:460px;width:100%;position:relative;box-shadow:0 0 60px rgba(255,184,0,.08);animation:avisoIn .45s cubic-bezier(.34,1.4,.64,1) forwards;">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;border-radius:16px 16px 0 0;background:linear-gradient(90deg,transparent,#FFB800,transparent)"></div>
+    <div style="font-size:2.8rem;text-align:center;margin-bottom:14px;">⚠️</div>
+    <div style="font-family:'Orbitron',sans-serif;font-size:.48rem;letter-spacing:3px;color:#FFB800;text-transform:uppercase;text-align:center;margin-bottom:10px;opacity:.7">Mensaje del Administrador</div>
+    <div id="aviso-titulo" style="font-family:'Orbitron',sans-serif;font-size:.95rem;font-weight:900;color:#fff;text-align:center;letter-spacing:1.5px;margin-bottom:12px;line-height:1.3">Aviso</div>
+    <div id="aviso-mensaje" style="font-family:'Exo 2',sans-serif;color:#888;font-size:.88rem;text-align:center;line-height:1.75;margin-bottom:26px;background:rgba(255,184,0,.04);border:1px solid rgba(255,184,0,.1);border-radius:8px;padding:14px 18px">—</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button id="aviso-btn-ok" onclick="document.getElementById('aviso-overlay').style.display='none';window.responderAvisoIndex&&window.responderAvisoIndex('accept')" style="width:100%;padding:14px;border:none;border-radius:8px;background:linear-gradient(135deg,#7A1FEE,#5a15bb);color:#fff;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">✅ Entendido, lo corregiré</button>
+      <button id="aviso-btn-no" onclick="document.getElementById('aviso-overlay').style.display='none';window.responderAvisoIndex&&window.responderAvisoIndex('reject')" style="width:100%;padding:12px;border:1px solid rgba(255,80,80,.25);background:transparent;border-radius:8px;color:#ff6868;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.58rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">✖ No lo haré</button>
+    </div>
+  </div>
+</div>
+<style>@keyframes avisoIn{from{opacity:0;transform:scale(.9) translateY(-12px)}to{opacity:1;transform:scale(1) translateY(0)}}</style>
+
+<!-- ═══ BAN SCREEN ═══ -->
 <div id="ban-screen" style="
   display:none; position:fixed; inset:0; z-index:999999;
   background:#06040f; align-items:center; justify-content:center;
@@ -3387,35 +3388,91 @@ renderCart();
 </style>
 
 <script type="module">
-/* ── REAL-TIME BAN LISTENER ── */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+/* ── REAL-TIME BAN + AVISOS LISTENER ── */
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, collection, query, where, onSnapshot, updateDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 (function(){
   const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
-  const app2 = initializeApp(cfg, 'ban-listener');
+  const app2  = getApps().find(a=>a.name==='[DEFAULT]') || initializeApp(cfg);
   const auth2 = getAuth(app2);
   const db2   = getFirestore(app2);
-  let unsub = null;
-  onAuthStateChanged(auth2, user => {
-    if (unsub) unsub();
+  let unsubBan = null, unsubAv = null, _avId = null;
+
+  function mostrarBan(data) {
+    const screen = document.getElementById('ban-screen');
+    if (!screen) return;
+    screen.style.display = 'flex';
+    if (data.banReason) {
+      const el = document.getElementById('ban-reason-rt');
+      if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
+    }
+    // Cerrar sesión para que no pueda seguir navegando
+    signOut(auth2).catch(()=>{});
+  }
+
+  onAuthStateChanged(auth2, async user => {
+    if (unsubBan) { unsubBan(); unsubBan = null; }
+    if (unsubAv)  { unsubAv();  unsubAv  = null; }
     if (!user) return;
-    unsub = onSnapshot(doc(db2,'users',user.uid), snap => {
+
+    // ── VERIFICAR BAN AL CARGAR (inmediato) ──
+    try {
+      const snap = await getDoc(doc(db2,'users',user.uid));
+      if (snap.exists() && snap.data().banned) {
+        mostrarBan(snap.data());
+        return; // No activar listeners si ya está baneado
+      }
+    } catch(e) { console.error('Ban check error:', e); }
+
+    // ── BAN EN TIEMPO REAL ──
+    unsubBan = onSnapshot(doc(db2,'users',user.uid), snap => {
       if (!snap.exists()) return;
       const data = snap.data();
-      if (data.banned) {
-        const screen = document.getElementById('ban-screen');
-        if (screen) {
-          screen.style.display = 'flex';
-          if (data.banReason) {
-            const el = document.getElementById('ban-reason-rt');
-            if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
-          }
-        }
-      }
+      if (data.banned) mostrarBan(data);
+    }, err => console.error('Ban listener error:', err));
+
+    // ── AVISOS ──
+    const qAv = query(
+      collection(db2,'avisos'),
+      where('uid','==',user.uid),
+      where('estado','==','pendiente')
+    );
+    unsubAv = onSnapshot(qAv, snap => {
+      snap.docChanges().forEach(ch => {
+        if (ch.type !== 'added') return;
+        _avId = ch.doc.id;
+        const d = ch.doc.data();
+        const ov = document.getElementById('aviso-overlay');
+        if (!ov) return;
+        const t  = document.getElementById('aviso-titulo');
+        const m  = document.getElementById('aviso-mensaje');
+        const ok = document.getElementById('aviso-btn-ok');
+        const no = document.getElementById('aviso-btn-no');
+        if (t)  t.textContent  = d.titulo   || 'Aviso';
+        if (m)  m.textContent  = d.mensaje  || '—';
+        if (ok && d.btnAceptar)  ok.textContent  = d.btnAceptar;
+        if (no && d.btnRechazar) no.textContent   = d.btnRechazar;
+        ov.style.display = 'flex';
+      });
     });
   });
+
+  // Responder aviso desde index
+  window.responderAvisoIndex = async function(resp) {
+    const ov = document.getElementById('aviso-overlay');
+    if (ov) ov.style.display = 'none';
+    if (!_avId) return;
+    try {
+      await updateDoc(doc(db2,'avisos',_avId), {
+        estado: 'respondido',
+        respuesta: resp,
+        respondidoEn: serverTimestamp()
+      });
+    } catch(e) { console.error('Error respondiendo aviso:', e); }
+    _avId = null;
+  };
 })();
 </script>
 
