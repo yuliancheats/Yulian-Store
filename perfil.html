@@ -704,8 +704,8 @@
 <script type="module">
 /* ── BAN + AVISOS LISTENER (perfil) ── */
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, onSnapshot, collection, query, where, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, onSnapshot, getDoc, collection, query, where, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ── DEBUG PANEL (borrar después de confirmar que funciona) ──
 function klLog(msg){
@@ -740,20 +740,41 @@ function klLog(msg){
 
   let unsubBan=null, unsubAv=null, _avId=null;
 
-  onAuthStateChanged(authP, user => {
+  function mostrarBanPerfil(d) {
+    klLog('🚫 Mostrando ban screen');
+    const screen = document.getElementById('ban-screen');
+    if(screen) {
+      screen.style.display='flex';
+      if(d.banReason){
+        const el=document.getElementById('ban-reason-rt');
+        if(el){el.textContent='📋 Razón: '+d.banReason;el.style.display='block';}
+      }
+    } else {
+      klLog('❌ ban-screen NO ENCONTRADO en DOM');
+    }
+    // Cerrar sesión para que no pueda seguir navegando
+    signOut(authP).catch(()=>{});
+  }
+
+  onAuthStateChanged(authP, async user => {
     klLog('🔑 Auth state changed');
     if(unsubBan){unsubBan();unsubBan=null;}
     if(unsubAv){unsubAv();unsubAv=null;}
 
-    if(!user){
-      klLog('❌ Sin usuario');
-      return;
-    }
-
+    if(!user){ klLog('❌ Sin usuario'); return; }
     klLog('✅ Usuario: '+user.email);
     klLog('🆔 UID: '+user.uid);
 
-    // ── BAN ──
+    // ── VERIFICAR BAN INMEDIATAMENTE AL CARGAR ──
+    try {
+      const snap = await getDoc(doc(dbP,'users',user.uid));
+      if(snap.exists() && snap.data().banned){
+        mostrarBanPerfil(snap.data());
+        return;
+      }
+    } catch(e){ klLog('❌ Ban check err: '+e.message); }
+
+    // ── BAN EN TIEMPO REAL ──
     klLog('👂 Escuchando ban...');
     unsubBan = onSnapshot(
       doc(dbP,'users',user.uid),
@@ -761,19 +782,7 @@ function klLog(msg){
         if(!snap.exists()){ klLog('⚠️ Doc user no existe'); return; }
         const d = snap.data();
         klLog('📄 banned='+d.banned);
-        if(d.banned){
-          const screen = document.getElementById('ban-screen');
-          if(screen){
-            klLog('🚫 Mostrando ban screen');
-            screen.style.display='flex';
-            if(d.banReason){
-              const el=document.getElementById('ban-reason-rt');
-              if(el){el.textContent='📋 Razón: '+d.banReason;el.style.display='block';}
-            }
-          } else {
-            klLog('❌ ban-screen NO ENCONTRADO en DOM');
-          }
-        }
+        if(d.banned) mostrarBanPerfil(d);
       },
       err => klLog('❌ Ban err: '+err.code+' '+err.message)
     );

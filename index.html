@@ -3342,6 +3342,7 @@ renderCart();
 <style>@keyframes avisoIn{from{opacity:0;transform:scale(.9) translateY(-12px)}to{opacity:1;transform:scale(1) translateY(0)}}</style>
 
 <!-- ═══ BAN SCREEN ═══ -->
+<div id="ban-screen" style="
   display:none; position:fixed; inset:0; z-index:999999;
   background:#06040f; align-items:center; justify-content:center;
   padding:20px; flex-direction:column;
@@ -3389,36 +3390,48 @@ renderCart();
 <script type="module">
 /* ── REAL-TIME BAN + AVISOS LISTENER ── */
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, collection, query, where, onSnapshot, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, collection, query, where, onSnapshot, updateDoc, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 (function(){
   const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
-  const app2 = getApps().find(a=>a.name==='[DEFAULT]') || initializeApp(cfg);
+  const app2  = getApps().find(a=>a.name==='[DEFAULT]') || initializeApp(cfg);
   const auth2 = getAuth(app2);
   const db2   = getFirestore(app2);
   let unsubBan = null, unsubAv = null, _avId = null;
 
-  onAuthStateChanged(auth2, user => {
+  function mostrarBan(data) {
+    const screen = document.getElementById('ban-screen');
+    if (!screen) return;
+    screen.style.display = 'flex';
+    if (data.banReason) {
+      const el = document.getElementById('ban-reason-rt');
+      if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
+    }
+    // Cerrar sesión para que no pueda seguir navegando
+    signOut(auth2).catch(()=>{});
+  }
+
+  onAuthStateChanged(auth2, async user => {
     if (unsubBan) { unsubBan(); unsubBan = null; }
     if (unsubAv)  { unsubAv();  unsubAv  = null; }
     if (!user) return;
 
-    // ── BAN ──
+    // ── VERIFICAR BAN AL CARGAR (inmediato) ──
+    try {
+      const snap = await getDoc(doc(db2,'users',user.uid));
+      if (snap.exists() && snap.data().banned) {
+        mostrarBan(snap.data());
+        return; // No activar listeners si ya está baneado
+      }
+    } catch(e) { console.error('Ban check error:', e); }
+
+    // ── BAN EN TIEMPO REAL ──
     unsubBan = onSnapshot(doc(db2,'users',user.uid), snap => {
       if (!snap.exists()) return;
       const data = snap.data();
-      if (data.banned) {
-        const screen = document.getElementById('ban-screen');
-        if (screen) {
-          screen.style.display = 'flex';
-          if (data.banReason) {
-            const el = document.getElementById('ban-reason-rt');
-            if (el) { el.textContent = '📋 Razón: ' + data.banReason; el.style.display = 'block'; }
-          }
-        }
-      }
-    });
+      if (data.banned) mostrarBan(data);
+    }, err => console.error('Ban listener error:', err));
 
     // ── AVISOS ──
     const qAv = query(

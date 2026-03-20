@@ -198,8 +198,8 @@
     .pm-methods-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
     .pm-method-card{background:rgba(255,255,255,.02);border:1.5px solid rgba(255,255,255,.07);border-radius:8px;padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .2s;position:relative;overflow:hidden}
     .pm-method-card:hover{border-color:rgba(122,31,238,.35);background:rgba(122,31,238,.04);transform:translateY(-1px)}
-    .pm-method-card.sel{border-color:#7A1FEE;background:rgba(122,31,238,.07);box-shadow:0 0 18px rgba(122,31,238,.12)}
-    .pm-method-card.sel::before{content:'✓';position:absolute;top:6px;right:8px;font-family:'Orbitron',sans-serif;font-size:.55rem;color:#7A1FEE;font-weight:900}
+    .pm-method-card.selected{border-color:#7A1FEE;background:rgba(122,31,238,.07);box-shadow:0 0 18px rgba(122,31,238,.12)}
+    .pm-method-card.selected::before{content:'✓';position:absolute;top:6px;right:8px;font-family:'Orbitron',sans-serif;font-size:.55rem;color:#7A1FEE;font-weight:900}
     .pm-method-logo{height:28px;display:flex;align-items:center;justify-content:center}
     .pm-method-name{font-family:'Orbitron',sans-serif;font-size:.52rem;letter-spacing:1.5px;color:#aaa;text-transform:uppercase;text-align:center}
     .pm-method-sub{font-family:'Exo 2',sans-serif;font-size:.68rem;color:#555;text-align:center}
@@ -1093,6 +1093,49 @@ document.querySelectorAll('.tilt-box').forEach(box=>{
   window.addEventListener("mousemove",e=>{m.x=e.clientX;m.y=e.clientY;});
   window.addEventListener("resize",resize);
   resize();draw();
+})();
+</script>
+
+<!-- ═══ BAN SCREEN ═══ -->
+<div id="ban-screen" style="display:none;position:fixed;inset:0;z-index:999999;background:#06040f;align-items:center;justify-content:center;padding:20px;flex-direction:column;">
+  <div style="background:#0d0a1a;border:2px solid rgba(255,68,68,0.4);border-radius:16px;padding:48px 40px;max-width:480px;width:100%;text-align:center;box-shadow:0 0 60px rgba(255,68,68,0.12);animation:popInBan .5s cubic-bezier(.34,1.56,.64,1) forwards;">
+    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
+    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;letter-spacing:3px;color:#ff4444;text-transform:uppercase;margin-bottom:16px;text-shadow:0 0 20px rgba(255,68,68,0.5);">Cuenta Suspendida</h2>
+    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:12px;">Tu cuenta ha sido suspendida por un administrador.</p>
+    <div id="ban-reason-rt" style="font-family:'Exo 2',sans-serif;color:#ff9966;font-size:.85rem;background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);border-radius:8px;padding:12px 16px;margin-bottom:24px;line-height:1.7;display:none;"></div>
+    <p style="font-family:'Exo 2',sans-serif;color:#666;font-size:.82rem;line-height:1.7;margin-bottom:24px;">Si crees que es un error, abre un ticket en Discord o contacta un administrador.</p>
+    <a href="https://discord.gg/GEbWADVD" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#7A1FEE;color:#000;text-decoration:none;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:2px;padding:13px 28px;border-radius:6px;text-transform:uppercase;box-shadow:0 4px 18px rgba(122,31,238,.35);">🎮 Abrir Discord</a>
+  </div>
+</div>
+<style>@keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}</style>
+
+<script type="module">
+/* ── BAN LISTENER EN TIEMPO REAL ── */
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+(function(){
+  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
+  const appName = 'ban-rt-' + Math.random().toString(36).slice(2,7);
+  const app  = initializeApp(cfg, appName);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+  let unsub = null;
+  onAuthStateChanged(auth, user => {
+    if (unsub) { unsub(); unsub = null; }
+    if (!user) return;
+    unsub = onSnapshot(doc(db,'users',user.uid), snap => {
+      if (!snap.exists()) return;
+      const d = snap.data();
+      if (d.banned) {
+        const screen = document.getElementById('ban-screen');
+        if (!screen) return;
+        screen.style.display = 'flex';
+        const el = document.getElementById('ban-reason-rt');
+        if (el && d.banReason) { el.textContent = '📋 Razón: ' + d.banReason; el.style.display = 'block'; }
+      }
+    });
+  });
 })();
 </script>
 </body>
