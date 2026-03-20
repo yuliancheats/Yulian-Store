@@ -222,6 +222,27 @@
     .resp-badge.reject{background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.25);color:#ff6868}
     .resp-badge.pendiente{background:rgba(122,31,238,.1);border:1px solid rgba(122,31,238,.3);color:#a855f7}
 
+
+    /* ── ROLES ── */
+    .badge-reseller{background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.35);color:#ffc800;display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:2px;font-family:var(--font-display);font-size:.5rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+    .badge-reseller .star-anim{display:inline-block;animation:starPulse 1.8s ease-in-out infinite;filter:drop-shadow(0 0 4px #ffc800)}
+    @keyframes starPulse{0%,100%{transform:scale(1) rotate(0deg);opacity:1}50%{transform:scale(1.3) rotate(15deg);opacity:.8}}
+    .badge-cliente{background:rgba(122,31,238,.1);border:1px solid rgba(122,31,238,.3);color:#a855f7;display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:2px;font-family:var(--font-display);font-size:.5rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+    .badge-cliente .star-c{color:#a855f7;font-size:.65rem}
+    .badge-user{background:rgba(68,170,255,.1);border:1px solid rgba(68,170,255,.25);color:#44aaff;display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:2px;font-family:var(--font-display);font-size:.5rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+    .badge-admin-role{background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.35);color:#FFD700;display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:2px;font-family:var(--font-display);font-size:.5rem;font-weight:700;letter-spacing:1.5px}
+    /* ── ONLINE STATUS ── */
+    .online-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+    .online-dot.online{background:#44ff88;box-shadow:0 0 6px #44ff88;animation:onlinePulse 2s infinite}
+    .online-dot.offline{background:#555}
+    @keyframes onlinePulse{0%,100%{box-shadow:0 0 4px #44ff88}50%{box-shadow:0 0 10px #44ff88,0 0 20px rgba(68,255,136,.3)}}
+    .online-lbl{font-family:var(--font-display);font-size:.48rem;letter-spacing:1.5px;font-weight:700}
+    .online-lbl.online{color:#44ff88}
+    .online-lbl.offline{color:#555}
+    /* ── DELETE BTN ── */
+    .btn-delete{background:transparent;color:#ff4444;border:1px solid rgba(255,68,68,.25);padding:5px 10px;border-radius:4px;font-family:var(--font-display);font-size:.5rem;font-weight:700;letter-spacing:1px;transition:all .2s;cursor:pointer}
+    .btn-delete:hover{background:rgba(255,68,68,.1);border-color:#ff4444}
+
   </style>
 </head>
 <body>
@@ -247,6 +268,7 @@
     <div class="sidebar-section">Gestión</div>
     <div class="nav-item active" onclick="showPanel('dashboard',this)"><span class="nav-icon">📊</span> Dashboard</div>
     <div class="nav-item" onclick="showPanel('usuarios',this)"><span class="nav-icon">👥</span> Usuarios<span class="nav-badge" id="badge-usuarios">—</span></div>
+    <div class="nav-item" onclick="showPanel('clientes',this)"><span class="nav-icon">⭐</span> Clientes<span class="nav-badge" id="badge-clientes">—</span></div>
     <div class="nav-item" onclick="showPanel('compras',this)"><span class="nav-icon">🛒</span> Compras<span class="nav-badge" id="badge-compras">—</span></div>
     <div class="nav-item" onclick="showPanel('historial',this)"><span class="nav-icon">📋</span> Historial Saldo<span class="nav-badge" id="badge-historial">—</span></div>
     <div class="sidebar-section">Licencias</div>
@@ -292,13 +314,32 @@
           <div class="table-actions"><input class="search-box" id="search-usuarios" placeholder="🔍 Buscar usuario..." oninput="filterUsuarios(this.value)"></div>
         </div>
         <table>
-          <thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Saldo</th><th>Estado</th><th>Registro</th><th>Acciones</th></tr></thead>
+          <thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Saldo</th><th>Estado</th><th>Online</th><th>Registro</th><th>Acciones</th></tr></thead>
           <tbody id="usuarios-body"><tr class="loading-row"><td colspan="7"><span class="spinner"></span> Cargando...</td></tr></tbody>
         </table>
       </div>
     </div>
 
     <!-- COMPRAS -->
+
+    <!-- CLIENTES -->
+    <div class="panel" id="panel-clientes">
+      <div class="page-header">
+        <div><div class="page-title">CLIEN<span>TES</span></div><div class="page-sub">Usuarios que han realizado al menos una compra</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="loadClientes()">🔄 Actualizar</button>
+      </div>
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">⭐ Lista de Clientes</div>
+          <div class="table-actions"><input class="search-box" id="search-clientes" placeholder="🔍 Buscar cliente..." oninput="filterClientes(this.value)" style="width:220px;"></div>
+        </div>
+        <table>
+          <thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Compras</th><th>Saldo</th><th>Estado</th><th>Registro</th><th>Acciones</th></tr></thead>
+          <tbody id="clientes-body"><tr class="loading-row"><td colspan="8"><span class="spinner"></span> Cargando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
     <div class="panel" id="panel-compras">
       <div class="page-header">
         <div><div class="page-title">COM<span>PRAS</span></div><div class="page-sub">Historial de transacciones</div></div>
@@ -540,6 +581,22 @@
 </div>
 
 <!-- MODAL: BANEAR USUARIO -->
+
+<div class="modal-overlay" id="modal-delete">
+  <div class="modal" style="max-width:420px;border-color:rgba(255,68,68,.3)">
+    <button class="modal-close" onclick="closeModal('modal-delete')">✕</button>
+    <div class="modal-title" style="color:var(--red)">🗑️ ELIMINAR USUARIO</div>
+    <div style="background:rgba(255,68,68,.07);border:1px solid rgba(255,68,68,.2);border-radius:8px;padding:14px 16px;margin-bottom:18px;font-family:var(--font-alt);font-size:.88rem;color:#ff8888;line-height:1.7">
+      ⚠️ Vas a eliminar la cuenta de <strong id="delete-user-name" style="color:#fff">—</strong>.<br>
+      Esta acción <strong>no se puede deshacer</strong>. Solo se elimina el documento de Firestore — el usuario no podrá iniciar sesión pero su cuenta de Auth permanece.
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-delete')">Cancelar</button>
+      <button class="btn btn-danger" style="flex:1" id="btn-confirm-delete" onclick="confirmDelete()">🗑️ ELIMINAR</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-ban">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-ban')">✕</button>
@@ -681,13 +738,32 @@ window.confirmarLogout = async () => { await signOut(auth); window.location.href
 /* ─── STATE ─── */
 let allUsuarios = [], allCompras = [], allClaves = [];
 let currentKeyTab = 'todas';
-let editingUserId = null, banningUserId = null, resellerUserId = null;
+let editingUserId = null, banningUserId = null, resellerUserId = null, deletingUserId = null;
+let allClientes = [];
+const onlineUsers = new Set(); // tracks online UIDs
+let onlineUnsub = null;
+
+// ── ONLINE PRESENCE listener ──
+function startPresenceListener() {
+  if (onlineUnsub) onlineUnsub();
+  const q = query(collection(db,'presence'), where('online','==',true));
+  onlineUnsub = onSnapshot(q, snap => {
+    onlineUsers.clear();
+    snap.forEach(d => onlineUsers.add(d.id));
+    if (document.getElementById('panel-usuarios')?.classList.contains('active')) {
+      renderUsuarios(allUsuarios);
+    }
+    if (document.getElementById('panel-clientes')?.classList.contains('active')) {
+      renderClientes(allClientes);
+    }
+  });
+}
 let generatedKey  = null;
 // timers map: keyId → intervalId
 const keyTimers = {};
 
 /* ─── LOAD ALL ─── */
-window.loadAll = () => Promise.all([loadUsuarios(), loadCompras(), loadClaves(), loadHistorial(), loadBaneados(), loadResellers()]);
+window.loadAll = () => Promise.all([loadUsuarios(), loadClientes(), loadCompras(), loadClaves(), loadHistorial(), loadBaneados(), loadResellers()]);
 
 /* ══════════════════════════════
    USUARIOS
@@ -710,26 +786,42 @@ window.loadUsuarios = async () => {
   }
 };
 
+function roleBadgeHTML(role, email) {
+  if (email === 'admin@yulianstore.com' || role === 'admin')
+    return '<span class="badge-admin-role">👑 ADMIN</span>';
+  if (role === 'reseller')
+    return '<span class="badge-reseller"><span class="star-anim">⭐</span> RESELLER</span>';
+  if (role === 'cliente')
+    return '<span class="badge-cliente"><span class="star-c">★</span> CLIENTE</span>';
+  return '<span class="badge-user">👤 USUARIO</span>';
+}
+
+function onlineHTML(uid) {
+  const online = onlineUsers.has(uid);
+  return `<div style="display:flex;align-items:center;gap:5px">
+    <span class="online-dot ${online?'online':'offline'}"></span>
+    <span class="online-lbl ${online?'online':'offline'}">${online?'ONLINE':'OFFLINE'}</span>
+  </div>`;
+}
+
 function renderUsuarios(list) {
   const tbody = document.getElementById('usuarios-body');
-  if (!list.length) { tbody.innerHTML='<tr class="empty-row"><td colspan="7">Sin usuarios</td></tr>'; return; }
+  if (!list.length) { tbody.innerHTML='<tr class="empty-row"><td colspan="8">Sin usuarios</td></tr>'; return; }
   tbody.innerHTML = list.map(u => {
     const fecha   = u.createdAt?.toDate ? formatDate(u.createdAt.toDate()) : '—';
     const saldo   = Number(u.saldo ?? 0).toFixed(2);
     const banned  = !!u.banned;
     const role    = u.role || 'user';
-    const roleBadge = role === 'reseller'
-      ? '<span class="badge badge-yellow">⭐ Reseller</span>'
-      : '<span class="badge badge-blue">Usuario</span>';
     const statusBadge = banned
       ? '<span class="badge badge-red">🚫 Baneado</span>'
       : '<span class="badge badge-green">✅ Activo</span>';
     return `<tr class="${banned?'user-banned':''}">
       <td><strong>${esc(u.name||'—')}</strong></td>
       <td class="td-muted overflow-text" title="${esc(u.email)}">${esc(u.email||'—')}</td>
-      <td>${roleBadge}</td>
+      <td>${roleBadgeHTML(role, u.email)}</td>
       <td><span style="color:var(--green);font-family:var(--font-display);font-size:.75rem;">$${saldo}</span></td>
       <td>${statusBadge}</td>
+      <td>${onlineHTML(u.id)}</td>
       <td class="td-muted">${fecha}</td>
       <td style="display:flex;gap:5px;flex-wrap:wrap;">
         <button class="btn btn-success btn-sm" onclick="openSaldoModal('${u.id}','${esc(u.name||u.email)}',${saldo})">💰</button>
@@ -740,10 +832,57 @@ function renderUsuarios(list) {
         ${role !== 'reseller'
           ? `<button class="btn btn-ghost btn-sm" onclick="openResellerModal('${u.id}','${esc(u.name||u.email)}')">⭐ Reseller</button>`
           : `<button class="btn btn-ghost btn-sm" onclick="removeReseller('${u.id}')">↩ Quitar rol</button>`}
+        <button class="btn-delete" onclick="openDeleteModal('${u.id}','${esc(u.name||u.email)}')">🗑️</button>
       </td>
     </tr>`;
   }).join('');
 }
+
+
+window.loadClientes = async () => {
+  const tbody = document.getElementById('clientes-body');
+  if (tbody) tbody.innerHTML = '<tr class="loading-row"><td colspan="8"><span class="spinner"></span> Cargando...</td></tr>';
+  try {
+    const snap = await getDocs(collection(db,'users'));
+    allClientes = snap.docs
+      .map(d => ({id:d.id,...d.data()}))
+      .filter(u => !u.banned && (u.role === 'cliente' || (u.purchases && u.purchases.length > 0)));
+    document.getElementById('badge-clientes').textContent = allClientes.length;
+    renderClientes(allClientes);
+  } catch(e) { console.error('loadClientes:', e); }
+};
+
+function renderClientes(list) {
+  const tbody = document.getElementById('clientes-body');
+  if (!tbody) return;
+  if (!list.length) { tbody.innerHTML='<tr class="empty-row"><td colspan="8">Sin clientes aún</td></tr>'; return; }
+  tbody.innerHTML = list.map(u => {
+    const fecha   = u.createdAt?.toDate ? formatDate(u.createdAt.toDate()) : '—';
+    const saldo   = Number(u.saldo ?? 0).toFixed(2);
+    const role    = u.role || 'cliente';
+    const compras = u.purchases?.length || 0;
+    return `<tr>
+      <td><strong>${esc(u.name||'—')}</strong></td>
+      <td class="td-muted overflow-text" title="${esc(u.email)}">${esc(u.email||'—')}</td>
+      <td>${roleBadgeHTML(role, u.email)}</td>
+      <td><span style="color:#a855f7;font-family:var(--font-display);font-size:.72rem">${compras} compra${compras!==1?'s':''}</span></td>
+      <td><span style="color:var(--green);font-family:var(--font-display);font-size:.75rem;">$${saldo}</span></td>
+      <td>${onlineHTML(u.id)}</td>
+      <td class="td-muted">${fecha}</td>
+      <td style="display:flex;gap:5px;flex-wrap:wrap;">
+        <button class="btn btn-success btn-sm" onclick="openSaldoModal('${u.id}','${esc(u.name||u.email)}',${saldo})">💰</button>
+        <button class="btn btn-sm" style="background:rgba(255,184,0,.12);border:1px solid rgba(255,184,0,.3);color:#FFB800;" onclick="openAvisoRapido('${u.id}','${esc(u.name||u.email)}')">⚠️ Aviso</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+window.filterClientes = q => {
+  const f = q.toLowerCase();
+  renderClientes(allClientes.filter(u =>
+    (u.name||'').toLowerCase().includes(f)||(u.email||'').toLowerCase().includes(f)
+  ));
+};
 
 window.filterUsuarios = q => {
   const f = q.toLowerCase();
@@ -829,40 +968,46 @@ window.confirmBan = async () => {
     });
     const u = allUsuarios.find(x=>x.id===banningUserId);
     if (u) { u.banned=true; u.banReason=reason||'Baneado por un administrador.'; }
+    // Move from usuarios to baneados
     allUsuarios = allUsuarios.filter(x=>x.id!==banningUserId);
     renderUsuarios(allUsuarios);
     document.getElementById('badge-usuarios').textContent = allUsuarios.length;
     await loadBaneados();
     closeModal('modal-ban');
-    showToast('🚫 Usuario baneado correctamente','success');
-  } catch(e) {
-    console.error('Error al banear:', e);
-    showToast('Error al banear: ' + (e.code || e.message), 'error');
-  }
+    showToast('🚫 Usuario baneado','success');
+  } catch(e) { showToast('Error al banear','error'); }
   btn.disabled=false; btn.innerHTML='🚫 BANEAR';
 };
+window.openDeleteModal = (uid, name) => {
+  deletingUserId = uid;
+  document.getElementById('delete-user-name').textContent = name;
+  document.getElementById('modal-delete').classList.add('open');
+};
+
+window.confirmDelete = async () => {
+  const btn = document.getElementById('btn-confirm-delete');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    await deleteDoc(doc(db,'users',deletingUserId));
+    allUsuarios = allUsuarios.filter(x => x.id !== deletingUserId);
+    allClientes = allClientes.filter(x => x.id !== deletingUserId);
+    renderUsuarios(allUsuarios);
+    renderClientes(allClientes);
+    document.getElementById('badge-usuarios').textContent = allUsuarios.length;
+    document.getElementById('badge-clientes').textContent = allClientes.length;
+    closeModal('modal-delete');
+    showToast('🗑️ Usuario eliminado', 'success');
+  } catch(e) { showToast('Error al eliminar: ' + (e.code || e.message), 'error'); }
+  btn.disabled = false; btn.innerHTML = '🗑️ ELIMINAR';
+};
+
 window.unbanUser = async (uid) => {
   try {
     await updateDoc(doc(db,'users',uid),{banned:false, banReason:'', bannedAt:null});
-    // Mandar aviso automático al usuario
-    try {
-      await addDoc(collection(db,'avisos'), {
-        uid,
-        titulo: '✅ Cuenta Restaurada',
-        mensaje: 'Tu cuenta ha sido revisada y el ban ha sido levantado. Ya puedes acceder a todos los servicios de Kernel Level con normalidad. ¡Bienvenido de vuelta!',
-        btnAceptar: '🎮 Entendido, gracias',
-        btnRechazar: '',
-        estado: 'pendiente',
-        enviadoEn: serverTimestamp(),
-        enviadoPor: ADMIN_EMAIL,
-        respuesta: null,
-        tipo: 'unban'
-      });
-    } catch(e) { console.warn('No se pudo enviar aviso de desban:', e); }
     // Reload both sections
     await Promise.all([loadUsuarios(), loadBaneados()]);
     showToast('🔓 Ban levantado — usuario restaurado','success');
-  } catch(e) { showToast('Error al desbanear: ' + (e.code || e.message),'error'); }
+  } catch(e) { showToast('Error','error'); }
 };
 
 /* ── RESELLER ── */
@@ -1559,7 +1704,7 @@ function renderResellers(list) {
     return `<tr>
       <td>
         <div style="display:flex;align-items:center;gap:8px;">
-          <span style="background:rgba(255,200,0,0.1);border:1px solid rgba(255,200,0,0.3);color:#ffc800;font-family:var(--font-display);font-size:0.5rem;letter-spacing:1px;padding:2px 8px;border-radius:2px;">⭐ RESELLER</span>
+          <span class="badge-reseller"><span class="star-anim">⭐</span> RESELLER</span>
           <strong>${esc(r.name||'—')}</strong>
         </div>
       </td>
@@ -1584,6 +1729,13 @@ window.filterResellers = q => {
     (r.name||'').toLowerCase().includes(f) ||
     (r.email||'').toLowerCase().includes(f)
   ));
+};
+
+// Override unbanUser to also refresh baneados panel
+const _origUnban = window.unbanUser;
+window.unbanUser = async (uid) => {
+  await _origUnban(uid);
+  await loadBaneados();
 };
 
 // Override removeReseller to also refresh resellers panel

@@ -66,7 +66,8 @@
     .profile-email{font-family:var(--fb);font-size:.88rem;color:var(--tm);margin-bottom:10px}
     .profile-badge-reseller{background:rgba(255,200,0,0.1)!important;border-color:rgba(255,200,0,0.35)!important;color:#ffc800!important;}
     .profile-badge-cliente{background:rgba(255,200,0,0.08)!important;border-color:rgba(255,200,0,0.3)!important;color:#ffc800!important;}
-    .profile-badge-admin{background:rgba(255,215,0,0.12)!important;border-color:rgba(255,215,0,0.45)!important;color:#FFD700!important;text-shadow:0 0 8px rgba(255,215,0,.4)!important;}
+    @keyframes starPulse{0%,100%{transform:scale(1) rotate(0deg);opacity:1}50%{transform:scale(1.3) rotate(15deg);opacity:.8}}
+    
     .profile-badge{display:inline-block;font-family:var(--fd);font-size:.5rem;letter-spacing:2px;
       padding:4px 12px;border-radius:20px;text-transform:uppercase;font-weight:700;
       background:rgba(77,255,145,.1);border:1px solid rgba(77,255,145,.3);color:var(--green)}
@@ -301,7 +302,20 @@
   </style>
 </head>
 <body>
-
+<script>
+// TEST: Si ves este panel, JS básico funciona
+(function(){
+  var d=document.createElement('div');
+  d.style.cssText='position:fixed;top:10px;right:10px;z-index:999999;background:#111;border:2px solid #7A1FEE;border-radius:8px;padding:8px 14px;color:#4dff91;font-family:monospace;font-size:12px;';
+  d.textContent='✅ JS OK - cargando...';
+  d.id='_jstest';
+  document.addEventListener('DOMContentLoaded',function(){
+    var el=document.getElementById('_jstest');
+    if(el) el.textContent='✅ DOM listo';
+  });
+  document.body ? document.body.appendChild(d) : document.addEventListener('DOMContentLoaded',function(){document.body.appendChild(d);});
+})();
+</script>
 
 <div id="toast" class="toast">✓ Clave copiada</div>
 
@@ -367,7 +381,7 @@
           <div class="edit-field-group">
             <div class="edit-label">Nombre de Usuario</div>
             <div class="edit-input-row">
-              <input type="text" class="edit-input" id="edit-name" placeholder="Tu nombre o alias" maxlength="30">
+              <input type="text" class="edit-input" id="edit-name" placeholder="Tu nombre o alias" maxlength="10">
               <button class="btn-edit-save" onclick="guardarNombre()">GUARDAR</button>
             </div>
             <div class="edit-hint">Máximo 30 caracteres. Sin caracteres inapropiados.</div>
@@ -425,7 +439,7 @@
   import { getAuth, onAuthStateChanged, signOut }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getFirestore, doc, getDoc,
            collection, query, where,
-           getDocs, orderBy }                        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+           getDocs, orderBy, setDoc, serverTimestamp }                        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const cfg = {
     apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",
@@ -439,11 +453,25 @@
   const auth = getAuth(app);
   const db   = getFirestore(app);
 
+  // ── PRESENCE ──
+  async function setPresence(user, online) {
+    try {
+      await setDoc(doc(db,'presence',user.uid), {
+        online, uid: user.uid, lastSeen: serverTimestamp()
+      }, {merge:true});
+    } catch(e) {}
+  }
+
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       window.location.href = 'login.html';
       return;
     }
+
+    // Presence
+    setPresence(user, true);
+    window.addEventListener('beforeunload', () => setPresence(user, false));
+    document.addEventListener('visibilitychange', () => setPresence(user, !document.hidden));
 
     // Fill profile info
     const nombre = user.displayName || user.email.split('@')[0];
@@ -468,16 +496,17 @@
         if (rb) {
           const ADMIN_EMAIL = 'admin@yulianstore.com';
           if (user.email === ADMIN_EMAIL || data.role === 'admin') {
-            rb.textContent = '👑 Admin';
+            rb.innerHTML = '👑 Administrador';
             rb.classList.add('profile-badge-admin');
           } else if (data.role === 'reseller') {
-            rb.textContent = '⭐ Reseller';
-            rb.classList.add('profile-badge-reseller');
+            rb.innerHTML = '<span style="display:inline-block;animation:starPulse 1.8s ease-in-out infinite;filter:drop-shadow(0 0 4px #ffc800)">⭐</span> Reseller';
+            rb.style.cssText = 'background:rgba(255,200,0,.1);border-color:rgba(255,200,0,.4);color:#ffc800;text-shadow:0 0 8px rgba(255,200,0,.3)';
           } else if (data.role === 'cliente') {
-            rb.textContent = '🛒 Cliente';
-            rb.classList.add('profile-badge-cliente');
+            rb.innerHTML = '★ Cliente';
+            rb.style.cssText = 'background:rgba(122,31,238,.1);border-color:rgba(122,31,238,.3);color:#a855f7';
+          } else {
+            rb.innerHTML = '✓ Usuario Activo';
           }
-          // cliente por compras se detecta en loadCompras
         }
       }
     } catch(e) { console.warn(e); }
@@ -691,12 +720,23 @@
 <script type="module">
 /* ── BAN + AVISOS LISTENER (perfil) ── */
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, onSnapshot, getDoc, collection, query, where, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, onSnapshot, collection, query, where, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ── DEBUG PANEL (borrar después de confirmar que funciona) ──
-// Debug desactivado en producción
-function klLog(msg){ console.log('[KL]', msg); }
+function klLog(msg){
+  console.log('[KL]', msg);
+  let p = document.getElementById('_kldp');
+  if(!p){
+    p = document.createElement('div');
+    p.id='_kldp';
+    p.style.cssText='position:fixed;bottom:10px;left:10px;z-index:999999;background:rgba(0,0,0,.95);border:1px solid #7A1FEE;border-radius:8px;padding:10px 14px;width:340px;max-height:220px;overflow-y:auto;font-family:monospace;font-size:11px;color:#4dff91;line-height:1.5;';
+    p.innerHTML='<b style="color:#a855f7;font-size:10px;">KL DEBUG</b> <span onclick="this.parentNode.remove()" style="float:right;cursor:pointer;color:#ff6868;">✕</span><br>';
+    document.body.appendChild(p);
+  }
+  p.innerHTML += new Date().toLocaleTimeString('es')+' '+msg+'<br>';
+  p.scrollTop=p.scrollHeight;
+}
 
 (function(){
   const cfg = {
@@ -716,41 +756,20 @@ function klLog(msg){ console.log('[KL]', msg); }
 
   let unsubBan=null, unsubAv=null, _avId=null;
 
-  function mostrarBanPerfil(d) {
-    klLog('🚫 Mostrando ban screen');
-    const screen = document.getElementById('ban-screen');
-    if(screen) {
-      screen.style.display='flex';
-      if(d.banReason){
-        const el=document.getElementById('ban-reason-rt');
-        if(el){el.textContent='📋 Razón: '+d.banReason;el.style.display='block';}
-      }
-    } else {
-      klLog('❌ ban-screen NO ENCONTRADO en DOM');
-    }
-    // Cerrar sesión para que no pueda seguir navegando
-    signOut(authP).catch(()=>{});
-  }
-
-  onAuthStateChanged(authP, async user => {
+  onAuthStateChanged(authP, user => {
     klLog('🔑 Auth state changed');
     if(unsubBan){unsubBan();unsubBan=null;}
     if(unsubAv){unsubAv();unsubAv=null;}
 
-    if(!user){ klLog('❌ Sin usuario'); return; }
+    if(!user){
+      klLog('❌ Sin usuario');
+      return;
+    }
+
     klLog('✅ Usuario: '+user.email);
     klLog('🆔 UID: '+user.uid);
 
-    // ── VERIFICAR BAN INMEDIATAMENTE AL CARGAR ──
-    try {
-      const snap = await getDoc(doc(dbP,'users',user.uid));
-      if(snap.exists() && snap.data().banned){
-        mostrarBanPerfil(snap.data());
-        return;
-      }
-    } catch(e){ klLog('❌ Ban check err: '+e.message); }
-
-    // ── BAN EN TIEMPO REAL ──
+    // ── BAN ──
     klLog('👂 Escuchando ban...');
     unsubBan = onSnapshot(
       doc(dbP,'users',user.uid),
@@ -758,7 +777,19 @@ function klLog(msg){ console.log('[KL]', msg); }
         if(!snap.exists()){ klLog('⚠️ Doc user no existe'); return; }
         const d = snap.data();
         klLog('📄 banned='+d.banned);
-        if(d.banned) mostrarBanPerfil(d);
+        if(d.banned){
+          const screen = document.getElementById('ban-screen');
+          if(screen){
+            klLog('🚫 Mostrando ban screen');
+            screen.style.display='flex';
+            if(d.banReason){
+              const el=document.getElementById('ban-reason-rt');
+              if(el){el.textContent='📋 Razón: '+d.banReason;el.style.display='block';}
+            }
+          } else {
+            klLog('❌ ban-screen NO ENCONTRADO en DOM');
+          }
+        }
       },
       err => klLog('❌ Ban err: '+err.code+' '+err.message)
     );
@@ -967,7 +998,7 @@ onAuthStateChanged(_auth, user => {
   _user = user;
   document.getElementById('edit-name').value  = user.displayName || '';
   document.getElementById('edit-email').value = user.email || '';
-  // Los avisos son manejados por el script kl-perfil
+  listenAvisos(user.uid);
 });
 
 // ── GUARDAR NOMBRE ──
@@ -976,6 +1007,8 @@ window.guardarNombre = async function() {
   const msg  = document.getElementById('msg-name');
   const name = document.getElementById('edit-name').value.trim();
   if (!name || name.length < 2) { showEM(msg,'err','El nombre debe tener al menos 2 caracteres.'); return; }
+  if (name.length > 10) { showEM(msg,'err','El nombre no puede tener más de 10 caracteres.'); return; }
+  if (/\d/.test(name)) { showEM(msg,'err','El nombre no puede contener números.'); return; }
   btn.disabled = true; btn.innerHTML = '<span class="spin-sm"></span>Guardando...';
   try {
     await updateProfile(_user, { displayName: name });
@@ -1012,8 +1045,41 @@ window.guardarEmail = async function() {
   btn.disabled = false; btn.textContent = 'GUARDAR';
 };
 
-// Los avisos y responderAviso son manejados por el script kl-perfil de arriba.
-// No se duplica el listener aquí para evitar conflictos.
+// ── AVISOS EN TIEMPO REAL ──
+function listenAvisos(uid) {
+  // Usar la misma instancia de db que ya tiene auth correcta
+  const q = query(collection(_db,'avisos'), where('uid','==',uid), where('estado','==','pendiente'));
+  onSnapshot(q,
+    snap => {
+      snap.docChanges().forEach(ch => {
+        if (ch.type === 'added') {
+          _avisoId = ch.doc.id;
+          const d = ch.doc.data();
+          document.getElementById('aviso-titulo').textContent  = d.titulo  || 'Advertencia';
+          document.getElementById('aviso-mensaje').textContent = d.mensaje || '—';
+          if (d.btnAceptar)  document.getElementById('aviso-btn-ok').textContent  = d.btnAceptar;
+          if (d.btnRechazar) document.getElementById('aviso-btn-no').textContent = d.btnRechazar;
+          document.getElementById('aviso-overlay').classList.add('open');
+        }
+      });
+    },
+    err => {
+      console.error('❌ listenAvisos error:', err.code, err.message);
+    }
+  );
+}
+
+window.responderAviso = async function(resp) {
+  if (!_avisoId) return;
+  document.getElementById('aviso-overlay').classList.remove('open');
+  try {
+    await updateDoc(doc(_db,'avisos',_avisoId), { estado:'respondido', respuesta:resp, respondidoEn:serverTimestamp() });
+  } catch(e) { console.error(e); }
+  _avisoId = null;
+  if (resp === 'reject') {
+    setTimeout(() => document.getElementById('consec-overlay').classList.add('open'), 350);
+  }
+};
 
 function showEM(el, type, txt) {
   el.className = 'edit-msg ' + type; el.textContent = txt;
