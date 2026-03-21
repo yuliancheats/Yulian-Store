@@ -766,7 +766,7 @@
           </div>
         </div>
 
-        <!-- PANEL: PAYPAL -->
+                <!-- PANEL: PAYPAL -->
         <div class="pm-panel" id="pmp-paypal">
           <div class="pmp-paypal-wrap">
             <div class="pp-hdr">
@@ -776,8 +776,10 @@
               </div>
               <div class="pp-ssl">🔒 SSL</div>
             </div>
-            <div class="pp-info">Pagarás <span class="pp-amt" id="pmp-pp-total">$0.00</span> vía PayPal. Tu acceso se activa en &lt;24h tras confirmar el pago por Discord.</div>
-            <button class="btn-pp" id="btn-paypal-go">💙 PAGAR CON PAYPAL — <span id="pmp-pp-btn">$0.00</span></button>
+            <div class="pp-info">Pagarás <span class="pp-amt" id="pmp-pp-total">$0.00</span> vía PayPal. La clave se entrega automáticamente al confirmar el pago.</div>
+            <!-- Contenedor de botones PayPal SDK -->
+            <div id="paypal-button-container" style="margin-top:14px;min-height:50px;"></div>
+            <div id="paypal-msg" style="display:none;margin-top:10px;padding:10px 14px;border-radius:8px;font-family:'Exo 2',sans-serif;font-size:.82rem;text-align:center;"></div>
             <div class="pp-ft"><span>🔒 PayPal</span><span>·</span><span>Protección al comprador</span><span>·</span><span>SSL 256-bit</span></div>
           </div>
         </div>
@@ -834,6 +836,58 @@
     {id:'1m',name:'MES',sub:'Acceso 30 días',price:80},
     {id:'lf',name:'LIFETIME',sub:'De por vida',price:150}];
   const PID='FORTNITE-PRIVATE',PNAME='Fortnite Mobile (Privado)';
+
+  // ── PAYPAL HELPERS ──
+  window._ppGetPrice   = () => sv ? sv.price : 0;
+  window._ppGetQty     = () => qty || 1;
+  window._ppGetPlan    = () => sv ? sv.name : '—';
+  window._ppGetProduct = () => 'Fortnite Mobile (Privado)';
+  window._ppOnSuccess  = async function(order) {
+    const user = auth.currentUser;
+    if(!user) return;
+    const t   = (sv.price * qty);
+    const key = 'KL-FORT-PRIVATE-' + sv.id.toUpperCase() + '-' + Math.random().toString(36).slice(2,8).toUpperCase();
+    const txId = order.id;
+    try {
+      // Guardar compra en Firebase
+      await addDoc(collection(db,'compras'),{
+        uid: user.uid, nombre: user.displayName||'—',
+        email: user.email, producto: 'Fortnite Mobile (Privado)',
+        plan: sv.name, cantidad: qty,
+        precio: t, clave: key,
+        metodoPago: 'paypal',
+        paypalTxId: txId,
+        fecha: serverTimestamp()
+      });
+      // Actualizar rol
+      try {
+        const uSnap = await getDoc(doc(db,'users',user.uid));
+        if(uSnap.exists() && (!uSnap.data().role || uSnap.data().role==='user'))
+          await updateDoc(doc(db,'users',user.uid),{role:'cliente'});
+      } catch(_) {}
+      // Mostrar modal de éxito con clave
+      const msgEl = document.getElementById('paypal-msg');
+      if(msgEl) {
+        msgEl.style.display='block';
+        msgEl.style.background='rgba(77,255,145,.08)';
+        msgEl.style.border='1px solid rgba(77,255,145,.25)';
+        msgEl.style.color='#4dff91';
+        msgEl.textContent='✅ Pago confirmado. Clave generada.';
+      }
+      document.getElementById('kbox').textContent = key;
+      document.getElementById('modal-ok').classList.add('open');
+    } catch(err) {
+      console.error('Error guardando compra PayPal:', err);
+      const msgEl = document.getElementById('paypal-msg');
+      if(msgEl) {
+        msgEl.style.display='block';
+        msgEl.style.background='rgba(255,184,0,.08)';
+        msgEl.style.border='1px solid rgba(255,184,0,.2)';
+        msgEl.style.color='#FFB800';
+        msgEl.textContent='⚠️ Pago recibido pero error al guardar. Contacta soporte con ID: ' + txId;
+      }
+    }
+  };
   let sv=VARS[0],qty=1,user=null,saldo=0;
   function rVars(){
     const g=document.getElementById('vg');
@@ -1068,21 +1122,6 @@
   window.copiarAddr    = window.copiarCoin;
 
   window.doLogout=async()=>{await signOut(auth);window.location.href='index.html';};
-
-  // ── PAYPAL + KOFI ──
-  const _KF2 = {15: 'https://ko-fi.com/s/fed7c44d36', 30: 'https://ko-fi.com/s/c22a6aef9e', 50: 'https://ko-fi.com/s/7312372baa', 80: 'https://ko-fi.com/s/fde5bba3cc', 150: 'https://ko-fi.com/s/3226f4eba1'};
-  document.addEventListener('click', function(e) {
-    if (e.target.closest('#btn-paypal-go, #btn-paypal-go *')) {
-      const t = sv.price * qty;
-      window.open('https://www.paypal.com/paypalme/kernelevel/' + t.toFixed(2) + 'USD', '_blank');
-    }
-    if (e.target.closest('#btn-kofi-go, #btn-kofi-go *')) {
-      const link = _KF2[sv.price];
-      if (link) { window.open(link, '_blank'); }
-      else if (confirm('No hay link para ese precio.\n¿Contactar por Discord?'))
-        window.open('https://discord.gg/GEbWADVD', '_blank');
-    }
-  });
 </script>
 
 <script>
@@ -1232,6 +1271,115 @@ import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasej
         if (el && d.banReason) { el.textContent = '📋 Razón: ' + d.banReason; el.style.display = 'block'; }
       }
     });
+  });
+})();
+</script>
+<!-- PayPal SDK Sandbox -->
+<script src="https://www.paypal.com/sdk/js?client-id=AZRNk7Xp3K8IFYc8gEZqo3kz6pzs6qH3rSTJlBNIZbzDH1su1npZit5dgbnyk_SguwND_qOSELMri-5-&currency=USD&intent=capture" data-sdk-integration-source="button-factory"></script>
+<script>
+// ── PAYPAL INTEGRATION ──
+(function(){
+  let _ppRendered = false;
+
+  function initPayPal() {
+    const container = document.getElementById('paypal-button-container');
+    if(!container || _ppRendered) return;
+    if(typeof paypal === 'undefined') { setTimeout(initPayPal, 500); return; }
+    _ppRendered = true;
+
+    paypal.Buttons({
+      style: {
+        layout: 'vertical',
+        color:  'blue',
+        shape:  'rect',
+        label:  'paypal',
+        height: 45
+      },
+
+      // Crear la orden con el monto exacto
+      createOrder: function(data, actions) {
+        const qty = window._ppGetQty ? window._ppGetQty() : 1;
+        const price = window._ppGetPrice ? window._ppGetPrice() : 0;
+        const total = (price * qty).toFixed(2);
+        const planName = window._ppGetPlan ? window._ppGetPlan() : 'Plan';
+        const productName = window._ppGetProduct ? window._ppGetProduct() : 'Kernel Level';
+        return actions.order.create({
+          purchase_units: [{
+            description: productName + ' - ' + planName,
+            amount: {
+              currency_code: 'USD',
+              value: total
+            }
+          }]
+        });
+      },
+
+      // Pago aprobado - capturar y entregar clave
+      onApprove: async function(data, actions) {
+        const msgEl = document.getElementById('paypal-msg');
+        if(msgEl) {
+          msgEl.style.display='block';
+          msgEl.style.background='rgba(122,31,238,.1)';
+          msgEl.style.border='1px solid rgba(122,31,238,.3)';
+          msgEl.style.color='#a855f7';
+          msgEl.textContent='⏳ Procesando pago...';
+        }
+        try {
+          const order = await actions.order.capture();
+          if(order.status === 'COMPLETED') {
+            // Pago exitoso - llamar función de entrega de clave
+            if(window._ppOnSuccess) {
+              await window._ppOnSuccess(order);
+            }
+          }
+        } catch(err) {
+          console.error('PayPal capture error:', err);
+          if(msgEl) {
+            msgEl.style.background='rgba(255,68,68,.1)';
+            msgEl.style.border='1px solid rgba(255,68,68,.3)';
+            msgEl.style.color='#ff6868';
+            msgEl.textContent='❌ Error al procesar. Contacta soporte en Discord.';
+          }
+        }
+      },
+
+      onError: function(err) {
+        console.error('PayPal error:', err);
+        const msgEl = document.getElementById('paypal-msg');
+        if(msgEl) {
+          msgEl.style.display='block';
+          msgEl.style.background='rgba(255,68,68,.1)';
+          msgEl.style.border='1px solid rgba(255,68,68,.3)';
+          msgEl.style.color='#ff6868';
+          msgEl.textContent='❌ Error con PayPal. Intenta de nuevo o usa otro método.';
+        }
+      },
+
+      onCancel: function() {
+        console.log('PayPal cancelado');
+      }
+
+    }).render('#paypal-button-container');
+  }
+
+  // Inicializar cuando se seleccione el método PayPal
+  const _origSelMetodo = window.selMetodo;
+  window.selMetodo = function(metodo, el) {
+    if(_origSelMetodo) _origSelMetodo(metodo, el);
+    if(metodo === 'paypal') {
+      setTimeout(initPayPal, 100);
+    }
+  };
+
+  // También intentar al cargar
+  document.addEventListener('DOMContentLoaded', function() {
+    // Pre-init si ya está visible
+    setTimeout(function() {
+      const panel = document.getElementById('pmp-paypal');
+      if(panel && (panel.classList.contains('show') || panel.style.display !== 'none')) {
+        initPayPal();
+      }
+    }, 1000);
   });
 })();
 </script>
