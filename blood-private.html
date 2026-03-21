@@ -882,6 +882,7 @@
     {id:'lf',name:'LIFETIME',sub:'De por vida',price:150}];
   const PID='BLOOD-PRIVATE',PNAME='Blood Strike (Privado)';
   let sv=VARS[0],qty=1,user=null,saldo=0;
+  window._sv=()=>sv; window._qty=()=>qty;
   function rVars(){
     const g=document.getElementById('vg');
     g.innerHTML=VARS.map(v=>`<div class="vc${v.id===sv.id?' sel':''}" data-id="${v.id}"><div class="vc-n">${v.name}</div><div class="vc-s">${v.sub}</div><div class="vc-p">$${v.price.toFixed(2)}</div></div>`).join('');
@@ -1092,11 +1093,22 @@
 
   // ── PAYPAL ──
   window.pagarConPayPal = function() {
-    const t = sv.price * qty;
-    const email = 'kernelevel@gmail.com';
-    // Use PayPal send money link with pre-filled amount
+    const _s = window._sv ? window._sv() : sv;
+    const _q = window._qty ? window._qty() : qty;
+    const t = _s.price * _q;
     const url = `https://www.paypal.com/paypalme/kernelevel/${t.toFixed(2)}USD`;
     window.open(url, '_blank');
+  };
+
+
+  // ── KO-FI ──
+  const _KF_LINKS = {15: 'https://ko-fi.com/s/3ff2146e43', 30: 'https://ko-fi.com/s/96e2a6fb81', 50: 'https://ko-fi.com/s/3e250b23c8', 80: 'https://ko-fi.com/s/b67bb865fa', 150: 'https://ko-fi.com/s/d4b709c117'};
+  window.pagarConKofi = function() {
+    const t = sv.price * qty;
+    const link = _KF_LINKS[sv.price] || _KF_LINKS[Math.round(t)];
+    if (link) { window.open(link,'_blank'); return; }
+    if(confirm('No hay link para ese precio.\n¿Contactar por Discord?'))
+      window.open('https://discord.gg/GEbWADVD','_blank');
   };
 
   // ── CRYPTO ──
@@ -1222,77 +1234,6 @@ document.querySelectorAll('.tilt-box').forEach(box=>{
 @keyframes popInL{from{opacity:0;transform:scale(.85) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
 </style>
 
-<script>
-(function(){
-  if(window.matchMedia("(hover:none),(pointer:coarse)").matches)return;
-  const c=document.getElementById("hex-canvas");
-  if(!c)return;
-  const ctx=c.getContext("2d");
-  let W,H,m={x:-999,y:-999},hexes=[];
-  const R=38,H2=R*Math.sqrt(3);
-  function corners(cx,cy){const p=[];for(let i=0;i<6;i++){const a=Math.PI/180*(60*i-30);p.push([cx+R*Math.cos(a),cy+R*Math.sin(a)]);}return p;}
-  function build(){hexes=[];const cols=Math.ceil(W/(R*1.5))+2,rows=Math.ceil(H/H2)+2;for(let r=0;r<rows;r++)for(let cc=0;cc<cols;cc++)hexes.push({x:cc*R*1.5-R,y:r*H2+(cc%2?H2/2:0)-H2/2,g:0});}
-  function resize(){W=c.width=innerWidth;H=c.height=innerHeight;build();}
-  function draw(){ctx.clearRect(0,0,W,H);hexes.forEach(h=>{const d=Math.hypot(h.x-m.x,h.y-m.y);h.g+=((d<R*7?1-d/(R*7):0)-h.g)*.1;if(h.g<.01)return;const p=corners(h.x,h.y);ctx.beginPath();ctx.moveTo(p[0][0],p[0][1]);p.forEach(q=>ctx.lineTo(q[0],q[1]));ctx.closePath();ctx.strokeStyle=`rgba(122,31,238,${h.g*.8})`;ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle=`rgba(122,31,238,${h.g*.12})`;ctx.fill();});requestAnimationFrame(draw);}
-  window.addEventListener("mousemove",e=>{m.x=e.clientX;m.y=e.clientY;});
-  window.addEventListener("resize",resize);
-  resize();draw();
-})();
-</script>
 
-<!-- ═══ BAN SCREEN ═══ -->
-<div id="ban-screen" style="display:none;position:fixed;inset:0;z-index:999999;background:#06040f;align-items:center;justify-content:center;padding:20px;flex-direction:column;">
-  <div style="background:#0d0a1a;border:2px solid rgba(255,68,68,0.4);border-radius:16px;padding:48px 40px;max-width:480px;width:100%;text-align:center;box-shadow:0 0 60px rgba(255,68,68,0.12);animation:popInBan .5s cubic-bezier(.34,1.56,.64,1) forwards;">
-    <div style="font-size:4rem;margin-bottom:20px;">🚫</div>
-    <h2 style="font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:900;letter-spacing:3px;color:#ff4444;text-transform:uppercase;margin-bottom:16px;text-shadow:0 0 20px rgba(255,68,68,0.5);">Cuenta Suspendida</h2>
-    <p style="font-family:'Exo 2',sans-serif;color:#888;font-size:.9rem;line-height:1.8;margin-bottom:12px;">Tu cuenta ha sido suspendida por un administrador.</p>
-    <div id="ban-reason-rt" style="font-family:'Exo 2',sans-serif;color:#ff9966;font-size:.85rem;background:rgba(255,68,68,0.07);border:1px solid rgba(255,68,68,0.2);border-radius:8px;padding:12px 16px;margin-bottom:24px;line-height:1.7;display:none;"></div>
-    <p style="font-family:'Exo 2',sans-serif;color:#666;font-size:.82rem;line-height:1.7;margin-bottom:24px;">Si crees que es un error, abre un ticket en Discord o contacta un administrador.</p>
-    <a href="https://discord.gg/GEbWADVD" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#7A1FEE;color:#000;text-decoration:none;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:2px;padding:13px 28px;border-radius:6px;text-transform:uppercase;box-shadow:0 4px 18px rgba(122,31,238,.35);">🎮 Abrir Discord</a>
-  </div>
-</div>
-<style>@keyframes popInBan{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}</style>
-
-<script type="module">
-/* ── BAN LISTENER EN TIEMPO REAL ── */
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-(function(){
-  const cfg={apiKey:"AIzaSyB-HNqDxY2uRRS922yGkrtJDKuh0iwbbn0",authDomain:"yulian-store.firebaseapp.com",projectId:"yulian-store",storageBucket:"yulian-store.firebasestorage.app",messagingSenderId:"372613089099",appId:"1:372613089099:web:b70fae80818c73628f8ace"};
-  const appName = 'ban-rt-' + Math.random().toString(36).slice(2,7);
-  const app  = initializeApp(cfg, appName);
-  const auth = getAuth(app);
-  const db   = getFirestore(app);
-  let unsub = null;
-  onAuthStateChanged(auth, user => {
-    if (unsub) { unsub(); unsub = null; }
-    if (!user) return;
-    unsub = onSnapshot(doc(db,'users',user.uid), snap => {
-      if (!snap.exists()) return;
-      const d = snap.data();
-      if (d.banned) {
-        const screen = document.getElementById('ban-screen');
-        if (!screen) return;
-        screen.style.display = 'flex';
-        const el = document.getElementById('ban-reason-rt');
-        if (el && d.banReason) { el.textContent = '📋 Razón: ' + d.banReason; el.style.display = 'block'; }
-      }
-    });
-  });
-})();
-</script>
-<script>
-(function(){
-  const _KF = {15: 'https://ko-fi.com/s/3ff2146e43', 30: 'https://ko-fi.com/s/96e2a6fb81', 50: 'https://ko-fi.com/s/3e250b23c8', 80: 'https://ko-fi.com/s/b67bb865fa', 150: 'https://ko-fi.com/s/d4b709c117'};
-  window.pagarConKofi = function() {
-    const t = sv.price * qty;
-    const link = _KF[sv.price] || _KF[Math.round(t)];
-    if (link) { window.open(link,'_blank'); return; }
-    if(confirm('No hay link para ese precio.\n¿Contactar por Discord?'))
-      window.open('https://discord.gg/GEbWADVD','_blank');
-  };
-})();
-</script>
 </body>
 </html>
