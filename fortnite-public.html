@@ -1275,7 +1275,7 @@ import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasej
 })();
 </script>
 <!-- PayPal SDK Sandbox -->
-<script src="https://www.paypal.com/sdk/js?client-id=AUTJnrdkB1ZDhiHCDLIU_Ny5TfTWXsYNOgnW2tG1FPYYOEl8yA7IGDz0RNLED_StmoDj3AP_AELBGMxB&currency=USD&intent=capture" data-sdk-integration-source="button-factory"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=BAAZZfFQEKaV0lnFccbUyoiZDhu8Z3-PrGG0D8vAzCqEe5WimkCPIANHuyB9NUy_g91I60idioQdyKamzY&currency=USD&intent=capture" data-sdk-integration-source="button-factory"></script>
 <script>
 // ── PAYPAL INTEGRATION ──
 (function(){
@@ -1283,8 +1283,11 @@ import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasej
 
   function initPayPal() {
     const container = document.getElementById('paypal-button-container');
-    if(!container || _ppRendered) return;
+    if(!container) return;
     if(typeof paypal === 'undefined') { setTimeout(initPayPal, 500); return; }
+    // Always re-render when called (clear previous buttons)
+    container.innerHTML = '';
+    _ppRendered = false;
     _ppRendered = true;
 
     paypal.Buttons({
@@ -1367,20 +1370,32 @@ import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasej
   window.selMetodo = function(metodo, el) {
     if(_origSelMetodo) _origSelMetodo(metodo, el);
     if(metodo === 'paypal') {
-      setTimeout(initPayPal, 100);
+      setTimeout(initPayPal, 150);
     }
   };
 
-  // También intentar al cargar
-  document.addEventListener('DOMContentLoaded', function() {
-    // Pre-init si ya está visible
-    setTimeout(function() {
-      const panel = document.getElementById('pmp-paypal');
-      if(panel && (panel.classList.contains('show') || panel.style.display !== 'none')) {
-        initPayPal();
-      }
-    }, 1000);
-  });
+  // Re-renderizar PayPal cuando cambie el plan o cantidad
+  const _origUpdateUI = window.updateUI;
+  window.updateUI = function() {
+    if(_origUpdateUI) _origUpdateUI();
+    // Si PayPal está visible, re-renderizar con nuevo precio
+    const panel = document.getElementById('pmp-paypal');
+    if(panel && (panel.classList.contains('show') || getComputedStyle(panel).display !== 'none')) {
+      _ppRendered = false;
+      setTimeout(initPayPal, 50);
+    }
+  };
+
+  // También hook en upTot para capturar cambios de plan
+  const _origUpTot = window.upTot;
+  window.upTot = function() {
+    if(_origUpTot) _origUpTot();
+    const panel = document.getElementById('pmp-paypal');
+    if(panel && (panel.classList.contains('show') || getComputedStyle(panel).display !== 'none')) {
+      _ppRendered = false;
+      setTimeout(initPayPal, 50);
+    }
+  };
 })();
 </script>
 </body>
