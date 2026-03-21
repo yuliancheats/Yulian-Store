@@ -1167,7 +1167,7 @@
     _mmLoad.classList.add('show');
     _mmErr.classList.remove('show');
     try {
-      const res = await fetch('https://api.moneymotion.io/createCheckoutSession', {
+      const res = await fetch('https://api.moneymotion.io/checkout/sessions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1190,13 +1190,13 @@
       } else if (data && data.payment_url) {
         window.open(data.payment_url, '_blank');
       } else {
-        console.error('MM response:', data);
-        _mmErr.textContent = 'Error: ' + (data.message || data.error || 'Intenta de nuevo.');
+        console.error('MM response:', JSON.stringify(data));
+        _mmErr.textContent = 'Error API: ' + JSON.stringify(data).slice(0,120);
         _mmErr.classList.add('show');
       }
     } catch(e) {
       console.error('MM error:', e);
-      _mmErr.textContent = 'Error de conexión. Intenta de nuevo.';
+      _mmErr.textContent = 'Error: ' + e.message;
       _mmErr.classList.add('show');
     }
     _mmLoad.classList.remove('show');
