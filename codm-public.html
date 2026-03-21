@@ -1123,7 +1123,7 @@
         },
         body: JSON.stringify({
           json: {
-            description: sv.name + ' — Kernel Level',
+            description: PNAME + ' — ' + sv.name + ' — Kernel Level',
             urls: {
               success: 'https://kernelevel.netlify.app/perfil.html',
               cancel: window.location.href,
@@ -1131,8 +1131,8 @@
             },
             userInfo: { email: user ? user.email : '' },
             lineItems: [{
-              name: sv.name,
-              description: sv.name + ' — Kernel Level',
+              name: PNAME + ' — ' + sv.name,
+              description: PNAME + ' — ' + sv.name,
               pricePerItemInCents: Math.round(t * 100),
               quantity: 1
             }]
