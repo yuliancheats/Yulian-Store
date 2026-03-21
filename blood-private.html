@@ -600,7 +600,7 @@
     <div class="tot-box">
       <div class="tot-row"><span class="tot-lbl">Total</span><span class="tot-amt" id="ta">$0.00</span></div>
       <div class="sal-row" id="sr" style="display:none;">Tu saldo: <span class="sal-val" id="sv">$0.00</span></div>
-      <div id="ba"><button class="btn-log" onclick="window.location.href='login.html'">INICIA SESIÓN PARA COMPRAR</button></div>
+      <div id="ba"><button class="btn-log" disabled style="opacity:.5;cursor:default">Cargando...</button></div>
       <div class="msg" id="msg"></div>
 
       
@@ -873,7 +873,7 @@
   window.cQty=function(d){qty=Math.max(1,Math.min(10,qty+d));upTot();updateUI();};
   function updateUI(){
     const ba=document.getElementById('ba');clrMsg();
-    if(!user){ba.innerHTML='<button class="btn-log" onclick="window.location.href=\'login.html\'">INICIA SESIÓN PARA COMPRAR</button>';document.getElementById('sr').style.display='none';return;}
+    if(!user){if(window._authReady){ba.innerHTML='<button class="btn-log" onclick="window.location.href=\'login.html\'">INICIA SESIÓN PARA COMPRAR</button>';}document.getElementById('sr').style.display='none';return;}
     document.getElementById('sr').style.display='flex';
     document.getElementById('sv').textContent=`$${saldo.toFixed(2)}`;
     // show payment selector
@@ -1006,7 +1006,7 @@
   function showMsg(t,txt){const el=document.getElementById('msg');el.className=`msg ${t}`;el.textContent=txt;}
   function clrMsg(){const el=document.getElementById('msg');el.className='msg';}
   window.updateUI=updateUI;
-  onAuthStateChanged(auth,async u=>{user=u;if(u){document.getElementById('ng').style.display='none';document.getElementById('nu').style.display='flex';document.getElementById('nn').textContent=u.displayName||u.email.split('@')[0].toUpperCase();try{const s=await getDoc(doc(db,'users',u.uid));if(s.exists()){saldo=s.data().saldo??0;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;}}catch(e){}}rVars();upTot();updateUI();});
+  onAuthStateChanged(auth,async u=>{user=u;if(u){document.getElementById('ng').style.display='none';document.getElementById('nu').style.display='flex';document.getElementById('nn').textContent=u.displayName||u.email.split('@')[0].toUpperCase();try{const s=await getDoc(doc(db,'users',u.uid));if(s.exists()){saldo=s.data().saldo??0;document.getElementById('ns').textContent=`$${saldo.toFixed(2)}`;}}catch(e){}}window._authReady=true;rVars();upTot();updateUI();});
 
 
 
