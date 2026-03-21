@@ -1279,16 +1279,11 @@ import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasej
 <script>
 // ── PAYPAL INTEGRATION ──
 (function(){
-  let _ppRendered = false;
-
   function initPayPal() {
     const container = document.getElementById('paypal-button-container');
     if(!container) return;
     if(typeof paypal === 'undefined') { setTimeout(initPayPal, 500); return; }
-    // Always re-render when called (clear previous buttons)
     container.innerHTML = '';
-    _ppRendered = false;
-    _ppRendered = true;
 
     paypal.Buttons({
       style: {
@@ -1330,7 +1325,6 @@ import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasej
         try {
           const order = await actions.order.capture();
           if(order.status === 'COMPLETED') {
-            // Pago exitoso - llamar función de entrega de clave
             if(window._ppOnSuccess) {
               await window._ppOnSuccess(order);
             }
@@ -1362,7 +1356,9 @@ import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasej
         console.log('PayPal cancelado');
       }
 
-    }).render('#paypal-button-container');
+    }).render('#paypal-button-container').catch(function(err){
+      console.error('PayPal render error:', err);
+    });
   }
 
   // Inicializar cuando se seleccione el método PayPal
@@ -1378,25 +1374,22 @@ import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasej
   const _origUpdateUI = window.updateUI;
   window.updateUI = function() {
     if(_origUpdateUI) _origUpdateUI();
-    // Si PayPal está visible, re-renderizar con nuevo precio
     const panel = document.getElementById('pmp-paypal');
     if(panel && (panel.classList.contains('show') || getComputedStyle(panel).display !== 'none')) {
-      _ppRendered = false;
       setTimeout(initPayPal, 50);
     }
   };
 
-  // También hook en upTot para capturar cambios de plan
   const _origUpTot = window.upTot;
   window.upTot = function() {
     if(_origUpTot) _origUpTot();
     const panel = document.getElementById('pmp-paypal');
     if(panel && (panel.classList.contains('show') || getComputedStyle(panel).display !== 'none')) {
-      _ppRendered = false;
       setTimeout(initPayPal, 50);
     }
   };
 })();
+
 </script>
 </body>
 </html>
