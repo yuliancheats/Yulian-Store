@@ -1113,25 +1113,35 @@
     _mmErr.classList.remove('show');
     _mmErr.textContent = '';
     try {
-      // MoneyMotion uses tRPC — endpoint format: procedureName
-      const res = await fetch('https://api.moneymotion.io/checkoutSessions.create', {
+      // MoneyMotion tRPC — endpoint correcto confirmado
+      const res = await fetch('https://api.moneymotion.io/checkoutSessions.createCheckoutSession', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': 'mk_live_zgG7AFM4CfbOwAVPwOHV4xViB45E9dyz'
+          'X-API-Key': 'mk_live_zgG7AFM4CfbOwAVPwOHV4xViB45E9dyz',
+          'x-currency': 'USD'
         },
         body: JSON.stringify({
-          amount: Math.round(t * 100),
-          currency: 'USD',
-          name: sv.name + ' — Kernel Level',
-          successUrl: 'https://kernelevel.netlify.app/perfil.html',
-          cancelUrl: window.location.href,
+          json: {
+            description: sv.name + ' — Kernel Level',
+            urls: {
+              success: 'https://kernelevel.netlify.app/perfil.html',
+              cancel: window.location.href,
+              failure: window.location.href
+            },
+            userInfo: { email:  },
+            lineItems: [{
+              name: sv.name,
+              description: sv.name + ' — Kernel Level',
+              pricePerItemInCents: Math.round(t * 100),
+              quantity: 1
+            }]
+          }
         })
       });
       const data = await res.json();
-      // Try all possible URL fields
-      const url = data?.url || data?.checkoutUrl || data?.paymentUrl ||
-                  data?.result?.url || data?.data?.url || data?.session?.url;
+      const sessionId = data?.result?.data?.json?.checkoutSessionId;
+      const url = sessionId ? 'https://checkout.moneymotion.io/' + sessionId : null;
       if (url) {
         window.open(url, '_blank');
       } else {
