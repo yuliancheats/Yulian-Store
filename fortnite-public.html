@@ -1129,7 +1129,7 @@
               cancel: window.location.href,
               failure: window.location.href
             },
-            userInfo: { email:  },
+            userInfo: { email: user ? user.email : '' },
             lineItems: [{
               name: sv.name,
               description: sv.name + ' — Kernel Level',
