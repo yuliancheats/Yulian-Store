@@ -1141,7 +1141,7 @@
       });
       const data = await res.json();
       const sessionId = data?.result?.data?.json?.checkoutSessionId;
-      const url = sessionId ? 'https://checkout.moneymotion.io/' + sessionId : null;
+      const url = sessionId ? 'https://moneymotion.io/checkout/' + sessionId : null;
       if (url) {
         window.open(url, '_blank');
       } else {
