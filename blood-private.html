@@ -831,6 +831,8 @@
           </div>
         </div>
 
+      </div><!-- /pm-selector -->
+
 <div class="feats">
   <h2>CARACTERÍSTICAS DEL SOFTWARE</h2>
   <p class="sub">Todo lo que incluye tu acceso — Blood Strike PRIVADO</p>
@@ -869,6 +871,12 @@
     document.getElementById('qv').textContent=qty;
     document.getElementById('ta').textContent=`$${t.toFixed(2)}`;
     const skrillEl=document.getElementById('skrill-amt');if(skrillEl)skrillEl.textContent=`$${t.toFixed(2)}`;
+    // Actualizar precios de Ko-fi y MoneyMotion siempre
+    const s=id=>{ const el=document.getElementById(id); if(el) el.textContent='$'+t.toFixed(2); };
+    s('pmp-kf-total');s('pmp-kf-btn');s('pmp-mm-total');s('pmp-mm-btn');
+    // Actualizar también Ko-fi link según plan
+    const kfLink=document.getElementById('btn-kf-go');
+    if(kfLink && typeof KF_LINKS !== 'undefined' && KF_LINKS[sv.id]) kfLink.dataset.href=KF_LINKS[sv.id];
   }
   window.cQty=function(d){qty=Math.max(1,Math.min(10,qty+d));upTot();updateUI();};
   function updateUI(){
