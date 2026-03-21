@@ -776,10 +776,11 @@
               </div>
               <div class="pp-ssl">🔒 SSL</div>
             </div>
-            <div class="pp-info">Pagarás <span class="pp-amt" id="pmp-pp-total">$0.00</span> vía PayPal. La clave se entrega automáticamente al confirmar el pago.</div>
-            <!-- Contenedor de botones PayPal SDK -->
-            <div id="paypal-button-container" style="margin-top:14px;min-height:50px;"></div>
-            <div id="paypal-msg" style="display:none;margin-top:10px;padding:10px 14px;border-radius:8px;font-family:'Exo 2',sans-serif;font-size:.82rem;text-align:center;"></div>
+            <div class="pp-info">Pagarás <span class="pp-amt" id="pmp-pp-total">$0.00</span> vía PayPal. Serás redirigido a PayPal.me para completar el pago. Luego envía el comprobante por Discord.</div>
+            <button class="btn-pp" id="btn-paypal-go" onclick="pagarConPayPal()">
+              <svg width="18" height="18" viewBox="0 0 24 24"><path d="M8.5 7h4.5c2 0 3.5 1 3.2 3-.3 2-1.8 3-3.7 3H11l-.5 3H8l1.5-9z" fill="white" opacity=".95"/><path d="M7 10h4.5c2 0 3 1 2.8 2.8-.3 1.8-1.6 2.7-3.4 2.7H9.5L9 18H7z" fill="white" opacity=".65"/></svg>
+              PAGAR CON PAYPAL — <span id="pmp-pp-btn">$0.00</span>
+            </button>
             <div class="pp-ft"><span>🔒 PayPal</span><span>·</span><span>Protección al comprador</span><span>·</span><span>SSL 256-bit</span></div>
           </div>
         </div>
@@ -1274,122 +1275,27 @@ import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasej
   });
 })();
 </script>
-<!-- PayPal SDK Live -->
-<script src="https://www.paypal.com/sdk/js?client-id=AWDM_ukQAQZuNWh3fk7QBykUemqdfg904WyosjeD3O48llYglhneaRIawpGPPE0actNerapa79ZcEdWS&currency=USD&intent=capture" data-sdk-integration-source="button-factory"></script>
 <script>
-// ── PAYPAL INTEGRATION ──
-(function(){
-  function initPayPal() {
-    const container = document.getElementById('paypal-button-container');
-    if(!container) return;
-    if(typeof paypal === 'undefined') { setTimeout(initPayPal, 500); return; }
-    container.innerHTML = '';
-
-    paypal.Buttons({
-      style: {
-        layout: 'vertical',
-        color:  'blue',
-        shape:  'rect',
-        label:  'paypal',
-        height: 45
-      },
-
-      // Crear la orden con el monto exacto
-      createOrder: function(data, actions) {
-        const qty = window._ppGetQty ? window._ppGetQty() : 1;
-        const price = window._ppGetPrice ? window._ppGetPrice() : 0;
-        const total = (price * qty).toFixed(2);
-        const planName = window._ppGetPlan ? window._ppGetPlan() : 'Plan';
-        const productName = window._ppGetProduct ? window._ppGetProduct() : 'Kernel Level';
-        return actions.order.create({
-          purchase_units: [{
-            description: productName + ' - ' + planName,
-            amount: {
-              currency_code: 'USD',
-              value: total
-            }
-          }]
-        });
-      },
-
-      // Pago aprobado - capturar y entregar clave
-      onApprove: async function(data, actions) {
-        const msgEl = document.getElementById('paypal-msg');
-        if(msgEl) {
-          msgEl.style.display='block';
-          msgEl.style.background='rgba(122,31,238,.1)';
-          msgEl.style.border='1px solid rgba(122,31,238,.3)';
-          msgEl.style.color='#a855f7';
-          msgEl.textContent='⏳ Procesando pago...';
-        }
-        try {
-          const order = await actions.order.capture();
-          if(order.status === 'COMPLETED') {
-            if(window._ppOnSuccess) {
-              await window._ppOnSuccess(order);
-            }
-          }
-        } catch(err) {
-          console.error('PayPal capture error:', err);
-          if(msgEl) {
-            msgEl.style.background='rgba(255,68,68,.1)';
-            msgEl.style.border='1px solid rgba(255,68,68,.3)';
-            msgEl.style.color='#ff6868';
-            msgEl.textContent='❌ Error al procesar. Contacta soporte en Discord.';
-          }
-        }
-      },
-
-      onError: function(err) {
-        console.error('PayPal error:', err);
-        const msgEl = document.getElementById('paypal-msg');
-        if(msgEl) {
-          msgEl.style.display='block';
-          msgEl.style.background='rgba(255,68,68,.1)';
-          msgEl.style.border='1px solid rgba(255,68,68,.3)';
-          msgEl.style.color='#ff6868';
-          msgEl.textContent='❌ Error con PayPal. Intenta de nuevo o usa otro método.';
-        }
-      },
-
-      onCancel: function() {
-        console.log('PayPal cancelado');
-      }
-
-    }).render('#paypal-button-container').catch(function(err){
-      console.error('PayPal render error:', err);
-    });
-  }
-
-  // Inicializar cuando se seleccione el método PayPal
-  const _origSelMetodo = window.selMetodo;
-  window.selMetodo = function(metodo, el) {
-    if(_origSelMetodo) _origSelMetodo(metodo, el);
-    if(metodo === 'paypal') {
-      setTimeout(initPayPal, 150);
-    }
+// ── PAYPAL (PayPal.me) ──
+  const PAYPAL_LINKS = {
+    5:   'https://www.paypal.com/paypalme/kernelevel/5',
+    12:  'https://www.paypal.com/paypalme/kernelevel/12',
+    15:  'https://www.paypal.com/paypalme/kernelevel/15',
+    20:  'https://www.paypal.com/paypalme/kernelevel/20',
+    30:  'https://www.paypal.com/paypalme/kernelevel/30',
+    35:  'https://www.paypal.com/paypalme/kernelevel/35',
+    50:  'https://www.paypal.com/paypalme/kernelevel/50',
+    70:  'https://www.paypal.com/paypalme/kernelevel/70',
+    80:  'https://www.paypal.com/paypalme/kernelevel/80',
+    150: 'https://www.paypal.com/paypalme/kernelevel/150',
   };
-
-  // Re-renderizar PayPal cuando cambie el plan o cantidad
-  const _origUpdateUI = window.updateUI;
-  window.updateUI = function() {
-    if(_origUpdateUI) _origUpdateUI();
-    const panel = document.getElementById('pmp-paypal');
-    if(panel && (panel.classList.contains('show') || getComputedStyle(panel).display !== 'none')) {
-      setTimeout(initPayPal, 50);
-    }
+  window.pagarConPayPal = function() {
+    const price = sv.price;
+    const qty   = window._ppGetQty ? window._ppGetQty() : qty_sel || 1;
+    const total = price * (typeof qty_sel !== 'undefined' ? qty_sel : 1);
+    const link  = PAYPAL_LINKS[total] || ('https://www.paypal.com/paypalme/kernelevel/' + total.toFixed(2));
+    window.open(link, '_blank');
   };
-
-  const _origUpTot = window.upTot;
-  window.upTot = function() {
-    if(_origUpTot) _origUpTot();
-    const panel = document.getElementById('pmp-paypal');
-    if(panel && (panel.classList.contains('show') || getComputedStyle(panel).display !== 'none')) {
-      setTimeout(initPayPal, 50);
-    }
-  };
-})();
-
 </script>
 </body>
 </html>
